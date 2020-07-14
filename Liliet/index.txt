@@ -12,4 +12,6 @@ This Folder includes:
    dvcs_xs_newsets_withCFFs.csv
 
 -  Fitting of the pseudo data.
-   AnaBHDVCS.C     
+   Extraction/dvcs_xs_new_0.05.root (pseudo-data input file)
+   Extraction/AnaBHDVCS.C     
+   
