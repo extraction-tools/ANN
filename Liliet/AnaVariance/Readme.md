@@ -20,9 +20,9 @@ Use 5% variance in F and look at the resulting standard deviation in each of the
 - **cffs_error_prop.csv** Print out of the obtained values of the CFFs standard deviation, the columns are:
   * set, point
   * kinematics (k, QQ, x_b, t)
-  -- phi
-  -- F: Mean of the generated F values with 5% variation at fixed values of the CFFs that had no errors.
-  -- F_var(%): Variation of F that was fixed at 5% for all phi.
-  -- ReH_true: Set value of ReH used to generate the F distribution.
-  -- ReH_var(%): Standard deviation in % of ReH obtained for the generated F values keeping ReE and ReHtilde fixed to ReE_true, ReHtilde_true with one errors.
-  -- Analogously to ReH_true and ReH_var, the corresponding values of ReE and ReHtilde are shown in the following columns.
+  * phi
+  * F: Mean of the generated F values with 5% variation at fixed values of the CFFs that had no errors.
+  * F_var(%): Variation of F that was fixed at 5% for all phi.
+  * ReH_true: Set value of ReH used to generate the F distribution.
+  * ReH_var(%): Standard deviation in % of ReH obtained for the generated F values keeping ReE and ReHtilde fixed to ReE_true, ReHtilde_true with one errors.
+  * Analogously to ReH_true and ReH_var, the corresponding values of ReE and ReHtilde are shown in the following columns.
