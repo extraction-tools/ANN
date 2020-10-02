@@ -18,8 +18,8 @@ Use 5% variance in F and look at the resulting standard deviation in each of the
 - **ReHtilde_var.pdf** Obtained standard deviation of ReHtilde for all the sets.
 - **Deviation.pdf** Deviation of the CFFs from the values used to generate F.
 - **cffs_error_prop.csv** Print out of the obtained values of the CFFs standard deviation, the columns are:
-  -- set, point
-  -- kinematics (k, QQ, x_b, t)
+  * set, point
+  * kinematics (k, QQ, x_b, t)
   -- phi
   -- F: Mean of the generated F values with 5% variation at fixed values of the CFFs that had no errors.
   -- F_var(%): Variation of F that was fixed at 5% for all phi.
