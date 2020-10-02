@@ -25,4 +25,4 @@ Use 5% variance in F and look at the resulting standard deviation in each of the
   * F_var(%): Variation of F that was fixed at 5% for all phi.
   * ReH_true: Set value of ReH used to generate the F distribution.
   * ReH_var(%): Standard deviation in % of ReH obtained for the generated F values keeping ReE and ReHtilde fixed to ReE_true, ReHtilde_true with one errors.
-  * Analogously to ReH_true and ReH_var, the corresponding values of ReE and ReHtilde are shown in the following columns.
+  * Analogously to ReH_true and ReH_var, the corresponding values for ReE and ReHtilde are shown in the following columns.
