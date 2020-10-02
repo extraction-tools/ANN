@@ -12,7 +12,7 @@ Use 5% variance in F and look at the resulting standard deviation in each of the
 
 *Files*
 
-- **ErrorPropagationToCFFs.pdf** Presentation slides containing the method steps and summary or results.
+- **ErrorPropagationToCFFs.pdf** Presentation slides containing the method steps and results.
 - **ReH_var.pdf** Obtained standard deviation of ReH for all the sets.
 - **ReE_var.pdf** Obtained standard deviation of ReE for all the sets.
 - **ReHtilde_var.pdf** Obtained standard deviation of ReHtilde for all the sets.
