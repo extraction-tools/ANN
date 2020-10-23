@@ -6,7 +6,7 @@
 #SBATCH -A spinquest
 #SBATCH --job-name=replica.py
 
-#SBATCH --output=replica_results.out
+#SBATCH --output=rep_%a.out
 #SBATCH --error=replica_results.error
 
 python replica.py ${SLURM_ARRAY_TASK_ID}
