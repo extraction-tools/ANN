@@ -10,12 +10,13 @@
 ### *Changes in class TFormFactors:*
 
 * A new parametrization of F1 and F2 is included (Kelly's parametrization). 
-Note: This new parametrization is the one used to generate the data. To obtain the values of F1 and F2 use the functions Double_t TFormFactors::ffF1_K(Double_t t) and Double_t TFormFactors::ffF2_K(Double_t t).
+
+Note: This new parametrization is the one used to generate the data. To obtain the values of F1 and F2 use the functions `Double_t TFormFactors::ffF1_K(Double_t t)` and `Double_t TFormFactors::ffF2_K(Double_t t)`.
 
 ### Pseudodata
 
-There are a total of 19 kinematic settings where a Least Squares fit was able to reproduce the *true* values within 20% difference, as seen in the file CFFs_SelKine_0.05.pdf.
+There are a total of 19 kinematic settings where a Least Squares fit was able to reproduce the *true* values within 20% difference, as seen in the file **CFFs_SelKine_0.05.pdf**.
 
 The generated cross section F at the selected kinematics was obtained with a 5% variance.
 
-The pseudodata output values are shown on the file dvcs_xs_11-19-20_0.05.csv
+The pseudodata output values are shown on the file **dvcs_xs_11-19-20_0.05.csv**.
