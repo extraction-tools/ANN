@@ -1,21 +1,21 @@
-## Generated pseudodata on 11/19/2020:
+## Generated pseudodata on 11/19/2020
 
+### *Changes in class TBHDVCS:*
 
-*Files*
-  - **FvarVsPhi.pdf** Standard deviation of F obtained as a function of phi when the values of all the CFFs are generated with a 10% standard deviation. 
+* *jcob* parameter modified.
+* In *GetBHUUxs* an extra factor 2 was removed.
+* In *GetIUUxs* the AUUI, BUUI and CUUI coefficients were modified to the last version of the paper arXiv:1903.05742 [hep-ph].
+* Functions with polarized configurations that are not being used were removed.
+ 
+### *Changes in class TFormFactors:*
 
-### Method 2:
+* A new parametrization of F1 and F2 is included (Kelly's parametrization). 
+Note: This new parametrization is the one used to generate the data. To obtain the values of F1 and F2 use the functions Double_t TFormFactors::ffF1_K(Double_t t) and Double_t TFormFactors::ffF2_K(Double_t t).
 
-Use 5% variance in F and look at the resulting standard deviation in each of the CFFs one at a time, fixing the other two.
+### Pseudodata
 
-*Files*
+There are a total of 19 kinematic settings where a Least Squares fit was able to reproduce the *true* values within 20% difference, as seen in the file CFFs_SelKine_0.05.pdf.
 
-- **ErrorPropagationToCFFs.pdf** Presentation slides containing the method steps and results.
-- **ReH_var.pdf** Obtained standard deviation of ReH for all the sets.
-- **ReE_var.pdf** Obtained standard deviation of ReE for all the sets.
-- **ReHtilde_var.pdf** Obtained standard deviation of ReHtilde for all the sets.
-- **Deviation.pdf** Deviation of the CFFs from the values used to generate F.
-- **cffs_error_prop.csv** Print out of the obtained values of the CFFs standard deviation, the columns are:
-  * set, point
-  * kinematics (k, QQ, x_b, t)
-  * phi
+The generated cross section F at the selected kinematics was obtained with a 5% variance.
+
+The pseudodata output values are shown on the file dvcs_xs_11-19-20_0.05.csv
