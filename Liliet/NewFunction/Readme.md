@@ -4,7 +4,7 @@
 
 * *jcob* parameter modified.
 * In *GetBHUUxs* an extra factor 2 was removed.
-* In *GetIUUxs* the AUUI, BUUI and CUUI coefficients were modified to the last version of the paper arXiv:1903.05742 [hep-ph].
+* In *GetIUUxs* the AUUI, BUUI and CUUI coefficients were modified to the last version of the paper [arXiv:1903.05742 [hep-ph]](https://arxiv.org/abs/1903.05742).
 * Functions with polarized configurations that are not being used were removed.
  
 ### *Changes in class TFormFactors:*
