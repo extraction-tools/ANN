@@ -1,0 +1,4 @@
+1.	Generate n number of replicas from whichever local fitting method we conclude is optimal for each kinematic set of which we have m, thus producing a nxm matrix for each Compton Form Factor.
+2.	Define and compile a neural network, or other model form, with some set of as yet undetermined hyperparameters.
+3.	Train n copies of that model on each row of that matrix, meaning each model sees m data points.  Repeat this for each Compton Form Factor.
+4.	To interpolate a value of F for a novel kinematic set, feed that kinematic set into each model, producing n predictions of each CFF.  The mean of that n-sized vector would be the point estimate of our CFF, and the standard deviation would be our error.
