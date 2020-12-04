@@ -57,7 +57,8 @@ optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.02)
 
 EPOCH = 2500
 
-repNum = int(sys.argv[1])
+#repNum = int(sys.argv[1])
+repNum=1
 datset = 0
 
 fVals = np.zeros((100,36))
@@ -131,6 +132,7 @@ fit_cffs = [ReHfit, ReEfit, ReHTfit]
 #     plt.legend()
 #     plt.show()
 
+print(ReHfits)
 print('%d %.2f %.2f %.2f' % (repNum, ReHfits[18], ReEfits[18], ReHTfits[18]))
 
     
