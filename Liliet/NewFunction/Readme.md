@@ -15,7 +15,9 @@ Note: This new parametrization is the one used to generate the data. To obtain t
 
 ### Pseudodata
 
-There are a total of 19 kinematic settings where a Least Squares fit was able to reproduce the *true* values within 20% difference, as seen in the file **CFFs_SelKine_0.05.pdf**.
+Cross section values are generated in the file **genytree.C** without selecting the CFFs reproducibility within 20%.
+
+After a least Squares fit was able to reproduce the *true* values within 20% difference, as seen in the file **CFFs_SelKine_0.05.pdf**, there remain a total of 19 kinematic settings.
 
 The generated cross section F at the selected kinematics was obtained with a 5% variance.
 
