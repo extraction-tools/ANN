@@ -1,0 +1,21 @@
+Before using this container for the FIRST time, copy it to your personal home (or /scratch) directory using this command:
+cp $CONTAINERDIR/tensorflow-2.1.0-py37.sif /home/$USER
+
+To execute the default application inside the container, run this command:
+singularity run --nv /home/$USER/tensorflow-2.1.0-py37.sif
+
+2021-01-07 17:55:05.327984: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer.so.6
+2021-01-07 17:55:05.379558: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer_plugin.so.6
+2021-01-07 17:55:07.145296: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2021-01-07 17:55:07.153412: E tensorflow/stream_executor/cuda/cuda_driver.cc:351] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2021-01-07 17:55:07.153450: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-ba25-35c1): /proc/driver/nvidia/version does not exist
+2021-01-07 17:55:07.153823: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2021-01-07 17:55:07.166424: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2400000000 Hz
+2021-01-07 17:55:07.167611: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5f94870 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-01-07 17:55:07.167626: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2.1.0
+
+ 
+ I'm running! 
+ 
+
