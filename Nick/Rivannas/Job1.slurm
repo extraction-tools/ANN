@@ -10,4 +10,4 @@ module load anaconda/2019.10-py3.7
 module load singularity/3.5.2
 module load tensorflow/2.1.0-py37
 
-python /home/ncn6mq/Full_ML_fit_evaluation.py ${SLURM_ARRAY_TASK_ID}
+python /home/ncn6mq/Method4.py ${SLURM_ARRAY_TASK_ID}

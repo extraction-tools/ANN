@@ -173,39 +173,6 @@ class BHDVCS(tf.Module):
         self.xbhUU = self.bhAUU + self.bhBUU
 
         return self.xbhUU
-    
-    
-    def GetBHUUxsItsOwn(self, phi, F1, F2, kins):
-        '''
-        kins should be a 2-d numpy array in order of k, QQ, xb, t
-        '''
-        k = kins[:, 0]
-        QQ = kins[:, 1]
-        xb = kins[:, 2]
-        t = kins[:, 3]
-
-        # Set QQ, xB, t and k and calculate 4-vector products
-        self.SetKinematics(QQ, xb, t, k)
-        self.Set4VectorsPhiDep(phi)
-        self.Set4VectorProducts(phi)
-
-        # Coefficients of the BH unpolarized structure function FUUBH
-        self.AUUBH = ( (8. * self.M2) / (self.t * self.kqp * self.kpqp) ) * ( (4. * self.tau * (self.kP * self.kP + self.kpP * self.kpP) ) - ( (self.tau + 1.) * (self.kd * self.kd + self.kpd * self.kpd) ) )
-        self.BUUBH = ( (16. * self.M2) / (self.t* self.kqp * self.kpqp) ) * (self.kd * self.kd + self.kpd * self.kpd)
-
-        # Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
-        # I multiply by 2 because I think Auu and Buu are missing a factor 2
-        self.con_AUUBH = 2. * self.AUUBH * self.GeV2nb * self.jcob
-        self.con_BUUBH = 2. * self.BUUBH * self.GeV2nb * self.jcob
-
-        # Unpolarized Coefficients multiplied by the Form Factors
-        self.bhAUU = (self.Gamma/self.t) * self.con_AUUBH * ( F1 * F1 + self.tau * F2 * F2 )
-        self.bhBUU = (self.Gamma/self.t) * self.con_BUUBH * ( self.tau * ( F1 + F2 ) * ( F1 + F2 ) )
-
-        # Unpolarized BH cross section
-        self.xbhUU = self.bhAUU + self.bhBUU
-
-        return self.xbhUU
 
         #____________________________________________________________________________________
 

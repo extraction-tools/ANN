@@ -14,11 +14,12 @@ import sys
 
 print(tf.__version__)
 
+print("\n \n I'm running! \n \n")
 # In[2]:
 
 import sys
 # insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/home/ncn6mq') 
+sys.path.insert(1, '/home/ncn6mq')
 
 from BHDVCStf import BHDVCS #modified bhdvcs file
 bhdvcs = BHDVCS()
@@ -128,24 +129,26 @@ results = pd.DataFrame({
 
 for sample in range(numSamples):
 
-    chkpt_path = 'best-network' + str(i) + '.hdf5'
-    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=chkpt_path,
-        save_weights_only=True,
-        monitor='loss',
-        mode='min',
-        save_best_only=True)
+        chkpt_path = 'best-network' + str(i) + '.hdf5'
+        model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=chkpt_path,
+            save_weights_only=True,
+            monitor='loss',
+            mode='min',
+            save_best_only=True)
 
-    globalModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),
-                epochs=2500, verbose=0,
-                callbacks=[model_checkpoint_callback])
+        globalModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),
+                    epochs=2500, verbose=0,
+                    callbacks=[model_checkpoint_callback])
 
-    globalModel.load_weights(chkpt_path)
+        globalModel.load_weights(chkpt_path)
 
-    cffs = cffs_from_globalModel(globalModel, setI.Kinematics)
+        cffs = cffs_from_globalModel(globalModel, setI.Kinematics)
 
-    for num, cff in enumerate(['ReH', 'ReE', 'ReHtilde']):
-        results.loc[sample, cff] = cffs[num]     
-            
-            
+        for num, cff in enumerate(['ReH', 'ReE', 'ReHtilde']):
+            results.loc[sample, cff] = cffs[num]      
+      
+# In[86]:
+
+
 results.to_csv("/home/ncn6mq/Results"+ str(i) + ".csv")
