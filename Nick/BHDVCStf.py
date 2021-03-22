@@ -52,7 +52,6 @@ class BHDVCS(tf.Module):
         return v1.Px()*v2.Px() + v1.Py()*v2.Py()
 
     def SetKinematics(self, _QQ, _x, _t, _k):
-
         self.QQ = _QQ #Q^2 value
         self.x = _x   #Bjorken x
         self.t = _t   #momentum transfer squared
@@ -174,38 +173,6 @@ class BHDVCS(tf.Module):
 
         return self.xbhUU
     
-    
-    def GetBHUUxsItsOwn(self, phi, F1, F2, kins):
-        '''
-        kins should be a 2-d numpy array in order of k, QQ, xb, t
-        '''
-        k = kins[:, 0]
-        QQ = kins[:, 1]
-        xb = kins[:, 2]
-        t = kins[:, 3]
-
-        # Set QQ, xB, t and k and calculate 4-vector products
-        self.SetKinematics(QQ, xb, t, k)
-        self.Set4VectorsPhiDep(phi)
-        self.Set4VectorProducts(phi)
-
-        # Coefficients of the BH unpolarized structure function FUUBH
-        self.AUUBH = ( (8. * self.M2) / (self.t * self.kqp * self.kpqp) ) * ( (4. * self.tau * (self.kP * self.kP + self.kpP * self.kpP) ) - ( (self.tau + 1.) * (self.kd * self.kd + self.kpd * self.kpd) ) )
-        self.BUUBH = ( (16. * self.M2) / (self.t* self.kqp * self.kpqp) ) * (self.kd * self.kd + self.kpd * self.kpd)
-
-        # Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
-        # I multiply by 2 because I think Auu and Buu are missing a factor 2
-        self.con_AUUBH = 2. * self.AUUBH * self.GeV2nb * self.jcob
-        self.con_BUUBH = 2. * self.BUUBH * self.GeV2nb * self.jcob
-
-        # Unpolarized Coefficients multiplied by the Form Factors
-        self.bhAUU = (self.Gamma/self.t) * self.con_AUUBH * ( F1 * F1 + self.tau * F2 * F2 )
-        self.bhBUU = (self.Gamma/self.t) * self.con_BUUBH * ( self.tau * ( F1 + F2 ) * ( F1 + F2 ) )
-
-        # Unpolarized BH cross section
-        self.xbhUU = self.bhAUU + self.bhBUU
-
-        return self.xbhUU
 
         #____________________________________________________________________________________
 
@@ -241,7 +208,27 @@ class BHDVCS(tf.Module):
         self.xIUU = self.iAUU + self.iBUU + self.iCUU
 
         return self.xIUU
+    
+    
+    def ABcon(self, phi, F1, F2):
+        self.Set4VectorsPhiDep(phi)
+        self.Set4VectorProducts(phi)
 
+        # Interference coefficients given on eq. (241a,b,c)--------------------
+        self.AUUI = -4.0 / (self.kqp * self.kpqp) * (( self.QQ + self.t ) * ( 2.0 * ( self.kP + self.kpP ) * self.kk_T + ( self.Pq * self.kqp_T ) + 2.* ( self.kpP * self.kqp ) - 2.* ( self.kP * self.kpqp ) + self.kpqp * self.kP_T + self.kqp * self.kpP_T - 2.*self.kkp * self.kP_T )
+         + ( self.QQ - self.t + 4.* self.kd ) * ( self.Pqp * ( self.kkp_T + self.kqp_T - 2.* self.kkp ) + 2.* self.kkp * self.qpP_T - self.kpqp * self.kP_T - self.kqp * self.kpP_T ) )
+
+        self.BUUI = 2.0 * self.xi / ( self.kqp * self.kpqp) * ( ( self.QQ + self.t ) * ( 2.* self.kk_T * ( self.kd + self.kpd ) + self.kqp_T * ( self.qd - self.kqp - self.kpqp + 2.*self.kkp ) + 2.* self.kqp * self.kpd - 2.* self.kpqp * self.kd ) +
+                                                    ( self.QQ - self.t + 4.* self.kd ) * ( ( self.kk_T - 2.* self.kkp ) * self.qpd - self.kkp * self.dd_T - 2.* self.kd_T * self.kqp ) )
+
+        # Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
+
+        #print(self.AUUI, self.GeV2nb, self.jcob)
+        self.con_AUUI = self.AUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
+        self.con_BUUI = self.BUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
+        
+        return self.con_AUUI, self.con_BUUI
+    
     def TotalUUXS(self, x, ReH, ReE, ReHtilde): # originally named TotalUUXS_curve_fit, but original TotalUUXS is unnecessary
         """
         params:

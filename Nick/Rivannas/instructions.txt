@@ -8,6 +8,6 @@
 
 6. Run the job with the command "sbatch --array=0-14 Job1.slurm". For more information about this command see this link (https://www.rc.virginia.edu/userinfo/rivanna/slurm/). This will run all the kinematic sets simultaneously for however many replicas you specified with the numSamples parameter.  For 1000 replicas, the process may take up to six or seven hours.  If you desire to run only a handful of kinematic sets for 1000 replicas that can be done much more quickly but requires some slight changes to the code (The replicas would be parallelized instead of the kinematic sets.  In fact, both could be parallelized, but Rivanna prevents you from running more than a few thousand jobs simultaneously).   Let me know if that is the case and I can edit the code for you.
 
-7. Once the job is started, you will see a job ID in your Rivanna terminal. You can monitor the progress of your job by navigating the the "Jobs" page on your web browser (see fig 1 above). 
+7. Once the job is started, you will see a job ID in your Rivanna terminal. You can monitor the progress of your job by navigating the the "Jobs" page on your web browser.
 
 8. The results of the replicas will be in your home directory of Rivanna under the name Results(0-14).csv.  These can be sent back to your local system for analysis with the scp command or downloading via the OpenOnDemand
