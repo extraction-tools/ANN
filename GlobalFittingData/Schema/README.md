@@ -1,4 +1,12 @@
-**Instructions for writing data to a file using the global fitting schema**
+# How to Use the Global Fitting Schema
+
+Note: See [schema_test.ipynb](https://github.com/extraction-tools/ANN/blob/master/GlobalFittingData/Schema/schema_test.ipynb) for an example of how to use the global fitting schema
+
+---
+
+&nbsp;
+
+## Instructions for writing data to a file using the global fitting schema
 
 First, import GlobalFittingSchema and create an instance of the GlobalFittingSchema class:
 ```Python
@@ -6,19 +14,32 @@ from GlobalFittingSchema import GlobalFittingSchema
 g = GlobalFittingSchema()
 ```
 
-Add which architectures, optimizers, and learning rates you are using:
+If the architecture that you're using is not already in the data, add it:
 ```Python
-# Adds the architecture 'test' with the optimizers 'Adam' and 'Ftrl' and the learning rates '0.00001' and '0.8123'
-g.addArchitecture('test', ['Adam', 'Ftrl'], [0.00001, 0.8123])
+# Adds the architecture 'test' to the data
+g.addArchitecture('test')
 ```
 
-Once you run your model and get the data statistics, add them like so:
+Next add the run that you are using:
 ```Python
-# Sets the Mean Percent Error of ReH for the architecture 'test', optimizer 'Adam', and learning rate 0.00001 to 5
-g.setStatistic('test', 'Adam', 0.00001, 'ReH', 'MPE', 5)
+# Adds the run 'Run1-test-Nathan' to the architecture 'test'
+g.addRun('test', 'Run1-test-Nathan')
+```
 
-# Sets the Root Mean Square Error of ReE for the architecture 'test', optimizer 'Adam', and learning rate 0.8123 to 9.4
-g.setStatistic('test', 'Adam', 0.8123, 'ReE', 'RMSE', 9.4)
+Once you have the run in place, set the hyperparameters that characterize the run:
+```Python
+g.setHyperparameter('test', 'Run1-test-Nathan', 'optimizer', 'SGD')
+g.setHyperparameter('test', 'Run1-test-Nathan', 'learning-rate', 0.3)
+```
+Any hyperparameter name can be used.
+
+Then run your model and get the data statistics, and add them like so:
+```Python
+# Sets the Mean Percent Error of ReH for the architecture 'test' and run 'Run1-test-Nathan' to 5
+g.setStatistic('test', 'Run1-test-Nathan', 'ReH', 'MPE', 5)
+
+# Sets the Root Mean Square Error of ReE for the architecture 'test' and run 'Run1-test-Nathan' to 9.4
+g.setStatistic('test', 'Run1-test-Nathan', 'ReH', 'RMSE', 9.4)
 ```
 Any statistic name can be used.
 
@@ -27,9 +48,11 @@ After all of the statistics have been added, export the data:
 g.writeToFile('output.json')
 ```
 
+---
 
+&nbsp;
 
-**Instructions for reading data from a file using the global fitting schema**
+## Instructions for reading data from a file using the global fitting schema
 
 First, import GlobalFittingSchema and create an instance of the GlobalFittingSchema class:
 ```Python
@@ -42,38 +65,22 @@ Import the JSON file containing the data:
 g.importFromFile('input.json')
 ```
 
-There are functions for getting a list of architectures, optimizers, learning rates, etc. from the data:
+There are functions for getting a list of architectures, runs, etc. from the data:
 ```Python
 g.getArchitectures() # Get a list of architectures in the data
-g.getOptimizers('test') # Get a list of optimizers in the given architectures
-g.getLearningRates('test', 'Ftrl') # Get a list of learning rates in the given optimizer and architecture
-g.getCFFs('test', 'Ftrl', 0.00001) # Get a list of CFFs in the given leraning rate, optimizer, and architecture
-g.getStatistics('test', 'Ftrl', 0.00001, 'ReH') # Get a list of statistics in the given CFF, leraning rate, optimizer, and architecture
+g.getRuns('test') # Get a list of runs in the given architecture
+g.getHyperparameters('test', 'Run1-test-Nathan') # Get a list of hyperparameters in the given run
+g.getStatistics('test', 'Run1-test-Nathan', 'ReH') # Get a list of statistics for the given CFF, run, and architecture
+```
+
+If you want the value of a given hyperparameter, use the `getHyperparameter` function:
+```Python
+# Get the optimizer value for the given run and architecture
+g.getHyperparameter('test', 'Run1-test-Nathan', 'optimizer')
 ```
 
 If you want the value of a given statistic, use the `getStatistic` function:
 ```Python
-g.getStatistic('test', 'Adam', 0.00001, 'ReH', 'MPE')
-```
-
-There are also functions for getting a list of statistics across optimizers and learnings rates:
-```Python
-# Returns a list of MPE statistics for ReE with optimizer SGD across all available learning rates
-g.getStatisticForAllLearningRates('test', 'SGD', 'ReE', 'MPE')
-
-# Returns a list of MPE statistics for ReE with learning rate 0.5 across all available optimizers
-g.getStatisticForAllOptimizers('test', 0.5, 'ReE', 'MPE')
-```
-
-This makes it easy to plot the data:
-```Python
-import matplotlib.pyplot as plt
-
-learning_rates = g.getLearningRates('test', 'SGD')
-MPE_by_learning_rate = g.getStatisticForAllLearningRates('test', 'SGD', 'ReE', 'MPE')
-
-plt.plot(learning_rates, MPE_by_learning_rate)
-plt.ylabel('Mean Percent Error')
-plt.xlabel('learning rate')
-plt.show()
+# Get the MPE value for the given CFF, run, and architecture
+g.getStatistic('test', 'Run1-test-Nathan', 'ReH', 'MPE')
 ```
