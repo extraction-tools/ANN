@@ -198,5 +198,52 @@ class f1_f2(object):
         dif = (1-part)*(1-part);
         GA = ga/dif
         return GA
+
+
+def c_int_plot(folder_name, data, which_kin, cffname, cffnum, resolution=100):
+    
+    km = np.repeat([data.Kinematics['k'].median()], resolution)
+    QQm = np.repeat([data.Kinematics['QQ'].median()], resolution)
+    x_bm = np.repeat([data.Kinematics['x_b'].median()], resolution)
+    tm = np.repeat([data.Kinematics['t'].median()], resolution)
+    
+    k = np.linspace(data.Kinematics['k'].min(), data.Kinematics['k'].max(), num=resolution)
+    QQ = np.linspace(data.Kinematics['QQ'].min(), data.Kinematics['QQ'].max(), num=resolution)
+    x_b = np.linspace(data.Kinematics['x_b'].min(), data.Kinematics['x_b'].max(), num=resolution)
+    t = np.linspace(data.Kinematics['t'].min(), data.Kinematics['t'].max(), num=resolution)
+    
+    if which_kin == 'k':
+        x = k
+        to_pred = np.column_stack([k, QQm, x_bm, tm])
+    elif which_kin == 'QQ':
+        x = QQ
+        to_pred = np.column_stack([km, QQ, x_bm, tm])
+    elif which_kin == 'x_b':
+        x = x_b
+        to_pred = np.column_stack([km, QQm, x_b, tm])
+    elif which_kin == 't':
+        x = t
+        to_pred = np.column_stack([km, QQm, x_bm, t])
+    
+    
+    modnames = os.listdir(folder_name)
+    preds = []
+    for modname in modnames:
+        model = tf.keras.models.load_model(folder_name + '/' + modname)
+        preds.append(model.predict(to_pred)[cffnum])
+        
+    preds = np.column_stack(preds)
+
+    y_hat = preds.mean(axis=1)
+    upper_y_hat = y_hat + preds.std(axis=1)
+    lower_y_hat = y_hat - preds.std(axis=1)
+    
+    plt.plot(x, lower_y_hat)
+    plt.plot(x, y_hat, color='black')
+    plt.plot(x, upper_y_hat, color='red')
+    plt.title('68% confidence interval with point predictions')
+    plt.ylabel(cffname)
+    plt.xlabel(which_kin)
+    plt.show()
     
         
