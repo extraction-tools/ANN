@@ -1,1 +1,3 @@
 Test text for my first commit to the project
+
+Testing the commit before loading Rivanna progress
