@@ -201,7 +201,9 @@ class f1_f2(object):
 
 
 def c_int_plot(folder_name, data, which_kin, cffname, cffnum, resolution=100):
-    
+    """
+    :param folder_name: name of folder that contains saved models by name "model1.h5", "model2.h5", etc.
+    """
     km = np.repeat([data.Kinematics['k'].median()], resolution)
     QQm = np.repeat([data.Kinematics['QQ'].median()], resolution)
     x_bm = np.repeat([data.Kinematics['x_b'].median()], resolution)
