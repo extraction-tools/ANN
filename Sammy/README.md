@@ -11,10 +11,10 @@ My current task is the implementation of a full hyperparameter search using Riva
 # Current Hyperparameter 
 Learning Rate: interval between (0.1,0.0000001) <br />
 Activation Functions: ["tanh", "relu", "selu", "elu"] <br />
-Number of Nodes: [4,8,20,16,32,64,128]
-Number of hidden layers: 1-5
-Number of dropout layers: 1-3
-Optimizers: ["Adam", "SGD"]
+Number of Nodes: [4,8,20,16,32,64,128] <br />
+Number of hidden layers: 1-5 <br />
+Number of dropout layers: 1-3 <br />
+Optimizers: ["Adam", "SGD"] <br />
 
 #Hyperparameters that should be considered, however haven't been implemented yet:
 Dropout layer placement with respect to hidden layers: TBD
