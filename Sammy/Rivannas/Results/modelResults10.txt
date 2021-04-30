@@ -1,0 +1,4 @@
+Learning Rate: 0.0679285210687908
+ActivationFunction: elu
+Number of Nodes: 32
+Number of Hidden Layers: 1

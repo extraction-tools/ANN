@@ -1,0 +1,4 @@
+Learning Rate: 0.06860731830528269
+ActivationFunction: selu
+Number of Nodes: 32
+Number of Hidden Layers: 1

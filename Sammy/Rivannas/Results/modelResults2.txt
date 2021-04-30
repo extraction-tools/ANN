@@ -1,0 +1,4 @@
+Learning Rate: 0.09254515356575901
+ActivationFunction: relu
+Number of Nodes: 64
+Number of Hidden Layers: 1

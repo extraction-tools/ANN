@@ -1,0 +1,37 @@
+Before using this container for the FIRST time, copy it to your personal home (or /scratch) directory using this command:
+cp $CONTAINERDIR/tensorflow-2.1.0-py37.sif /home/$USER
+
+To execute the default application inside the container, run this command:
+singularity run --nv /home/$USER/tensorflow-2.1.0-py37.sif
+
+2021-04-30 04:53:26.778093: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer.so.6
+2021-04-30 04:53:26.831051: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer_plugin.so.6
+2021-04-30 04:53:28.728712: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2021-04-30 04:53:28.737912: E tensorflow/stream_executor/cuda/cuda_driver.cc:351] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2021-04-30 04:53:28.737951: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-ba26-28c0): /proc/driver/nvidia/version does not exist
+2021-04-30 04:53:28.738341: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2021-04-30 04:53:28.751362: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2400000000 Hz
+2021-04-30 04:53:28.752591: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x572e880 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-04-30 04:53:28.752606: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-04-30 04:53:33.272398: W tensorflow/core/common_runtime/base_collective_executor.cc:217] BaseCollectiveExecutor::StartAbort Out of range: End of sequence
+	 [[{{node IteratorGetNext}}]]
+WARNING:tensorflow:Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 0 batches). You may need to use the repeat() function when building your dataset.
+WARNING:tensorflow:Can save best model only with loss available, skipping.
+2.1.0
+
+ 
+ I'm running! 
+ 
+
+Traceback (most recent call last):
+  File "/home/sl8rn/Rivannas/General2.py", line 161, in <module>
+    callbacks=[model_checkpoint_callback])
+  File "/usr/local/lib/python3.7/dist-packages/tensorflow_core/python/keras/engine/training.py", line 819, in fit
+    use_multiprocessing=use_multiprocessing)
+  File "/usr/local/lib/python3.7/dist-packages/tensorflow_core/python/keras/engine/training_v2.py", line 342, in fit
+    total_epochs=epochs)
+  File "/usr/local/lib/python3.7/dist-packages/tensorflow_core/python/keras/engine/training_v2.py", line 187, in run_one_epoch
+    aggregator.finalize()
+  File "/usr/local/lib/python3.7/dist-packages/tensorflow_core/python/keras/engine/training_utils.py", line 144, in finalize
+    raise ValueError('Empty training data.')
+ValueError: Empty training data.

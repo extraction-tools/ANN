@@ -1,0 +1,4 @@
+Learning Rate: 0.07651827588377627
+ActivationFunction: tanh
+Number of Nodes: 16
+Number of Hidden Layers: 1
