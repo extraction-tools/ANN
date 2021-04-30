@@ -1,8 +1,7 @@
 # Sammy's Hyperparameter-Tuning Demo of Method 2 with Rivanna
 
 # Introduction
-My current task is the implementation of a full hyperparameter search using Rivanna. 
-
+My current task is the implementation of a full hyperparameter search using Rivanna. In this README, I detail my Rivanna setup, techniques, and further tasks.
 
 # Rivanna Setup Walkthrough Instructions
 
@@ -10,6 +9,17 @@ My current task is the implementation of a full hyperparameter search using Riva
 
 
 # Current Hyperparameter 
+Learning Rate: interval between (0.1,0.0000001)
+Activation Functions: ["tanh", "relu", "selu", "elu"]
+Number of Nodes: [4,8,20,16,32,64,128]
+Number of hidden layers: 1-5
+Number of dropout layers: 1-3
+Optimizers: ["Adam", "SGD"]
+
+#Hyperparameters that should be considered, however haven't been implemented yet:
+Dropout layer placement with respect to hidden layers: TBD
+Nodes per layer (shape): TBD
+
 
 
 ## Remainning Tasks:
