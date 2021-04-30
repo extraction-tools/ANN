@@ -9,8 +9,8 @@ My current task is the implementation of a full hyperparameter search using Riva
 
 
 # Current Hyperparameter 
-Learning Rate: interval between (0.1,0.0000001)
-Activation Functions: ["tanh", "relu", "selu", "elu"]
+Learning Rate: interval between (0.1,0.0000001) <br />
+Activation Functions: ["tanh", "relu", "selu", "elu"] <br />
 Number of Nodes: [4,8,20,16,32,64,128]
 Number of hidden layers: 1-5
 Number of dropout layers: 1-3
