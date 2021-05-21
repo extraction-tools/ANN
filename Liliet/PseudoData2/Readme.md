@@ -10,7 +10,7 @@
 
 ### *Pseudodata Generation:*
 
-* There are a total of 342 kinematic settings selected where a least squares fit was able to reproduce the *true* values of the CFFs within 20% difference.
+* There are a total of 342 kinematic settings selected where a least squares fit was able to reproduce the *true* values of the CFFs within 15% difference.
 
 * The cross section F at the selected kinematics was generated within a 5% variance.
 
