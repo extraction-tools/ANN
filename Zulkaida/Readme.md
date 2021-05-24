@@ -15,5 +15,6 @@ copy $CONTAINERDIR/pytorch-1.5.1.sif <your home directory>
 
 Don't forget modify job.slurm to your directory
   
- Combine the text files: cat *.out > name.txt 
+Combine the text files: cat *.out > name.txt 
 
+Result: ANN_Meeting_May24.pdf
