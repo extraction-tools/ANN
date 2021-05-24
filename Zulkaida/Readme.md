@@ -14,4 +14,6 @@ copy the pytorch sif file to your home directory before you run the job:
 copy $CONTAINERDIR/pytorch-1.5.1.sif <your home directory> 
 
 Don't forget modify job.slurm to your directory
+  
+ Combine the text files: cat *.out > name.txt 
 
