@@ -1,9 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////////
 //                                                                             //
-//  Calculation of the elastic form factors using:                             //
+//  Calculation of the elastic form factors using the Galster parametrization  //
 //                                                                             //
-//    1. The Galster or Dipole parametrization                                 //
-//    2. Kelly's parametrization                                               //
+//  Calculates GM, GE, F1, F2, GA, and GP and from their t dependence          //
+//                                                                             //
+//  Written as part of the work referencing arXiv: 1903.05742                  //
+//                                                                             //
+//  Written by: Brandon Kriesten                                               //
+//                                                                             //
+//  Email: btk8bh@virginia.edu                                                 //
 //                                                                             //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +54,7 @@ Double_t TFormFactors::ffGP(Double_t t) {
   return 8.13;
 }
 
-// =============== Kelly's parametrization ================
+// =============== Kelly parametrization ================
 Double_t TFormFactors::ffGEp(Double_t t) {
   Double_t tau = - t / 4. / M / M;
   Double_t GEp = ( 1. + a1_GEp * tau )/( 1. + b1_GEp * tau + b2_GEp * tau * tau + b3_GEp * tau * tau * tau );

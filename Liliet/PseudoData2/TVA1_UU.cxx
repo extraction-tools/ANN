@@ -1,26 +1,25 @@
-#include "TBHDVCS.h"
+#include "TVA1_UU.h"
 
 using namespace std;  	// std namespace: so you can do things like 'cout'
 
-ClassImp(TBHDVCS)				// classimp: necessary for root
-
+ClassImp(TVA1_UU)				// classimp: necessary for root
 
 //____________________________________________________________________________________
-TBHDVCS::TBHDVCS() {
+TVA1_UU::TVA1_UU() {
 	// Default Constructor
 }
 //____________________________________________________________________________________
-TBHDVCS::~TBHDVCS() {
+TVA1_UU::~TVA1_UU() {
 	// Default Destructor
 }
 //____________________________________________________________________________________
-Double_t TBHDVCS::TProduct(TLorentzVector v1, TLorentzVector v2) {
+Double_t TVA1_UU::TProduct(TLorentzVector v1, TLorentzVector v2) {
 	// Transverse product
   Double_t tv1v2;
   return tv1v2 = v1.Px() * v2.Px() + v1.Py() * v2.Py();
 }
 //____________________________________________________________________________________
-void TBHDVCS::SetKinematics(Double_t _QQ, Double_t _x, Double_t _t, Double_t _k){
+void TVA1_UU::SetKinematics(Double_t _QQ, Double_t _x, Double_t _t, Double_t _k){
 
   QQ = _QQ; //Q^2 value
   x = _x;   //Bjorken x
@@ -35,8 +34,9 @@ void TBHDVCS::SetKinematics(Double_t _QQ, Double_t _x, Double_t _t, Double_t _k)
 	e = ( 1 - y - ( y * y * (gg / 4.) ) ) / ( 1. - y + (y * y / 2.) + ( y * y * (gg / 4.) ) ); // epsilon eq. (32)
   //Skewness parameter
 	xi = 1. * x * ( ( 1. + t / ( 2. * QQ ) ) / ( 2. - x + x * t / QQ ) ); // skewness parameter eq. (12b) note: there is a minus sign on the write up that shouldn't be there
+  //xi = x * ( ( 1. ) / ( 2. - x ) );
   //Minimum t value
-  tmin = ( QQ * ( 1. - sqrt( 1. + gg ) + gg / 2. ) ) / ( x * ( 1. - sqrt( 1. + gg ) + gg / ( 2.* x ) ) ); // minimum t eq. (29)
+  tmin = -( QQ * ( 1. - sqrt( 1. + gg ) + gg / 2. ) ) / ( x * ( 1. - sqrt( 1. + gg ) + gg / ( 2.* x ) ) ); // minimum t eq. (29)
   //Final Lepton energy
   kpr = k * ( 1. - y ); // k' from eq. (23)
   //outgoing photon energy
@@ -67,16 +67,18 @@ void TBHDVCS::SetKinematics(Double_t _QQ, Double_t _x, Double_t _t, Double_t _k)
 
   // Defurne's Jacobian
   jcob = 2. * PI ;
+
 }
 //___________________________________________________________________________________
-Double_t TBHDVCS::GetGamma() {
+Double_t TVA1_UU::GetGamma() {
 
   return Gamma;
 }
 //___________________________________________________________________________________
-void TBHDVCS::Set4VectorsPhiDep(Double_t phi) {
+void TVA1_UU::Set4VectorsPhiDep(Double_t phi) {
 
   // phi dependent 4 - momenta vectors defined on eq. (21) -------------
+
 	QP.SetPxPyPzE(qp * sin(theta) * cos( phi * RAD ), qp * sin(theta) * sin( phi * RAD ), qp * cos(theta), qp);
   D = Q - QP; // delta vector eq. (12a)
   TLorentzVector pp = p + D; // p' from eq. (21)
@@ -84,7 +86,7 @@ void TBHDVCS::Set4VectorsPhiDep(Double_t phi) {
   P.SetPxPyPzE(.5*P.Px(), .5*P.Py(), .5*P.Pz(), .5*P.E());
 }
 //____________________________________________________________________________________
-void TBHDVCS::Set4VectorProducts(Double_t phi) {
+void TVA1_UU::Set4VectorProducts(Double_t phi) {
 
   // 4-vectors products (phi - independent)
   kkp  = K * KP;   //(kk')
@@ -102,49 +104,32 @@ void TBHDVCS::Set4VectorProducts(Double_t phi) {
   dd   = D * D;    //(ΔΔ)
   Pq   = P * Q;    //(Pq)
   Pqp  = P * QP;   //(Pq')
-  qd   = Q * D;    //(qΔ)
+  qd   = Q * D;    //(q
   qpd  = QP * D;   //(q'Δ)
 
-  // Transverse vector products -----------------------
-	kk_T   = TProduct(K,K);
+  // Transverse vector products defined after eq.(241c) -----------------------
+  kk_T   = TProduct(K,K);
   kkp_T  = kk_T;
   kqp_T  = TProduct(K,QP);
   kd_T   = -1.* kqp_T;
   dd_T   = TProduct(D,D);
-  kpqp_T = TProduct(KP,QP);
+  kpqp_T = kqp_T;
   kP_T   = TProduct(K,P);
   kpP_T  = TProduct(KP,P);
   qpP_T  = TProduct(QP,P);
-  kpd_T  = TProduct(KP,D);
-  qpd_T  = TProduct(QP,D);
+  kpd_T  = -1.* kqp_T;
+  qpd_T  = -1. * dd_T;
 
-  // Invariants involving the spin 4-vector SL used for polarized BH cross section calculation
-  ppSL  = ( 2. * M ) / ( sqrt( 1 + gg ) ) * ( x * ( 1 - ( t / QQ ) ) -  t / ( 2 * M2 ) ); // eq. 160
-  kSL   = ( 2. * QQ ) / ( sqrt( 1 + gg ) ) * ( 1. + .5 * y * gg ) * ( 1. / ( 2. * M * x * y ) );  // eq. 161
-  kpSL  = ( 2. * QQ ) / ( sqrt( 1 + gg ) ) * ( 1. - y - .5 * y * gg ) * ( 1. / ( 2. * M * x * y ) );  // eq. 162
-
-  //Expressions that appear in the polarized interference coefficient calculations
+  //Expressions that appear in the interference coefficient calculations
   Dplus   = .5 / kpqp - .5 / kqp;
-  Dminus  = .5 / kpqp + .5 / kqp;
-
-  //Light cone variables expressed as A^{+-} = 1/sqrt(2)(A^{0} +- A^{3}) used on the polarized interference coefficients
-  kplus   = ( K.E() + K.Pz() ) / sqrt(2);
-  kminus  = ( K.E() - K.Pz() ) / sqrt(2);
-  kpplus  = ( KP.E() + KP.Pz() ) / sqrt(2);
-  kpminus = ( KP.E() - KP.Pz() ) / sqrt(2);
-  qplus   = ( Q.E() + Q.Pz() ) / sqrt(2);
-  qminus  = ( Q.E() - Q.Pz() ) / sqrt(2);
-  qpplus  = ( QP.E() + QP.Pz() ) / sqrt(2);
-  qpminus = ( QP.E() - QP.Pz() ) / sqrt(2);
-  Pplus   = ( P.E() + P.Pz() ) / sqrt(2);
-  Pminus  = ( P.E() - P.Pz() ) / sqrt(2);
-  dplus   = ( D.E() + D.Pz() ) / sqrt(2);
-  dminus  = ( D.E() - D.Pz() ) / sqrt(2);
+  Dminus  = -.5 / kpqp - .5 / kqp;
 }
 //====================================================================================
 // DVCS Unpolarized Cross Section
 //====================================================================================
-Double_t TBHDVCS::GetDVCSUUxs( Double_t ReH, Double_t ReE, Double_t ReHtilde, Double_t ReEtilde, Double_t ImH, Double_t ImE, Double_t ImHtilde, Double_t ImEtilde) {
+Double_t TVA1_UU::GetDVCSUU( Double_t ReH, Double_t ReE, Double_t ReHtilde, Double_t ReEtilde, Double_t ImH, Double_t ImE, Double_t ImHtilde, Double_t ImEtilde) {
+
+  // Note: SetKinematics should have been previously called.
 
   FUUT = 4.* ( ( 1 - xi * xi ) * ( ReH * ReH + ImH * ImH + ReHtilde * ReHtilde + ImHtilde * ImHtilde ) + ( tmin - t ) / ( 2.* M2 ) * ( ReE * ReE + ImE * ImE + xi * xi * ReEtilde * ReEtilde + xi * xi * ImEtilde * ImEtilde )
          - ( 2.* xi * xi ) / ( 1 - xi * xi ) * ( ReH * ReE + ImH * ImE + ReHtilde * ReEtilde + ImHtilde * ImEtilde ) );
@@ -153,13 +138,12 @@ Double_t TBHDVCS::GetDVCSUUxs( Double_t ReH, Double_t ReE, Double_t ReHtilde, Do
 
   return xdvcsUU;
 }
-
 //====================================================================================
 // BH Unpolarized Cross Section
 //====================================================================================
-Double_t TBHDVCS::GetBHUUxs(Double_t phi, Double_t F1, Double_t F2) {
+Double_t TVA1_UU::GetBHUU(Double_t phi, Double_t F1, Double_t F2) {
 
-  // Get the 4-vector products. Note: Kinematics should have been previously set.
+  // Get the 4-vector products. Note: SetKinematics should have been previously called.
   Set4VectorsPhiDep(phi);
   Set4VectorProducts(phi);
 
@@ -180,27 +164,23 @@ Double_t TBHDVCS::GetBHUUxs(Double_t phi, Double_t F1, Double_t F2) {
 
   return xbhUU;
 }
-
 //====================================================================================
-// Unpolarized BH-DVCS Interference Cross Section
+// Unpolarized BH-DVCS Interference Cross Section (Comparison paper)
 //====================================================================================
-Double_t TBHDVCS::GetIUUxs(Double_t phi, Double_t F1, Double_t F2, Double_t ReH, Double_t ReE, Double_t ReHtilde,
-                           Double_t &con_AUUI, Double_t &con_BUUI, Double_t &con_CUUI) {
+Double_t TVA1_UU::GetIUU(Double_t phi, Double_t F1, Double_t F2, Double_t ReH, Double_t ReE, Double_t ReHtilde) {
 
-  // Get the 4-vector products. Note: Kinematics should have been previously set.
+  // Get the 4-vector products. Note: SetKinematics should have been previously called.
   Set4VectorsPhiDep(phi);
   Set4VectorProducts(phi);
 
-  // Interference coefficients given on eq. (238a,b,c)-------------------- last version
-  AUUI = 1. / ( kqp * kpqp ) * ( ( QQ + t ) * ( ( kqp_T - 2. * kk_T - 2. * kqp ) * kpP + ( 2. * kpqp - 2. * kkp_T - kpqp_T ) * kP + kpqp * kP_T + kqp * kpP_T - 2.*kkp * kP_T ) -
-                               ( QQ - t + 4.* kd ) * ( ( 2. * kkp - kpqp_T - kkp_T ) * Pqp + 2. * kkp * qpP_T - kpqp * kP_T - kqp * kpP_T ) );
+  AUUI = -4. * cos( phi * RAD ) * ( Dplus * ( ( kqp_T - 2. * kk_T - 2. * kqp ) * kpP + ( 2. * kpqp - 2. * kkp_T - kpqp_T ) * kP + kpqp * kP_T + kqp * kpP_T - 2.*kkp * kP_T ) -
+                  Dminus * ( ( 2. * kkp - kpqp_T - kkp_T ) * Pqp + 2. * kkp * qpP_T - kpqp * kP_T - kqp * kpP_T ) ) ;
 
-  BUUI = xi / ( 2. * kqp * kpqp ) * ( ( QQ + t ) * ( ( kqp_T - 2. * kk_T - 2. * kqp ) * kpd + ( 2. * kpqp - 2. * kkp_T - kpqp_T ) * kd + kpqp * kd_T + kqp * kpd_T - 2.*kkp * kd_T ) -
-                                      ( QQ - t + 4.* kd ) * ( ( 2. * kkp - kpqp_T - kkp_T ) * qpd + 2. * kkp * qpd_T - kpqp * kd_T - kqp * kpd_T ) );
+  BUUI = -2. * xi * cos( phi * RAD ) * ( Dplus * ( ( kqp_T - 2. * kk_T - 2. * kqp ) * kpd + ( 2. * kpqp - 2. * kkp_T - kpqp_T ) * kd + kpqp * kd_T + kqp * kpd_T - 2.*kkp * kd_T ) -
+                      Dminus * ( ( 2. * kkp - kpqp_T - kkp_T ) * qpd + 2. * kkp * qpd_T - kpqp * kd_T - kqp * kpd_T ) );
 
-
-  CUUI = 1. / ( 2. * kqp * kpqp) * ( ( QQ + t ) * ( 2. * kkp * kd_T - kpqp * kd_T - kqp * kpd_T + 4. * xi * kkp * kP_T - 2. * xi * kpqp * kP_T - 2. * xi * kqp * kpP_T ) -
-                                     ( QQ - t + 4.* kd ) * ( kkp * qpd_T - kpqp * kd_T - kqp * kpd_T + 2. * xi * kkp * qpP_T - 2. * xi * kpqp * kP_T - 2. * xi * kqp * kpP_T ) );
+  CUUI = -2. * cos( phi * RAD ) * ( Dplus * ( 2. * kkp * kd_T - kpqp * kd_T - kqp * kpd_T + 4. * xi * kkp * kP_T - 2. * xi * kpqp * kP_T - 2. * xi * kqp * kpP_T ) -
+                 Dminus * ( kkp * qpd_T - kpqp * kd_T - kqp * kpd_T + 2. * xi * kkp * qpP_T - 2. * xi * kpqp * kP_T - 2. * xi * kqp * kpP_T ) );
 
   // Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
   con_AUUI = AUUI * GeV2nb * jcob;
@@ -208,11 +188,12 @@ Double_t TBHDVCS::GetIUUxs(Double_t phi, Double_t F1, Double_t F2, Double_t ReH,
   con_CUUI = CUUI * GeV2nb * jcob;
 
   //Unpolarized Coefficients multiplied by the Form Factors
-  iAUU = (Gamma/(-t * QQ)) * cos( phi * RAD ) * con_AUUI * ( F1 * ReH + tau * F2 * ReE );
-  iBUU = (Gamma/(-t * QQ)) * cos( phi * RAD ) * con_BUUI * ( F1 + F2 ) * ( ReH + ReE );
-  iCUU = (Gamma/(-t * QQ)) * cos( phi * RAD ) * con_CUUI * ( F1 + F2 ) * ReHtilde;
+  iAUU = (Gamma/(TMath::Abs(t) * QQ)) * con_AUUI * ( F1 * ReH + tau * F2 * ReE );
+  iBUU = (Gamma/(TMath::Abs(t) * QQ)) * con_BUUI * ( F1 + F2 ) * ( ReH + ReE );
+  iCUU = (Gamma/(TMath::Abs(t) * QQ)) * con_CUUI * ( F1 + F2 ) * ReHtilde;
 
   // Unpolarized BH-DVCS interference cross section
   xIUU = iAUU + iBUU + iCUU;
-  return xIUU;
+
+  return -1. * xIUU;
 }
