@@ -146,8 +146,12 @@ class TotalUUXSlayer(tf.keras.layers.Layer):
     def __init__(self):
         super(TotalUUXSlayer, self).__init__(dtype='float64')
         self.F = BHDVCS()
+        
     def call(self, inputs):
         return self.F.TotalUUXS(inputs[:, :8], inputs[:, 8], inputs[:, 9], inputs[:, 10])
+    
+    def get_config(self):
+        return {"F": self.F}
     
     
 def cffs_from_globalModel(model, kinematics, numHL=1):
