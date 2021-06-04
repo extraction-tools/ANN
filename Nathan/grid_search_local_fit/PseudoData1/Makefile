@@ -2,7 +2,7 @@ OBJS := grid_search_local_fit.c
 TARGET_EXEC := grid_search_local_fit
 CFLAGS := -std=c99 -Wall -Wextra -Wpedantic -Ofast
 
-DATA_FILE := dvcs_xs_newsets_genCFFs.csv
+DATA_FILE := pseudodata.csv
 NUM_SETS := 15
 
 .SILENT: $(TARGET_EXEC) run clean
@@ -22,4 +22,4 @@ else
 endif
 
 clean:
-	rm -f $(TARGET_EXEC)
+	rm -f $(TARGET_EXEC) $(TARGET_EXEC)_output.csv
