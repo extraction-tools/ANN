@@ -6,34 +6,29 @@ from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 import os
 
-from BHDVCStf import BHDVCS
+from TVA1_UU import TVA1_UU
 
-bhdvcs = BHDVCS()
+#bhdvcs = BHDVCS()
 
 
 class DvcsData(object):
     def __init__(self, df):
         self.df = df
-        if 'ReH' in df:
-            self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'ReH', 'ReE', 'ReHtilde', 'dvcs']]
-            self.CFFs = df.loc[:, ['ReH', 'ReE', 'ReHtilde']]
-            
-        self.XnoCFF = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'dvcs']]
+        self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'dvcs']]
         self.y = df.loc[:, 'F']
         self.Kinematics = df.loc[:, ['k', 'QQ', 'x_b', 't']]
-        self.erry = df.loc[:, 'errF']
+        self.erry = df.loc[:, 'sigmaF']
         
     def __len__(self):
-        return len(self.df)
+        return len(self.X)
     
-    def getSet(self, setNum, itemsInSet=36):
+    def getSet(self, setNum, itemsInSet=45):
         pd.options.mode.chained_assignment = None
-#         subX = self.X.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1, :]
-#         subX['F'] = self.y.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
-#         subX['errF'] = self.erry.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
-#         pd.options.mode.chained_assignment = 'warn'
-#         return DvcsData(subX)
-        return DvcsData(self.df.iloc[setNum*itemsInSet:(setNum+1)*itemsInSet-1, :])
+        subX = self.X.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1, :]
+        subX['F'] = self.y.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
+        subX['sigmaF'] = self.erry.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
+        pd.options.mode.chained_assignment = 'warn'
+        return DvcsData(subX)
     
     def sampleY(self):
         return np.random.normal(self.y, self.erry)
@@ -41,7 +36,7 @@ class DvcsData(object):
     def sampleWeights(self):
         return 1/self.erry
     
-    def getAllKins(self, itemsInSets=36):
+    def getAllKins(self, itemsInSets=45):
         return self.Kinematics.iloc[np.array(range(len(df)//itemsInSets))*itemsInSets, :]
 
     
@@ -146,14 +141,11 @@ class TotalUUXSlayer(tf.keras.layers.Layer):
     '''
     def __init__(self):
         super(TotalUUXSlayer, self).__init__(dtype='float64')
-        self.F = BHDVCS()
-        
+        self.F = TVA1_UU()
     def call(self, inputs):
         return self.F.TotalUUXS(inputs[:, :8], inputs[:, 8], inputs[:, 9], inputs[:, 10])
-    
     def get_config(self):
         return {"F": self.F}
-    
     
 def cffs_from_globalModel(model, kinematics, numHL=1):
     '''
@@ -203,14 +195,15 @@ class f1_f2(object):
         dif = (1-part)*(1-part);
         GA = ga/dif
         return GA
-
-
-def c_int_plot(folder_name, data, which_kin, cffnum, resolution=100):
+    
+        
+def c_int_plot(folder_name, data, which_kin, cffnum, resolution=100, plot_error=False):
     """
     :param folder_name: name of folder that contains saved models by name "model1.h5", "model2.h5", etc.
     :param data: DvcsData object of the data originally used to train the models
     :param which_kin: kinematic to plot on x axis (one of 'k', 'QQ', 'x_b', or 't')
     :param cffnum: the cff number corresponding to the cff to plot on the y axis (0: 'ReH', 1: 'ReE', 2: 'ReHtilde')
+    :param plot_error: boolean indicating whether to plot error bars
     
     :returns: plot of kinematic against cff
     """
@@ -253,12 +246,11 @@ def c_int_plot(folder_name, data, which_kin, cffnum, resolution=100):
     y_hat = preds.mean(axis=1)
     upper_y_hat = y_hat + preds.std(axis=1)
     lower_y_hat = y_hat - preds.std(axis=1)
-    plt.plot(x, lower_y_hat)
     plt.plot(x, y_hat, color='black')
-    plt.plot(x, upper_y_hat, color='red')
+    if plot_error:
+        plt.plot(x, lower_y_hat)
+        plt.plot(x, upper_y_hat, color='red')
     plt.title('68% confidence interval with point predictions')
     plt.ylabel(cffnames[cffnum])
     plt.xlabel(which_kin)
     plt.show()
-    
-        
