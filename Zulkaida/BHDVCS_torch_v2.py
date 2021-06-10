@@ -165,11 +165,11 @@ class TBHDVCS(object):
         self.Set4VectorsPhiDep(cosphi)
         self.Set4VectorProducts(cosphi)
 
-        self.AUUI = -4. * torch.cosphi * ( self.Dplus * ( ( self.kqp_T - 2. * self.kk_T - 2. * self.kqp ) * self.kpP + ( 2. * self.kpqp - 2. * self.kkp_T - self.kpqp_T ) * self.kP +         	                 self.kpqp * self.kP_T + self.kqp * self.kpP_T - 2.*self.kkp * self.kP_T ) - self.Dminus * ( ( 2. * self.kkp - self.kpqp_T - self.kkp_T ) * self.Pqp + 2. * self.kkp * self.qpP_T -    	              self.kpqp * self.kP_T - self.kqp * self.kpP_T ) ) 
+        self.AUUI = -4. * cosphi * ( self.Dplus * ( ( self.kqp_T - 2. * self.kk_T - 2. * self.kqp ) * self.kpP + ( 2. * self.kpqp - 2. * self.kkp_T - self.kpqp_T ) * self.kP +         	                 self.kpqp * self.kP_T + self.kqp * self.kpP_T - 2.*self.kkp * self.kP_T ) - self.Dminus * ( ( 2. * self.kkp - self.kpqp_T - self.kkp_T ) * self.Pqp + 2. * self.kkp * self.qpP_T -    	              self.kpqp * self.kP_T - self.kqp * self.kpP_T ) ) 
 
-        self.BUUI = -2. * self.xi * torch.cosphi * ( self.Dplus * ( ( self.kqp_T - 2. * self.kk_T - 2. * self.kqp ) * self.kpd + ( 2. * self.kpqp - 2. * self.kkp_T - self.kpqp_T ) * self.kd   	                    + self.kpqp * self.kd_T + self.kqp * self.kpd_T - 2.*self.kkp * self.kd_T ) - self.Dminus * ( ( 2. * self.kkp - self.kpqp_T - self.kkp_T ) * self.qpd + 2. * self.kkp * self.qpd_T -  	                self.kpqp * self.kd_T - self.kqp * self.kpd_T ) )
+        self.BUUI = -2. * self.xi * cosphi * ( self.Dplus * ( ( self.kqp_T - 2. * self.kk_T - 2. * self.kqp ) * self.kpd + ( 2. * self.kpqp - 2. * self.kkp_T - self.kpqp_T ) * self.kd   	                    + self.kpqp * self.kd_T + self.kqp * self.kpd_T - 2.*self.kkp * self.kd_T ) - self.Dminus * ( ( 2. * self.kkp - self.kpqp_T - self.kkp_T ) * self.qpd + 2. * self.kkp * self.qpd_T -  	                self.kpqp * self.kd_T - self.kqp * self.kpd_T ) )
 
-        self.CUUI = -2. * torch.cosphi * ( self.Dplus * ( 2. * self.kkp * self.kd_T - self.kpqp * self.kd_T - self.kqp * self.kpd_T + 4. * self.xi * self.kkp * self.kP_T - 2. * self.xi *   	                self.kpqp * self.kP_T - 2. * self.xi * self.kqp * self.kpP_T ) -
+        self.CUUI = -2. * cosphi * ( self.Dplus * ( 2. * self.kkp * self.kd_T - self.kpqp * self.kd_T - self.kqp * self.kpd_T + 4. * self.xi * self.kkp * self.kP_T - 2. * self.xi *   	                self.kpqp * self.kP_T - 2. * self.xi * self.kqp * self.kpP_T ) -
                     self.Dminus * ( self.kkp * self.qpd_T - self.kpqp * self.kd_T - self.kqp * self.kpd_T + 2. * self.xi * self.kkp * self.qpP_T - 2. * self.xi * self.kpqp * self.kP_T       	   		            - 2. * self.xi * self.kqp  * self.kpP_T ) )
 
         # Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
