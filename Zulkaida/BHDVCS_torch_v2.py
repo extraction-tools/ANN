@@ -287,7 +287,7 @@ class TBHDVCS(object):
         f_pred = xsbhuu + xsiuu + const
 
         dy = torch.mean(f_true - f_pred)
-        if dy < delta:
+        if dy < 1.0:
             return self.loss_MSE(kins, cffs, errs, f_true)
         else:
             return self.loss_ABS(kins, cffs, errs, f_true)
