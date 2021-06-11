@@ -184,11 +184,8 @@ double calcFError(double replicas[], double ReH, double ReE, double ReHtilde) {
 
         double F_actual = F[index] + (replicas[index] * errF[index]);
 
-
-        double percent_error = (F_actual - F_predicted) / F_actual;
-
-        // Only care about the magnitude of the error, not the sign
-        if (percent_error < 0) percent_error *= -1;
+        // Take the absolute value because we only care about the magnitude of the error, not the sign
+        double percent_error = fabs((F_actual - F_predicted) / F_actual);
 
         sum_of_percent_errors += percent_error;
     }
@@ -232,14 +229,14 @@ void calcCFFs(int replicaNum) {
     }
 
     // dist: distance between each point being tested
-    for (double dist = (double) totalDist / (double) num; dist >= 0.0001; dist /= num) {
+    for (double dist = (double) totalDist / num; dist >= 0.0001; dist /= num) {
         double maxChange = dist * num, minChange = -1 * dist * num;
         double bestReHguess = 0, bestReEguess = 0, bestReHtildeguess = 0;
         double prevError = DBL_MAX;
 
         bestError = DBL_MAX;
 
-        while ((fabs(bestError - prevError) > 0.000001) || (DBL_MAX - bestError < 0.000001)) {
+        while ((prevError - bestError > 0.000001) || (DBL_MAX - bestError < 0.000001)) {
             prevError = bestError;
 
             for (double ReHchange = minChange; ReHchange <= maxChange; ReHchange += dist) {
