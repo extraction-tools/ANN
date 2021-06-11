@@ -25,7 +25,7 @@ for ((i=0;i<$SLURM_NTASKS;i++))
     # Define the variable "command" so that it does what you want:
     ## command="analyze run$runnumber.rz"
       
-       command="singularity run --nv /home/za2hd/pytorch-1.5.1.sif localfit.py"
+       command="singularity run --nv /home/za2hd/pytorch-1.5.1.sif localfit_v2.py"
     # ---------------------------------------------------------------------
 
      echo "Submitting task $i: $command"
