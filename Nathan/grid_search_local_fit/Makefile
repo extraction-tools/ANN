@@ -22,4 +22,4 @@ else
 endif
 
 clean:
-	rm -f $(TARGET_EXEC) $(TARGET_EXEC)_output.csv
+	rm -f $(TARGET_EXEC)
