@@ -1,4 +1,4 @@
-## Generated pseudodata on May 2021
+## Generated pseudodata (May 2021)
 
 ### *Theoretical Formulation:*
 
