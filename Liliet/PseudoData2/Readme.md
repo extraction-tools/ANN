@@ -2,7 +2,7 @@
 
 ### *Theoretical Formulation:*
 
-* The Total DVCS cross section distributions (F) was model with the VA Formulation [arXiv:1903.05742v3 [hep-ph]](https://arxiv.org/abs/1903.05742v3).
+* The Total DVCS cross section distributions (F) was model with the [VA Formulation](https://arxiv.org/abs/1903.05742v3).
 
 *  The total cross section (F) is calculated by adding the BH (`Double_t TVA1_UU::GetBHUU(Double_t phi, Double_t F1, Double_t F2)`), pure DVCS (constant values included on the data file) and the BH-DVCS interference (`Double_t TVA1_UU::GetIUU(Double_t phi, Double_t F1, Double_t F2, Double_t ReH, Double_t ReE, Double_t ReHtilde)`) cross sections.
 
