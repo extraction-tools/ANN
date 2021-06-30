@@ -99,6 +99,7 @@ static bool readInData(char * restrict filename) {
         sscanf(buff, "%d,%*s\n", &set);
 
         if (set == desiredSet) {
+            
             sscanf(buff, "%*d,%d,%*s\n", &index);
 
             if (!previouslyEncounteredSet) {
@@ -106,7 +107,6 @@ static bool readInData(char * restrict filename) {
                        &k, &QQ, &x, &t,
                        &phi[index], &F[index], &errF[index],
                        &F1, &F2, &dvcs);
-
                 previouslyEncounteredSet = 1;
             } else {
                 sscanf(buff, "%*d,%*d,%*lf,%*lf,%*lf,%*lf,%d,%lf,%lf,%*lf,%*lf,%*lf,%*lf\n",
@@ -244,7 +244,7 @@ static void calcCFFs(int replicaNum) {
 static void localFit(void) {
     TVA1_UU_SetKinematics(QQ, x, t, k);
 
-    //printf("Set %d: 0.00%% complete\n", desiredSet);
+    printf("Set %d: 0.00%% complete\n", desiredSet);
 
     for (int replicaNum = 0; replicaNum < NUM_REPLICAS; replicaNum++) {
         calcCFFs(replicaNum);
