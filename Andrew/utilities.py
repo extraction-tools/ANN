@@ -12,10 +12,10 @@ bhdvcs = BHDVCS()
 class DvcsData(object):
     def __init__(self, df):
         self.df = df
-        #self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'ReH', 'ReE', 'ReHtilde', 'dvcs']]
+        self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'ReH', 'ReE', 'ReHTilde', 'dvcs']]
         self.XnoCFF = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'dvcs']]
-        self.X = self.XnoCFF # ReH,ReE and ReHtilde no longer in new data
-        # self.CFFs = df.loc[:, ['ReH', 'ReE', 'ReHtilde']] # ReH,ReE and ReHtilde no longer in new data
+        #self.X = self.XnoCFF ReH,ReE and ReHtilde no longer in new data
+        self.CFFs = df.loc[:, ['ReH', 'ReE', 'ReHtilde']] # ReH,ReE and ReHtilde no longer in new data
         self.y = df.loc[:, 'F']
         self.Kinematics = df.loc[:, ['k', 'QQ', 'x_b', 't']]
         self.erry = df.loc[:, 'sigmaF']

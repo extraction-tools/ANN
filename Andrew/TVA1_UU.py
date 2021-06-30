@@ -266,3 +266,31 @@ class TVA1_UU(tf.Module):
 
         tot_sigma_uu = xsbhuu + xsiuu +  dvcs # Constant added to account for DVCS contribution
         return tot_sigma_uu
+    
+    def getIUU(self, x, F): # originally named TotalUUXS_curve_fit, but original TotalUUXS is unnecessary
+        """
+        params:
+            x: should be a 2d numpy array (or tf) with columns in the
+             order of phi, k, QQ, xb, t, F1, F2, dvcs
+            F: scalar or 1d of length len(x)
+        returns:
+            tf.float64 array of length len(x)
+        """
+
+        phi = x[:, 0]
+        k = x[:, 1]
+        QQ = x[:, 2]
+        xb = x[:, 3]
+        t = x[:, 4]
+        F1 = x[:, 5]
+        F2 = x[:, 6]
+        dvcs = x[:, 7]
+
+	    # Set QQ, xB, t and k and calculate 4-vector products
+        self.SetKinematics(QQ, xb, t, k)
+        self.Set4VectorsPhiDep(phi)
+        self.Set4VectorProducts(phi)
+
+        xsbhuu	 = self.GetBHUUxs(phi, F1, F2)
+        xsiuu = F - xsbhuu - dvcs
+        return xsiuu
