@@ -69,8 +69,8 @@ else:
 
 # range of y axis
 if ylabel in df:
-    min = np.amin(df[xlabel])
-    max = np.amax(df[xlabel])
+    min = np.amin(df[ylabel])
+    max = np.amax(df[ylabel])
     step = (max - min)/25
     yvar = np.arange(min, max+step, step)
 else:
