@@ -48,7 +48,7 @@ int Fun4Sim(const int nevent = 1234)
   const bool gen_particle = false;
   const bool read_hepmc   = false;
   const bool gen_e906legacy = false; //E906LegacyGen()
-  const bool save_in_acc  = false; //< Set true to save only in-acceptance events into DST.
+ // const bool save_in_acc  = false; //< Set true to save only in-acceptance events into DST.
 
  //! vtx gen flag
   const bool legacyVtxGen = true;
