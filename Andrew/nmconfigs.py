@@ -13,7 +13,7 @@ alpha = 1
 gamma = 2
 rho = .5
 sigma = .5
-startCFFs = np.random.random((4,3))*20-10
+STDEVS = np.array([.1,.1.,1])
 
 class DvcsData(object):
     def __init__(self, df):
@@ -74,37 +74,62 @@ def errFunc(data, cff):
     return err
     
 
+#version for configs that returns a df with all the cffs for each iteration
 def nm(sets, epochs, startCFF):
-    #CFFs = np.array([[1.,1,1],[1,1,2],[1,2,1],[2,2,2]])
+    totCFF = pd.DataFrame()
     CFFs = startCFF.copy()
+    lastmove = ""
+    
+    STDEVS = np.array([.05,.15,.05])
     for epoch in range(epochs):
         mse = errFunc(dvcsdata.getSet(sets),CFFs)
         sort = np.argsort(mse)
+        
+        ranks = np.empty_like(sort)
+        ranks[sort] = np.arange(len(mse))
+        df = pd.DataFrame(CFFs, columns = ['ReH', 'ReE', 'ReHT'])
+        df['lastMove'] = lastmove
+        df['epoch'] = epoch
+        df['error'] = mse
+        df['rank'] = ranks
+        totCFF = totCFF.append(df)
+        
+        if np.max(np.std(CFFs)>STDEVS):
+            CFFs = np.random.random((4,3))*2-1+CFFs
+            lastmove="reshuffle"
+            continue
+        
         centroid = np.mean([CFFs[i] for i in sort[0:-1]],axis = 0)
         centroidmse = errFunc(dvcsdata.getSet(sets),centroid)
         reflect = centroid - alpha * (centroid - CFFs[sort[-1]])
         reflectmse = errFunc(dvcsdata.getSet(sets),reflect)
         if (mse[sort[0]] <= reflectmse) and (reflectmse < mse[sort[-2]]):
             CFFs[sort[-1]] = reflect
+            lastmove = "reflection"
             continue
         if (reflectmse < mse[sort[0]]):
             expand = centroid + gamma * (reflect - centroid)
             expandmse = errFunc(dvcsdata.getSet(sets),expand)
             if expandmse < reflectmse:
                 CFFs[sort[-1]] = expand
+                lastmove = "expansion"
                 continue
             else:
                 CFFs[sort[-1]] = reflect
+                lastmove = "reflected-exp"
                 continue
         #if (reflectmse >= CFFs[sort[-1]]):
         contract = np.array(centroid + rho * (CFFs[sort[-1]] - centroid))
         contractmse = errFunc(dvcsdata.getSet(sets),contract)
         if contractmse < mse[sort[-1]]:
             CFFs[sort[-1]] = contract
+            lastmove = "contraction"
             continue
         for i in sort[1:]:
             CFFs[i] = CFFs[sort[0]] + sigma * (CFFs[i] - CFFs[sort[0]])
-    return CFFs
+        lastmove = "shrink"
+    
+    return totCFF
 
 def readConfig(filename, lineno):
     global epochno, setno, replicas, alpha, gamma, rho, sigma, startCFFs
@@ -132,18 +157,20 @@ def readConfig(filename, lineno):
     if 'set' in config.columns:
         setno = config['set'][lineno]
 
-
+startCFFs = np.random.random((4,3))*20-10
 filename = str(sys.argv[1])
 linenum = int(sys.argv[2])
 readConfig(filename, linenum)
 
+
 results = pd.DataFrame()
 for replica in range(replicas):
-    points = nm(setno,epochno,startCFFs)
-    result = pd.DataFrame(points, columns=['ReH', 'ReE', 'ReHT'])
-    result['index'] = range(0, len(result))
+    startCFFs = np.random.random((4,3))*20-10
+    result = nm(setno,epochno,startCFFs)
+    #result = pd.DataFrame(points, columns=['ReH', 'ReE', 'ReHT'])
+    #result['index'] = range(0, len(result))
     result['replica'] = replica
     result['set'] = setno
     results = results.append(result)
 
-results.to_csv("/home/atz6cq/nm/" + "ResultsConfig" +  "/Results"+ str(linenum) + "_" + str(setno) + "_" + str(epochno) + "_" + str(replicas) + ".csv")
+results.to_csv("/home/atz6cq/nm/" + "ResultsConfig" +  "/Results"+ str(linenum) + ".csv")
