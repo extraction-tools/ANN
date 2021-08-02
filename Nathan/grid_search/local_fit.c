@@ -10,9 +10,11 @@
 #define NUM_INDEXES 45
 #define NUM_REPLICAS 100
 
+#define B 0.2
+
 static struct {
     double ReH, ReE, ReHtilde, error;
-} cffGuesses[NUM_REPLICAS];
+} cffGuesses[NUM_REPLICAS + 1];
 
 static double k, QQ, x, t,
               F[NUM_INDEXES], errF[NUM_INDEXES],
@@ -20,6 +22,11 @@ static double k, QQ, x, t,
               dvcs,
               ReH_mean, ReE_mean, ReHtilde_mean,
               ReH_stddev, ReE_stddev, ReHtilde_stddev;
+              //bestReplicaValuesByIndex[NUM_INDEXES],
+              //bestErrorByIndex[NUM_INDEXES],
+              //bestReHValuesByIndex[NUM_INDEXES],
+              //bestReEValuesByIndex[NUM_INDEXES],
+              //bestReHtildeValuesByIndex[NUM_INDEXES];
 
 static int desiredSet, phi[NUM_INDEXES];
 
@@ -37,7 +44,7 @@ static void calcMeanAndStdDev(void);
 static double calcFError(double replicas[], double ReH, double ReE, double ReHtilde);
 
 // Estimate the correct CFF values for a specific replica
-static void calcCFFs(int replicaNum);
+static void calcCFFs(int replicaNum/*, bool final*/);
 
 // Fits CFFs to all of the replicas
 static void localFit(void);
@@ -60,14 +67,14 @@ int main(int argc, char **argv) {
 
     localFit();
 
-    FILE *f = fopen("grid_search_local_fit_output.csv", "r");
+    FILE *f = fopen("local_fit_output.csv", "r");
 
     if (f == NULL) {
-        f = fopen("grid_search_local_fit_output.csv", "w");
+        f = fopen("local_fit_output.csv", "w");
         fprintf(f, "Set,ReH_mean,ReH_stddev,ReE_mean,ReE_stddev,ReHtilde_mean,ReHtilde_stddev\n");
     } else {
         fclose(f);
-        f = fopen("grid_search_local_fit_output.csv", "a");
+        f = fopen("local_fit_output.csv", "a");
     }
 
     fprintf(f, "%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", desiredSet, k, QQ, x, t, ReH_mean, ReH_stddev, ReE_mean, ReE_stddev, ReHtilde_mean, ReHtilde_stddev);
@@ -164,7 +171,7 @@ static void calcMeanAndStdDev(void) {
 
 
 
-// Calculate the root mean squared percent error in F for a specific replica and the given CFFs
+// Calculate the root root mean squared percent error in F for a specific replica and the given CFFs
 static double calcFError(double replicas[], double ReH, double ReE, double ReHtilde) {
     double sum_of_squared_percent_errors = 0.0;
 
@@ -173,26 +180,40 @@ static double calcFError(double replicas[], double ReH, double ReE, double ReHti
                              TVA1_UU_GetIUU(phi[index], F1, F2, ReH, ReE, ReHtilde) +
                              dvcs;
 
-        double F_actual = F[index] + (replicas[index] * errF[index]);
+        double F_actual = F[index];
+        if (replicas != NULL) F_actual += (replicas[index] * errF[index]);
 
-        double percent_error = (F_actual - F_predicted) / F_actual;
-
+        double percent_error = fabs((F_actual - F_predicted) / F_actual);
+/*
+        if (replicas != NULL && (percent_error < bestErrorByIndex[index] || bestErrorByIndex[index] < 0.0000000001)) {
+            bestReplicaValuesByIndex[index] = replicas[index];
+            bestErrorByIndex[index] = percent_error;
+            bestReHValuesByIndex[index] = ReH;
+            bestReEValuesByIndex[index] = ReE;
+            bestReHtildeValuesByIndex[index] = ReHtilde;
+        }
+*/
         sum_of_squared_percent_errors += percent_error * percent_error;
     }
 
-    return sqrt(sum_of_squared_percent_errors / NUM_INDEXES);
+    return pow(sum_of_squared_percent_errors / NUM_INDEXES, B);
+    //, 0.25); // optimal number between 1/16 and 1/2 (1/4 is the most optimal tested -- probably lower)
 }
 
 
 
 // Estimate the correct CFF values for a specific replica
-static void calcCFFs(int replicaNum) {
+static void calcCFFs(int replicaNum/*, bool final*/) {
     double ReHguess = 0.0, ReEguess = 0.0, ReHtildeguess = 0.0, bestError = DBL_MAX;
 
     // replica: the number of standard deviations that the values of F will be off by
     double replicas[NUM_INDEXES];
-    for (int i = 0; i < NUM_INDEXES; i++) replicas[i] = boxMuller();
-
+    //if (final) {
+        //for (int i = 0; i < NUM_INDEXES; i++) replicas[i] = bestReplicaValuesByIndex[i];
+    //} else {
+        for (int i = 0; i < NUM_INDEXES; i++) replicas[i] = boxMuller();
+    //}
+    
     // num: number of points tested on either side of the guess
     const int num = 10;
 
@@ -200,7 +221,7 @@ static void calcCFFs(int replicaNum) {
     const double totalDist = 1.;
 
     // dist: distance between each point being tested
-    for (double dist = (double) totalDist / num; dist >= 0.0001; dist /= num) {
+    for (double dist = (double) totalDist / num; dist >= 0.000000001; dist /= num) {
         const double maxChange = dist * num, minChange = -1 * dist * num;
 
         double bestReHguess = 0, bestReEguess = 0, bestReHtildeguess = 0;
@@ -247,9 +268,38 @@ static void localFit(void) {
     printf("Set %d: 0.00%% complete\n", desiredSet);
 
     for (int replicaNum = 0; replicaNum < NUM_REPLICAS; replicaNum++) {
-        calcCFFs(replicaNum);
-        //printf("\033[ASet %d: %.2lf%% complete\n", desiredSet, (100. * (replicaNum + 1) / (double) NUM_REPLICAS));
+        calcCFFs(replicaNum/*, false*/);
+        printf("\033[ASet %d: %.2lf%% complete\n", desiredSet, (100. * (replicaNum + 1) / (double) NUM_REPLICAS));
     }
 
     calcMeanAndStdDev();
+/*
+    double avg_ReH = 0.0, avg_ReE = 0.0, avg_ReHtilde = 0.0;
+
+    for (int i = 0; i < NUM_INDEXES; ++i) {
+        printf("Index %d: %lf\tReH: %lf\tReE: %lf\tReHtilde: %lf\n", 
+            i, 
+            bestReplicaValuesByIndex[i],
+            bestReHValuesByIndex[i],
+            bestReEValuesByIndex[i],
+            bestReHtildeValuesByIndex[i]);
+        
+        avg_ReH += bestReHValuesByIndex[i];
+        avg_ReE += bestReEValuesByIndex[i];
+        avg_ReHtilde += bestReHtildeValuesByIndex[i];
+    }
+
+    avg_ReH /= NUM_INDEXES;
+    avg_ReE /= NUM_INDEXES;
+    avg_ReHtilde /= NUM_INDEXES;
+
+    calcCFFs(NUM_REPLICAS, true);
+
+    printf("\n\n");
+    printf("ReH: %lf\tavg_ReH: %lf\n", cffGuesses[NUM_REPLICAS].ReH, avg_ReH);
+    printf("ReE: %lf\tavg_ReE: %lf\n", cffGuesses[NUM_REPLICAS].ReE, avg_ReE);
+    printf("ReHtilde: %lf\tavg_ReHtilde: %lf\n", cffGuesses[NUM_REPLICAS].ReHtilde, avg_ReHtilde);
+    printf("Error: %lf\tavg error: %lf\n", cffGuesses[NUM_REPLICAS].error, calcFError(NULL, avg_ReH, avg_ReE, avg_ReHtilde));
+*/
 }
+
