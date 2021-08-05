@@ -35,6 +35,7 @@ int Fun4Sim(const int nevent = 1234)
   const bool do_dphodo = true;
   const bool do_station1DC = false;       //station-1 drift chamber should be turned off by default
 
+  
   const double target_l = 7.9; //cm
   const double target_z = (7.9-target_l)/2.; //cm
   const int use_g4steps = 1;
@@ -48,9 +49,9 @@ int Fun4Sim(const int nevent = 1234)
   const bool gen_particle = false;
   const bool read_hepmc   = false;
   const bool gen_e906legacy = false; //E906LegacyGen()
- // const bool save_in_acc  = false; //< Set true to save only in-acceptance events into DST.
+  const bool save_in_acc  = true; //< Set true to save only in-acceptance events into DST.
 
- //! vtx gen flag
+  //! vtx gen flag
   const bool legacyVtxGen = true;
 
   recoConsts *rc = recoConsts::instance();
@@ -62,10 +63,10 @@ int Fun4Sim(const int nevent = 1234)
     rc->set_DoubleFlag("KMAGSTR", 0.);
     rc->set_DoubleFlag("FMAGSTR", 0.);
   }
-  if(legacyVtxGen)
+
+  if(legacyVtxGen) //write here if you want to specify the vertex origin
   {
-    rc->set_BoolFlag("TARGETONLY", false);
-    rc->set_BoolFlag("DUMPONLY", true);
+    rc->set_CharFlag("VTX_GEN_MATERIAL_MODE", "Target"); // Target, Dump or TargetDumpGap
   }
   rc->Print();
 
@@ -87,10 +88,11 @@ int Fun4Sim(const int nevent = 1234)
   if(gen_pythia8) {    
     PHPythia8 *pythia8 = new PHPythia8();
     //pythia8->Verbosity(99);
-    pythia8->set_config_file("phpythia8_DY.cfg");
-    //pythia8->set_config_file("phpythia8_Jpsi.cfg");
-    if(legacyVtxGen) pythia8->enableLegacyVtxGen();
-    else {
+  // pythia8->set_config_file("phpythia8_DY.cfg");
+    pythia8->set_config_file("phpythia8_Jpsi.cfg");
+    //pythia8->set_config_file("phpythia8_pions2.cfg");
+   if(legacyVtxGen) pythia8->enableLegacyVtxGen();
+    else{
     pythia8->set_vertex_distribution_mean(0, 0, target_coil_pos_z, 0);
     pythia8->set_vertex_distribution_function(PHHepMCGenHelper::Uniform,
 
@@ -102,6 +104,7 @@ int Fun4Sim(const int nevent = 1234)
 
     pythia8->set_vertex_distribution_width(0,0,4.,0);
     }
+
     pythia8->set_embedding_id(1);
     se->registerSubsystem(pythia8);
 
@@ -136,7 +139,10 @@ int Fun4Sim(const int nevent = 1234)
     gun->set_name("mu-");
     //gun->set_vtx(0, 0, target_coil_pos_z);
     //gun->set_mom(3, 3, 50);
+     if (legacyVtxGen) gun->enableLegacyVtxGen();
+    else{
     gun->set_vtx(30, 10, 590);
+    }
     gun->set_mom(-0.3, 2, 50);
     se->registerSubsystem(gun);
   }
@@ -146,6 +152,8 @@ int Fun4Sim(const int nevent = 1234)
     PHG4SimpleEventGenerator *genp = new PHG4SimpleEventGenerator("MUP");
     //genp->set_seed(123);
     genp->add_particles("mu+", nmu);  // mu+,e+,proton,pi+,Upsilon
+    if (legacyVtxGen) genp->enableLegacyVtxGen();
+    else{
     genp->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
         PHG4SimpleEventGenerator::Uniform,
         PHG4SimpleEventGenerator::Uniform);
@@ -153,7 +161,7 @@ int Fun4Sim(const int nevent = 1234)
     genp->set_vertex_distribution_width(0.0, 0.0, 0.0);
     genp->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
     genp->set_vertex_size_parameters(0.0, 0.0);
-
+    }
     if(FMAGSTR>0)
       //genp->set_pxpypz_range(0,6, -6,6, 10,100);
       genp->set_pxpypz_range(-3,6, -3,3, 10,100);
@@ -170,6 +178,8 @@ int Fun4Sim(const int nevent = 1234)
     PHG4SimpleEventGenerator *genm = new PHG4SimpleEventGenerator("MUP");
     //genm->set_seed(123);
     genm->add_particles("mu-", nmu);  // mu+,e+,proton,pi+,Upsilon
+     if (legacyVtxGen) genm->enableLegacyVtxGen();
+    else{
     genm->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
         PHG4SimpleEventGenerator::Uniform,
         PHG4SimpleEventGenerator::Uniform);
@@ -177,7 +187,7 @@ int Fun4Sim(const int nevent = 1234)
     genm->set_vertex_distribution_width(0.0, 0.0, 0.0);
     genm->set_vertex_size_function(PHG4SimpleEventGenerator::Uniform);
     genm->set_vertex_size_parameters(0.0, 0.0);
-
+      }
     if(FMAGSTR>0)
       //genm->set_pxpypz_range(-6,0, -6,6, 10,100);
       genm->set_pxpypz_range(-6,3, -3,3, 10,100);
@@ -263,7 +273,7 @@ int Fun4Sim(const int nevent = 1234)
 
   se->registerSubsystem(g4Reco);
 
-  
+
   // save truth info to the Node Tree
   PHG4TruthSubsystem *truth = new PHG4TruthSubsystem();
   g4Reco->registerSubsystem(truth);
@@ -275,12 +285,12 @@ int Fun4Sim(const int nevent = 1234)
   digitizer->set_enable_dphodo(do_dphodo);       // in the SetupSensitiveVolumes() function call above
   se->registerSubsystem(digitizer);
 
-  /// Save only events that are in the geometric acceptance.
+/// Save only events that are in the geometric acceptance.
   SQGeomAcc* geom_acc = new SQGeomAcc();
   geom_acc->SetMuonMode(SQGeomAcc::PAIR); // PAIR, PAIR_TBBT, SINGLE, SINGLE_T, etc.
   geom_acc->SetPlaneMode(SQGeomAcc::HODO_CHAM); // HODO, CHAM or HODO_CHAM
   geom_acc->SetNumOfH1EdgeElementsExcluded(4); // Exclude 4 elements at H1 edges
-  se->registerSubsystem(geom_acc); 
+  se->registerSubsystem(geom_acc);
 
   // Make SQ nodes for truth info
   se->registerSubsystem(new TruthNodeMaker());
@@ -300,22 +310,21 @@ int Fun4Sim(const int nevent = 1234)
 
   // Trigger Emulator
   DPTriggerAnalyzer* dptrigger = new DPTriggerAnalyzer();
-  dptrigger->set_road_set_file_name("$E1039_RESOURCE/trigger/trigger_67.txt");
+  dptrigger->set_road_set_file_name(gSystem->ExpandPathName("$E1039_RESOURCE/trigger/trigger_67.txt"));
+  //dptrigger->Verbosity(99);
   se->registerSubsystem(dptrigger);
 
   // Event Filter
-  //EvtFilter *evt_filter = new EvtFilter();
+  EvtFilter *evt_filter = new EvtFilter();
   //evt_filter->Verbosity(10);
   //evt_filter->set_trigger_req(1<<5);
-  //se->registerSubsystem(evt_filter);
+  se->registerSubsystem(evt_filter);
 
-  AnaTrkQAv2* trackQAv2 = new AnaTrkQAv2();
-  trackQAv2->set_out_name("trackQA_v2.root");
-  se->registerSubsystem(trackQAv2);
-
-  // Tracking module
+  // trakcing module
+    // trakcing module
   SQReco* reco = new SQReco();
   reco->Verbosity(0);
+  reco->set_legacy_rec_container(legacy_rec_container);
   //reco->set_geom_file_name("support/geom.root"); //not needed as it's created on the fly
   reco->set_enable_KF(true);           //Kalman filter not needed for the track finding, disabling KF saves a lot of initialization time
   reco->setInputTy(SQReco::E1039);     //options are SQReco::E906 and SQReco::E1039
@@ -330,19 +339,36 @@ int Fun4Sim(const int nevent = 1234)
   //reco->add_eval_list(1);             //include station-2 in eval tree for debugging
   se->registerSubsystem(reco);
 
+  
+  /*TruthNodeMaker* truthMaker = new TruthNodeMaker();
+  truthMaker->set_legacy_rec_container(legacy_rec_container);
+  se->registerSubsystem(truthMaker);*/
+
+/*  SQTruthVertexing* truthVtx = new SQTruthVertexing();
+  truthVtx->set_legacy_rec_container(legacy_rec_container);
+  se->registerSubsystem(truthVtx);*/
+
   VertexFit* vertexing = new VertexFit();
-  //vertexing->enable_fit_target_center(); //uncomment if you want to fit in the target center
+  vertexing->enable_fit_target_center(); //uncomment if you want to fit in the target center
   //vertexing->enableOptimization(); //uncomment if you want to fit according to new optimization formula
   se->registerSubsystem(vertexing);
+
+  //A simple analysis module for single muon tracking QA
+  /*AnaModule* ana = new AnaModule();
+  ana->set_output_filename(Form("ana_%s_%d.root", prefix.Data(), seed));
+  ana->set_legacy_rec_container(legacy_rec_container);
+  se->registerSubsystem(ana);*/
 
   //Analysis module for track QA
   AnaTrkQA* trackQA = new AnaTrkQA();
   trackQA->set_out_name("trackQA.root");
   se->registerSubsystem(trackQA); 
 
-  //AnaTrkQAv2* trackQAv2 = new AnaTrkQAv2();
-  //trackQAv2->set_out_name("trackQA_v2.root");
-  //se->registerSubsystem(trackQAv2);  
+  AnaTrkQAv2* trackQAv2 = new AnaTrkQAv2();
+  trackQAv2->set_out_name("trackQA_v2.root");
+  se->registerSubsystem(trackQAv2);  
+
+  
 
   //// Trim minor data nodes (to reduce the DST file size)
   //se->registerSubsystem(new SimDstTrimmer());
@@ -363,9 +389,9 @@ int Fun4Sim(const int nevent = 1234)
   // Output
   ///////////////////////////////////////////
 
-  // DST output manager
-  //Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT", "DST.root");
-  //se->registerOutputManager(out);
+  // DST output manager, tunred off to save disk by default
+ // Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT", "DST.root");
+ // se->registerOutputManager(out);
 
   //if(gen_pythia8 && !read_hepmc) {
   //  Fun4AllHepMCOutputManager *out = new Fun4AllHepMCOutputManager("HEPMCOUT", "hepmcout.txt");
