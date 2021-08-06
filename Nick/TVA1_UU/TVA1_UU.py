@@ -266,3 +266,45 @@ class TVA1_UU(tf.Module):
 
         tot_sigma_uu = xsbhuu + xsiuu +  dvcs # Constant added to account for DVCS contribution
         return tot_sigma_uu
+    
+    
+    def SplitTotalUUXS(self, x, ReH, ReE, ReHtilde):
+        """
+        params:
+            x: should be a 2d numpy array (or tf) with columns in the
+             order of phi, k, QQ, xb, t, F1, F2, dvcs
+            ReH: scalar or 1d of length len(x)
+            ReE: same as ReH
+            ReHtilde: same as ReH
+        returns:
+            tf.float64 array of length len(x)
+        """
+
+        phi = x[:, 0]
+        k = x[:, 1]
+        QQ = x[:, 2]
+        xb = x[:, 3]
+        t = x[:, 4]
+        F1 = x[:, 5]
+        F2 = x[:, 6]
+        dvcs = x[:, 7]
+
+	    # Set QQ, xB, t and k and calculate 4-vector products
+        self.SetKinematics(QQ, xb, t, k)
+        self.Set4VectorsPhiDep(phi)
+        self.Set4VectorProducts(phi)
+
+        xsbhuu	 = self.GetBHUUxs(phi, F1, F2)
+        xsiuu	 = self.GetIUUxs(phi, F1, F2, ReH, ReE, ReHtilde)
+
+
+        return xsbhuu, xsiuu, dvcs # Constant added to account for DVCS contribution
+    
+    
+    def GetDVCSUU(ReH, ReE, ReHtilde, ReEtilde, ImH, ImE, ImHtilde, ImEtilde):
+
+        FUUT = 4.* ( ( 1 - self.xi * self.xi ) * ( ReH * ReH + ImH * ImH + ReHtilde * ReHtilde + ImHtilde * ImHtilde ) + ( self.tmin - self.t ) / ( 2.* self.M2 ) * ( ReE * ReE + ImE * ImE + self.xi * self.xi * ReEtilde * ReEtilde + self.xi * self.xi * ImEtilde * ImEtilde ) - ( 2.* self.xi * self.xi ) / ( 1 - self.xi * self.xi ) * ( ReH * ReE + ImH * ImE + ReHtilde * ReEtilde + ImHtilde * ImEtilde ) )
+
+        xdvcsUU =  self.GeV2nb * self.jcob * self.Gamma / self.QQ / ( 1 - self.e ) * FUUT
+
+        return xdvcsUU
