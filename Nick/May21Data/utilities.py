@@ -17,7 +17,7 @@ class DvcsData(object):
         self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'dvcs']]
         self.y = df.loc[:, 'F']
         self.Kinematics = df.loc[:, ['k', 'QQ', 'x_b', 't']]
-        self.erry = df.loc[:, 'sigmaF']
+        self.erry = df.loc[:, 'errF']
         
     def __len__(self):
         return len(self.X)
