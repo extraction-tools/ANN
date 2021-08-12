@@ -9,11 +9,7 @@ bhdvcs = BHDVCS()
 epochno = 0
 setno = 0
 replicas = 0
-alpha = 1
-gamma = 2
-rho = .5
-sigma = .5
-STDEVS = np.array([.1,.1.,1])
+
 
 class DvcsData(object):
     def __init__(self, df):
@@ -33,6 +29,14 @@ class DvcsData(object):
         pd.options.mode.chained_assignment = None
         subX = self.X.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1, :]
         subX['F'] = self.y.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
+        subX['sigmaF'] = self.erry.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
+        pd.options.mode.chained_assignment = 'warn'
+        return DvcsData(subX)
+    
+    def getSampleSet(self, setNum, itemsInSet=45):
+        pd.options.mode.chained_assignment = None
+        subX = self.X.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1, :]
+        subX['F'] = np.random.normal(self.y.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1], self.erry.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1])
         subX['sigmaF'] = self.erry.loc[setNum*itemsInSet:(setNum+1)*itemsInSet-1]
         pd.options.mode.chained_assignment = 'warn'
         return DvcsData(subX)
@@ -72,18 +76,23 @@ def errFunc(data, cff):
         calcF = bhdvcs.TotalUUXS(xdat,ReH[i],ReE[i],ReHT[i])
         err = np.append(err,np.mean(np.power(np.subtract(data.y,calcF),2)))
     return err
+
+
     
 
 #version for configs that returns a df with all the cffs for each iteration
+STDEVS = np.array([.05,.15,.05])
 def nm(sets, epochs, startCFF):
     totCFF = pd.DataFrame()
     CFFs = startCFF.copy()
     lastmove = ""
     
-    STDEVS = np.array([.05,.15,.05])
     for epoch in range(epochs):
         mse = errFunc(dvcsdata.getSet(sets),CFFs)
         sort = np.argsort(mse)
+        
+        #only return last one
+        totCFF = pd.DataFrame()
         
         ranks = np.empty_like(sort)
         ranks[sort] = np.arange(len(mse))
@@ -94,15 +103,16 @@ def nm(sets, epochs, startCFF):
         df['rank'] = ranks
         totCFF = totCFF.append(df)
         
-        if np.max(np.std(CFFs)>STDEVS):
-            CFFs = np.random.random((4,3))*2-1+CFFs
-            lastmove="reshuffle"
-            continue
+        #if np.max(np.std(CFFs,axis=0)<STDEVS):
+        #    CFFs = np.random.random((4,3))*2-1+CFFs
+        #    lastmove="reshuffle"
+        #    continue
         
         centroid = np.mean([CFFs[i] for i in sort[0:-1]],axis = 0)
         centroidmse = errFunc(dvcsdata.getSet(sets),centroid)
         reflect = centroid - alpha * (centroid - CFFs[sort[-1]])
         reflectmse = errFunc(dvcsdata.getSet(sets),reflect)
+        
         if (mse[sort[0]] <= reflectmse) and (reflectmse < mse[sort[-2]]):
             CFFs[sort[-1]] = reflect
             lastmove = "reflection"
@@ -116,18 +126,123 @@ def nm(sets, epochs, startCFF):
                 continue
             else:
                 CFFs[sort[-1]] = reflect
-                lastmove = "reflected-exp"
+                lastmove = "reflection-exp"
                 continue
-        #if (reflectmse >= CFFs[sort[-1]]):
-        contract = np.array(centroid + rho * (CFFs[sort[-1]] - centroid))
+        
+        
+        
+        contract = np.array(centroid + rho * (reflect - centroid))
         contractmse = errFunc(dvcsdata.getSet(sets),contract)
-        if contractmse < mse[sort[-1]]:
+        #if (reflectmse >= CFFs[sort[-1]]):
+        #if contractmse < mse[sort[-1]]:
+        if reflectmse < mse[sort[-1]] and (contractmse < reflectmse):
             CFFs[sort[-1]] = contract
-            lastmove = "contraction"
+            lastmove = "contraction-out"
             continue
+        elif reflectmse >= mse[sort[-1]]:
+            insidecontract = np.array(centroid - rho * (reflect - centroid))
+            insidecontractmse = errFunc(dvcsdata.getSet(sets),insidecontract)
+            if (insidecontractmse < mse[sort[-1]]):
+                CFFs[sort[-1]] = insidecontract
+                lastmove = "contraction-in"
+                continue
+        
         for i in sort[1:]:
             CFFs[i] = CFFs[sort[0]] + sigma * (CFFs[i] - CFFs[sort[0]])
         lastmove = "shrink"
+    
+    return totCFF
+
+alpha = 1
+gamma = 2
+rho = .5
+sigma = .5
+
+#chi = gamma
+#psi = rho
+
+#rho = 1
+#chi = 2
+#psi = 0.5
+#sigma = 0.5
+
+def nmalt(datasets, epochs, startCFF):
+    totCFF = pd.DataFrame()
+    dataset = datasets
+    CFFs = startCFF.copy()
+    fCFFs = errFunc(dataset, CFFs)
+    
+    lastmove = ""
+    
+    retall = True
+    
+    for epoch in range(epochs):
+        
+        sort = np.argsort(fCFFs)
+        CFFs = np.take(CFFs , sort, 0)
+        fCFFs= np.take(fCFFs, sort, 0)
+        
+        df = pd.DataFrame(np.reshape(CFFs[0],(-1,3)), columns = ['ReH', 'ReE', 'ReHT'])
+        df['lastMove'] = lastmove
+        df['epoch'] = epoch
+        df['error'] = fCFFs[0]
+        totCFF = totCFF.append(df)
+        
+        centroid = np.mean(CFFs[0:-1],axis = 0)
+        
+        reflect = centroid + alpha * (centroid - CFFs[-1])
+        freflect = errFunc(dataset, reflect)
+        
+        if freflect < fCFFs[0]:
+            expand = centroid + gamma * (centroid - CFFs[-1])
+            fexpand = errFunc(dataset, expand)
+            
+            if fexpand < freflect:
+                CFFs[-1] = expand
+                fCFFs[-1]= fexpand
+                lastmove = "expansion"
+                continue
+            else:
+                CFFs[-1] = reflect
+                fCFFs[-1]= freflect
+                lastmove = "reflection-exp"
+                continue
+        if freflect < fCFFs[-2]:
+            CFFs[-1] = reflect
+            fCFFs[-1]= freflect
+            lastmove = "reflection"
+            continue
+        else: # worse than the worst in the simplex f(reflect) >= f(n)
+            if freflect < fCFFs[-1]:
+                contract_out = centroid + rho * (centroid - CFFs[-1])
+                fcontract_out = errFunc(dataset, contract_out)
+                if fcontract_out <= freflect:
+                    CFFs[-1] = contract_out
+                    fCFFs[-1]= fcontract_out
+                    lastmove = "contraction_out"
+                    continue
+            else: #if reflected point is the absolute worst
+                contract_in = centroid - rho * (centroid - CFFs[-1])
+                fcontract_in = errFunc(dataset, contract_in)
+                if fcontract_in <= fCFFs[-1]:
+                    CFFs[-1] = contract_in
+                    fCFFs[-1]= fcontract_in
+                    lastmove = "contraction_in"
+                    continue
+        
+        for i in sort[1:]:
+            CFFs[i] = CFFs[0] + sigma * (CFFs[i] - CFFs[0])
+        lastmove = "shrink"
+    
+    sort = np.argsort(fCFFs)
+    CFFs = np.take(CFFs , sort, 0)
+    fCFFs= np.take(fCFFs, sort, 0)
+    
+    df = pd.DataFrame(np.reshape(CFFs[0],(-1,3)), columns = ['ReH', 'ReE', 'ReHT'])
+    df['lastMove'] = lastmove
+    df['epoch'] = epoch
+    df['error'] = fCFFs[0]
+    totCFF = totCFF.append(df)
     
     return totCFF
 
@@ -163,14 +278,36 @@ linenum = int(sys.argv[2])
 readConfig(filename, linenum)
 
 
+import scipy.optimize as opt
+
+def funcErr(cff, data):
+    if np.shape(cff) != (3,):
+        raise ValueError("CFF shape incorrect")
+    return errFunc(data, cff)
+
 results = pd.DataFrame()
+scipyresults = pd.DataFrame()
 for replica in range(replicas):
     startCFFs = np.random.random((4,3))*20-10
-    result = nm(setno,epochno,startCFFs)
+    dataset = dvcsdata.getSampleSet(setno)
+    result = nmalt(dataset,epochno,startCFFs)
+    #result is now a pd array
     #result = pd.DataFrame(points, columns=['ReH', 'ReE', 'ReHT'])
     #result['index'] = range(0, len(result))
     result['replica'] = replica
     result['set'] = setno
     results = results.append(result)
-
+    
+    scipyresult = opt.minimize(funcErr, np.array([0,0,0]), args = dataset, method = 'Nelder-Mead', options = {'maxiter': epochno, 'maxfev': None, 'return_all': True, 'initial_simplex': startCFFs, 'xatol': 0.000, 'fatol': 0.000})
+    x = scipyresult.allvecs
+    #success = scipyresult.success
+    
+    scp = pd.DataFrame(x, columns=['ReH', 'ReE', 'ReHT'])
+    #scp['success'] = success
+    scp['epoch'] = range(0, len(scp))
+    scp['replica'] = replica
+    scp['set'] = setno
+    scipyresults = scipyresults.append(scp)
+    
+scipyresults.to_csv("/home/atz6cq/nm/scipyResultsConfig/Results" + str(linenum) + ".csv")
 results.to_csv("/home/atz6cq/nm/" + "ResultsConfig" +  "/Results"+ str(linenum) + ".csv")
