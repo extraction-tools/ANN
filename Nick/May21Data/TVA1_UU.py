@@ -214,7 +214,7 @@ class TVA1_UU(tf.Module):
 
     
     
-    def ABcon(self, phi, F1, F2):
+    def AB(self, phi, F1, F2):
         self.Set4VectorsPhiDep(phi)
         self.Set4VectorProducts(phi)
 
@@ -229,13 +229,13 @@ class TVA1_UU(tf.Module):
         # Convert Unpolarized Coefficients to nano-barn and use Defurne's Jacobian
 
         #print(self.AUUI, self.GeV2nb, self.jcob)
-        self.con_AUUI = self.AUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
-        self.con_BUUI = self.BUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
+        #self.con_AUUI = self.AUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
+        #self.con_BUUI = self.BUUI * self.GeV2nb * self.jcob * tf.cos( phi * self.RAD )
         
-        return self.con_AUUI, self.con_BUUI
+        return self.AUUI, self.BUUI
     
     
-    def TotalUUXS(self, x, ReH, ReE, ReHtilde): # originally named TotalUUXS_curve_fit, but original TotalUUXS is unnecessary
+    def TotalUUXS(self, x, ReH, ReE, ReHtilde):
         """
         params:
             x: should be a 2d numpy array (or tf) with columns in the
@@ -267,3 +267,66 @@ class TVA1_UU(tf.Module):
 
         tot_sigma_uu = xsbhuu + xsiuu +  dvcs # Constant added to account for DVCS contribution
         return tot_sigma_uu
+    
+    
+    def TotalUUXSFitJlab(self, x, ReH, ReE, ReHtilde, dvcs):
+        """
+        params:
+            x: should be a 2d numpy array (or tf) with columns in the
+             order of phi, k, QQ, xb, t, F1, F2, dvcs
+            ReH: scalar or 1d of length len(x)
+            ReE: same as ReH
+            ReHtilde: same as ReH
+        returns:
+            tf.float64 array of length len(x)
+        """
+
+        phi = x[:, 0]
+        k = x[:, 1]
+        QQ = x[:, 2]
+        xb = x[:, 3]
+        t = x[:, 4]
+        F1 = x[:, 5]
+        F2 = x[:, 6]
+        #dvcs = x[:, 7]
+
+	    # Set QQ, xB, t and k and calculate 4-vector products
+        self.SetKinematics(QQ, xb, t, k)
+        self.Set4VectorsPhiDep(phi)
+        self.Set4VectorProducts(phi)
+
+        xsbhuu	 = self.GetBHUUxs(phi, F1, F2)
+        xsiuu	 = self.GetIUUxs(phi, F1, F2, ReH, ReE, ReHtilde)
+
+
+        tot_sigma_uu = xsbhuu + xsiuu +  dvcs # Constant added to account for DVCS contribution
+        return tot_sigma_uu
+    
+    
+    def Interference(self, x, ReH, ReE, ReHtilde): 
+        """
+        params:
+            x: should be a 2d numpy array (or tf) with columns in the
+             order of phi, k, QQ, xb, t, F1, F2, dvcs
+            ReH: scalar or 1d of length len(x)
+            ReE: same as ReH
+            ReHtilde: same as ReH
+        returns:
+            tf.float64 array of length len(x)
+        """
+
+        phi = x[:, 0]
+        k = x[:, 1]
+        QQ = x[:, 2]
+        xb = x[:, 3]
+        t = x[:, 4]
+        F1 = x[:, 5]
+        F2 = x[:, 6]
+        dvcs = x[:, 7]
+
+	    # Set QQ, xB, t and k and calculate 4-vector products
+        self.SetKinematics(QQ, xb, t, k)
+        self.Set4VectorsPhiDep(phi)
+        self.Set4VectorProducts(phi)
+
+        return self.GetIUUxs(phi, F1, F2, ReH, ReE, ReHtilde)

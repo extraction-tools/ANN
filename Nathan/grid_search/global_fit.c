@@ -1,40 +1,63 @@
+/*
+GRID SEARCH GLOBAL FIT
+Nathan Snyder
+*/
+
+#include <float.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <math.h>
 #include <time.h>
-#include <float.h>
+//#include <OpenCL/opencl.h>
+
+
 
 #define ReH 0
 #define ReE 1
 #define ReHtilde 2
 
+#define NUM_SETS 342
+
+
+
+// The SetData type stores a set's kinematic variables as well as the results of the local fit for that set
+// This struct will be padded by 6 bytes by the compiler to fill to an alignment boundary
 typedef struct {
     double k, QQ, x, t, mean[3], error[3];
     uint16_t setNumber;
 } SetData;
 
-static SetData* sets[342] = {0};
+// The maximum number of sets you can read is 500
+// It would be easy to dynamically allocate this and either read through the data file twice or realloc for every new set but I'd rather avoid that
+static SetData* sets[NUM_SETS] = {0};
 
+// The total number of sets
 static uint16_t numSets = 0;
 
+// The coefficients for each of the 3 CFFs in the following equation:
+// CFF = c_0*k + c_1 * k^2 + c_2 * QQ + c_3 * QQ^2 + c_4 * x_b + c_5 * x_b^2 + c_6 * t + c_7 * t^2 + c_8
 static double coefficients[3][9];
+
 
 
 // Read in the data
 // Returns 0 if success, 1 if error
 static bool readInData(char * restrict filename);
 
+// Calculate the RMSPE in the equation specified by `test_coefficients` for the given CFF
+// The values for set `setToChange` will be shifted by `amountToChangeBy` standard deviations
 static double calcCFFError(uint8_t cff, double test_coefficients[9], uint16_t setToChange, double amountToChangeBy);
 
-void calcCoefficients(uint8_t cff);
+// Estimates the coefficients in the equation for a CFF
+// Goes through the sets one-by-one and changes their values according to how much a value will decrease the error in the equation
+static void calcCoefficients(uint8_t cff);
 
-// Fits CFFs to all of the replicas
+// Gets the coefficients for every CFF
 static void globalFit(void);
 
-static void removeBadData(void);
-
+// Sorts the sets in non-decreasing order of ReE error
 static void sortData(uint8_t cff);
 
 
@@ -51,8 +74,6 @@ int main(int argc, char **argv) {
         printf("Please specify a data file (.csv) only.\n");
         return 1;
     }
-
-    removeBadData();
 
     globalFit();
 
@@ -115,8 +136,6 @@ static double calcCFFError(uint8_t cff, double test_coefficients[9], uint16_t se
         double actual = sets[i]->mean[cff];
 
         if (i == setToChange) actual += amountToChangeBy * sets[i]->error[cff];
-
-        //printf("actual=%lf\testimate=%lf\n", actual, estimate);
 
         // Take the absolute value because we only care about the magnitude of the error, not the sign
         double percent_error = (actual == 0.0) ? 0.0 : (actual - estimate) / actual;
