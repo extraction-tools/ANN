@@ -25,52 +25,56 @@ typedef struct {
 
     TLorentzVector *QP, *D, *P;
 
-    double kkp; // not dependent on phi
+    double kkp;
     double *kd, *kpd, *kP, *kpP, *kqp, *kpqp, *dd, *Pq, *Pqp, *qd, *qpd;
 
-    double kk_T, kkp_T; // not dependent on phi
+    double kk_T, kkp_T;
     double *kqp_T, *kd_T, *dd_T, *kpqp_T, *kP_T, *kpP_T, *qpP_T, *kpd_T, *qpd_T;
 
     double *Dplus, *Dminus;
 
-    int *phiValues;
+    double F1, F2;
+
+    double *xbhUU;
+
+    // OO languages should probably use a hashmap instead of an array for mapping phi values to indices
+    double *phiValues;
     unsigned long lengthOfPhiValues;
 } TVA1_UU;
 
 
 
-void TVA1_UU_Init(TVA1_UU * const restrict self, const double _QQ, const double x, const double _t, const double k, int * const restrict phiValues, const unsigned long lengthOfPhiValues);
+void TVA1_UU_Init(TVA1_UU * const restrict self, const double QQ, const double x, const double t, const double k, const double F1, const double F2, double * const restrict phiValues, const unsigned long lengthOfPhiValues);
 void TVA1_UU_Destruct(const TVA1_UU * const restrict self);
-unsigned int TVA1_UU_getPhiIndex(const TVA1_UU * const restrict self, const int phi);
+unsigned long TVA1_UU_getPhiIndex(const TVA1_UU * const restrict self, const double phi);
 double TVA1_UU_TProduct(const TLorentzVector * const restrict v1, const TLorentzVector * const restrict v2);
-double TVA1_UU_getBHUU_plus_getIUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2, const double ReH, const double ReE, const double ReHtilde);
-
-// double TVA1_UU_getBHUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2);
-// double TVA1_UU_getIUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2, const double ReH, const double ReE, const double ReHtilde);
+double TVA1_UU_getBHUU_plus_getIUU(const TVA1_UU * const restrict self, const double phi, const double ReH, const double ReE, const double ReHtilde);
 
 
 
-void TVA1_UU_Init(TVA1_UU * const restrict self, const double _QQ, const double x, const double _t, const double k, int * const restrict phiValues, const unsigned long lengthOfPhiValues) {
-    self->phiValues = phiValues;
+void TVA1_UU_Init(TVA1_UU * const restrict self, const double QQ, const double x, const double t, const double k, const double F1, const double F2, double * const restrict phiValues, const unsigned long lengthOfPhiValues) {
     self->lengthOfPhiValues = lengthOfPhiValues;
 
-    self->QQ = _QQ;
-    self->t = _t;
+    self->F1 = F1;
+    self->F2 = F2;
+
+    self->QQ = QQ;
+    self->t = t;
     self->M2 = M * M;
     self->jcob = 2 * PI;
 
-    const double y = _QQ / (2 * M * k * x);
-    const double gg = 4 * self->M2 * x * x / _QQ;
+    const double y = QQ / (2 * M * k * x);
+    const double gg = 4 * self->M2 * x * x / QQ;
     self->e = (1 - y - (y * y * (gg / 4))) / (1 - y + (y * y / 2) + (y * y * (gg / 4)));
-    self->xi = x * (1 + _t / (2 * _QQ)) / (2 - x + (x * _t / _QQ));
-    self->tmin = -1 * _QQ * (1 - sqrt(1 + gg) + (gg / 2)) / (x * (1 - sqrt(1 + gg) + (gg / (2 * x))));
+    self->xi = x * (1 + t / (2 * QQ)) / (2 - x + (x * t / QQ));
+    self->tmin = -1 * QQ * (1 - sqrt(1 + gg) + (gg / 2)) / (x * (1 - sqrt(1 + gg) + (gg / (2 * x))));
     const double kpr = k * (1 - y);
-    const double qp = ((_t / 2) / M) + k - kpr;
-    const double cth = -1 / sqrt(1 + gg) * (1 + ((gg / 2) * (1 + (_t / _QQ)) / (1 + (x * _t / _QQ))));
+    const double qp = ((t / 2) / M) + k - kpr;
+    const double cth = -1 / sqrt(1 + gg) * (1 + ((gg / 2) * (1 + (t / QQ)) / (1 + (x * t / QQ))));
     const double theta = acos(cth);
     const double sthl = sqrt(gg) / sqrt(1 + gg) * (sqrt(1 - y - (y * y * gg / 4)));
     const double cthl = -1 / sqrt(1 + gg) * (1 + (y * gg / 2));
-    self->tau = -0.25 * _t / self->M2;
+    self->tau = -0.25 * t / self->M2;
 
     TLorentzVector K, KP, Q, p;
 
@@ -91,12 +95,15 @@ void TVA1_UU_Init(TVA1_UU * const restrict self, const double _QQ, const double 
     Q = TLorentzVector_Minus_Operator(K, KP);
     TLorentzVector_SetPxPyPzE(&p, 0.0, 0.0, 0.0, M);
     const double s = TLorentzVector_Multiplication_Operator(TLorentzVector_Plus_Operator(p, K), TLorentzVector_Plus_Operator(p, K));
-    self->Gamma = (((((((((1 / ALP_INV) / ALP_INV) / ALP_INV) / PI) / PI) / 16) / (s - self->M2)) / (s - self->M2)) / sqrt(1 + gg)) / x;
+    self->Gamma = 1 / ALP_INV / ALP_INV / ALP_INV / PI / PI / 16 / (s - self->M2) / (s - self->M2) / sqrt(1 + gg) / x;
 
     self->kkp  = TLorentzVector_Multiplication_Operator(K, KP);
 
     self->kk_T   = TVA1_UU_TProduct(&K, &K);
     self->kkp_T  = self->kk_T;
+
+    self->phiValues = malloc(sizeof(double) * lengthOfPhiValues);
+    self->xbhUU = malloc(sizeof(double) * lengthOfPhiValues);
 
     self->QP =     malloc(sizeof(TLorentzVector) * lengthOfPhiValues);
     self->D =      malloc(sizeof(TLorentzVector) * lengthOfPhiValues);
@@ -129,6 +136,8 @@ void TVA1_UU_Init(TVA1_UU * const restrict self, const double _QQ, const double 
 
 
     for (unsigned long i = 0; i < lengthOfPhiValues; i++) {
+        self->phiValues[i] = phiValues[i];
+
         // Set4VectorsPhiDep
         TLorentzVector_SetPxPyPzE(
             &self->QP[i], 
@@ -173,19 +182,32 @@ void TVA1_UU_Init(TVA1_UU * const restrict self, const double _QQ, const double 
 
         self->Dplus[i]   = 0.5 / self->kpqp[i] - 0.5 / self->kqp[i];
         self->Dminus[i]  = -0.5 / self->kpqp[i] - 0.5 / self->kqp[i];
+
+
+        // getBHUU
+        const double AUUBH = (8. * self->M2) / (self->t * self->kqp[i] * self->kpqp[i]) * ( (4. * self->tau * (self->kP[i] * self->kP[i] + self->kpP[i] * self->kpP[i]) ) - ( (self->tau + 1.) * (self->kd[i] * self->kd[i] + self->kpd[i] * self->kpd[i]) ) );
+        const double BUUBH = (16. * self->M2) / (self->t * self->kqp[i] * self->kpqp[i]) * (self->kd[i] * self->kd[i] + self->kpd[i] * self->kpd[i]);
+
+        const double con_AUUBH = AUUBH * GeV2nb * self->jcob;
+        const double con_BUUBH = BUUBH * GeV2nb * self->jcob;
+
+        const double bhAUU = (self->Gamma/self->t) * con_AUUBH * ( F1 * F1 + self->tau * F2 * F2 );
+        const double bhBUU = (self->Gamma/self->t) * con_BUUBH * ( self->tau * ( F1 + F2 ) * ( F1 + F2 ) );
+
+        self->xbhUU[i] = bhAUU + bhBUU;
     }
 }
 
 
 
-unsigned int TVA1_UU_getPhiIndex(const TVA1_UU * const restrict self, const int phi) {
-    for (unsigned int i = 0; i < self->lengthOfPhiValues; i++) {
-        if (self->phiValues[i] == phi) {
+unsigned long TVA1_UU_getPhiIndex(const TVA1_UU * const restrict self, const double phi) {
+    for (unsigned long i = 0; i < self->lengthOfPhiValues; i++) {
+        if (fabs(self->phiValues[i] - phi) < 0.000001) {
             return i;
         }
     }
 
-    fprintf(stderr, "Error: phi value not found\n");
+    perror("Error: phi value not found\n");
     exit(1);
 }
 
@@ -197,22 +219,8 @@ double TVA1_UU_TProduct(const TLorentzVector * const restrict v1, const TLorentz
 
 
 
-double TVA1_UU_getBHUU_plus_getIUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2, const double ReH, const double ReE, const double ReHtilde) {
-    const unsigned int phiIndex = TVA1_UU_getPhiIndex(self, phi);
-
-
-    // getBHUU
-    const double AUUBH = (8. * self->M2) / (self->t * self->kqp[phiIndex] * self->kpqp[phiIndex]) * ( (4. * self->tau * (self->kP[phiIndex] * self->kP[phiIndex] + self->kpP[phiIndex] * self->kpP[phiIndex]) ) - ( (self->tau + 1.) * (self->kd[phiIndex] * self->kd[phiIndex] + self->kpd[phiIndex] * self->kpd[phiIndex]) ) );
-    const double BUUBH = (16. * self->M2) / (self->t * self->kqp[phiIndex] * self->kpqp[phiIndex]) * (self->kd[phiIndex] * self->kd[phiIndex] + self->kpd[phiIndex] * self->kpd[phiIndex]);
-
-    const double con_AUUBH = AUUBH * GeV2nb * self->jcob;
-    const double con_BUUBH = BUUBH * GeV2nb * self->jcob;
-
-    const double bhAUU = (self->Gamma/self->t) * con_AUUBH * ( F1 * F1 + self->tau * F2 * F2 );
-    const double bhBUU = (self->Gamma/self->t) * con_BUUBH * ( self->tau * ( F1 + F2 ) * ( F1 + F2 ) );
-
-    const double xbhUU = bhAUU + bhBUU;
-
+double TVA1_UU_getBHUU_plus_getIUU(const TVA1_UU * const restrict self, const double phi, const double ReH, const double ReE, const double ReHtilde) {
+    const unsigned long phiIndex = TVA1_UU_getPhiIndex(self, phi);
 
     // getIUU
     const double AUUI = -4. * cos( phi * RAD ) * ( self->Dplus[phiIndex] * ( ( self->kqp_T[phiIndex] - 2. * self->kk_T - 2. * self->kqp[phiIndex] ) * self->kpP[phiIndex] + ( 2. * self->kpqp[phiIndex] - 2. * self->kkp_T - self->kpqp_T[phiIndex] ) * self->kP[phiIndex] + self->kpqp[phiIndex] * self->kP_T[phiIndex] + self->kqp[phiIndex] * self->kpP_T[phiIndex] - 2.*self->kkp * self->kP_T[phiIndex] ) -
@@ -226,20 +234,23 @@ double TVA1_UU_getBHUU_plus_getIUU(const TVA1_UU * const restrict self, const in
     const double con_BUUI = BUUI * GeV2nb * self->jcob;
     const double con_CUUI = CUUI * GeV2nb * self->jcob;
 
-    const double iAUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_AUUI * ( F1 * ReH + self->tau * F2 * ReE );
-    const double iBUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_BUUI * ( F1 + F2 ) * ( ReH + ReE );
-    const double iCUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_CUUI * ( F1 + F2 ) * ReHtilde;
+    const double iAUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_AUUI * ( self->F1 * ReH + self->tau * self->F2 * ReE );
+    const double iBUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_BUUI * ( self->F1 + self->F2 ) * ( ReH + ReE );
+    const double iCUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_CUUI * ( self->F1 + self->F2 ) * ReHtilde;
 
     const double xIUU = iAUU + iBUU + iCUU;
 
 
     // getBHUU + getIUU = xbhUU + (-1 * xIUU)
-    return xbhUU - xIUU;
+    return self->xbhUU[phiIndex] - xIUU;
 }
 
 
 
 void TVA1_UU_Destruct(const TVA1_UU * const restrict self) {
+    free(self->phiValues);
+    free(self->xbhUU);
+
     free(self->QP);
     free(self->D);
     free(self->P);
@@ -269,55 +280,5 @@ void TVA1_UU_Destruct(const TVA1_UU * const restrict self) {
     free(self->Dplus);
     free(self->Dminus);
 }
-
-
-
-/*
-double TVA1_UU_getBHUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2) {
-    const unsigned int phiIndex = TVA1_UU_getPhiIndex(self, phi);
-
-    const double AUUBH = (8. * self->M2) / (self->t * self->kqp[phiIndex] * self->kpqp[phiIndex]) * ( (4. * self->tau * (self->kP[phiIndex] * self->kP[phiIndex] + self->kpP[phiIndex] * self->kpP[phiIndex]) ) - ( (self->tau + 1.) * (self->kd[phiIndex] * self->kd[phiIndex] + self->kpd[phiIndex] * self->kpd[phiIndex]) ) );
-    const double BUUBH = (16. * self->M2) / (self->t * self->kqp[phiIndex] * self->kpqp[phiIndex]) * (self->kd[phiIndex] * self->kd[phiIndex] + self->kpd[phiIndex] * self->kpd[phiIndex]);
-
-    const double con_AUUBH = AUUBH * GeV2nb * self->jcob;
-    const double con_BUUBH = BUUBH * GeV2nb * self->jcob;
-
-    const double bhAUU = (self->Gamma/self->t) * con_AUUBH * ( F1 * F1 + self->tau * F2 * F2 );
-    const double bhBUU = (self->Gamma/self->t) * con_BUUBH * ( self->tau * ( F1 + F2 ) * ( F1 + F2 ) );
-
-    const double xbhUU = bhAUU + bhBUU;
-
-    return xbhUU;
-}
-*/
-
-
-
-/*
-double TVA1_UU_getIUU(const TVA1_UU * const restrict self, const int phi, const double F1, const double F2, const double ReH, const double ReE, const double ReHtilde) {
-    const unsigned int phiIndex = TVA1_UU_getPhiIndex(self, phi);
-
-    const double AUUI = -4. * cos( phi * RAD ) * ( self->Dplus[phiIndex] * ( ( self->kqp_T[phiIndex] - 2. * self->kk_T - 2. * self->kqp[phiIndex] ) * self->kpP[phiIndex] + ( 2. * self->kpqp[phiIndex] - 2. * self->kkp_T - self->kpqp_T[phiIndex] ) * self->kP[phiIndex] + self->kpqp[phiIndex] * self->kP_T[phiIndex] + self->kqp[phiIndex] * self->kpP_T[phiIndex] - 2.*self->kkp * self->kP_T[phiIndex] ) -
-        self->Dminus[phiIndex] * ( ( 2. * self->kkp - self->kpqp_T[phiIndex] - self->kkp_T ) * self->Pqp[phiIndex] + 2. * self->kkp * self->qpP_T[phiIndex] - self->kpqp[phiIndex] * self->kP_T[phiIndex] - self->kqp[phiIndex] * self->kpP_T[phiIndex] ) ) ;
-
-    const double BUUI = -2. * self->xi * cos( phi * RAD ) * ( self->Dplus[phiIndex] * ( ( self->kqp_T[phiIndex] - 2. * self->kk_T - 2. * self->kqp[phiIndex] ) * self->kpd[phiIndex] + ( 2. * self->kpqp[phiIndex] - 2. * self->kkp_T - self->kpqp_T[phiIndex] ) * self->kd[phiIndex] + self->kpqp[phiIndex] * self->kd_T[phiIndex] + self->kqp[phiIndex] * self->kpd_T[phiIndex]- 2.*self->kkp * self->kd_T[phiIndex] ) -
-        self->Dminus[phiIndex] * ( ( 2. * self->kkp - self->kpqp_T[phiIndex] - self->kkp_T ) * self->qpd[phiIndex] + 2. * self->kkp * self->qpd_T[phiIndex] - self->kpqp[phiIndex] * self->kd_T[phiIndex] - self->kqp[phiIndex] * self->kpd_T[phiIndex] ) );
-
-    const double CUUI = -2. * cos( phi * RAD ) * ( self->Dplus[phiIndex] * ( 2. * self->kkp * self->kd_T[phiIndex] - self->kpqp[phiIndex] * self->kd_T[phiIndex] - self->kqp[phiIndex] * self->kpd_T[phiIndex] + 4. * self->xi * self->kkp * self->kP_T[phiIndex] - 2. * self->xi * self->kpqp[phiIndex] * self->kP_T[phiIndex] - 2. * self->xi * self->kqp[phiIndex] * self->kpP_T[phiIndex] ) -
-        self->Dminus[phiIndex] * ( self->kkp * self->qpd_T[phiIndex] - self->kpqp[phiIndex] * self->kd_T[phiIndex] - self->kqp[phiIndex] * self->kpd_T[phiIndex] + 2. * self->xi * self->kkp * self->qpP_T[phiIndex] - 2. * self->xi * self->kpqp[phiIndex] * self->kP_T[phiIndex] - 2. * self->xi * self->kqp[phiIndex] * self->kpP_T[phiIndex]) );
-
-    const double con_AUUI = AUUI * GeV2nb * self->jcob;
-    const double con_BUUI = BUUI * GeV2nb * self->jcob;
-    const double con_CUUI = CUUI * GeV2nb * self->jcob;
-
-    const double iAUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_AUUI * ( F1 * ReH + self->tau * F2 * ReE );
-    const double iBUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_BUUI * ( F1 + F2 ) * ( ReH + ReE );
-    const double iCUU = (self->Gamma/(fabs(self->t) * self->QQ)) * con_CUUI * ( F1 + F2 ) * ReHtilde;
-
-    const double xIUU = iAUU + iBUU + iCUU;
-
-    return -1. * xIUU;
-}
-*/
 
 #endif // TVA1_UU_H_

@@ -27,11 +27,12 @@ static struct {
 static double k, QQ, x, t,
        F[NUM_INDEXES], errF[NUM_INDEXES],
        F1, F2,
+       phi[NUM_INDEXES],
        dvcs,
        ReH_mean, ReE_mean, ReHtilde_mean,
        ReH_stddev, ReE_stddev, ReHtilde_stddev;
 
-static int desiredSet, phi[NUM_INDEXES];
+static int desiredSet;
 
 static TVA1_UU tva1_uu;
 
@@ -73,7 +74,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    TVA1_UU_Init(&tva1_uu, QQ, x, t, k, (int *) (&phi), 45);
+    TVA1_UU_Init(&tva1_uu, QQ, x, t, k, F1, F2, (double *) &phi, 45);
 
     localFit();
 
@@ -121,14 +122,14 @@ static bool readInData(const char * const restrict filename) {
             sscanf(buff, "%*d,%d,%*s\n", &index);
 
             if (!previouslyEncounteredSet) {
-                sscanf(buff, "%*d,%*d,%lf,%lf,%lf,%lf,%d,%lf,%lf,%*lf,%lf,%lf,%lf\n",
+                sscanf(buff, "%*d,%*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%*lf,%lf,%lf,%lf\n",
                        &k, &QQ, &x, &t,
                        &phi[index], &F[index], &errF[index],
                        &F1, &F2, &dvcs);
 
                 previouslyEncounteredSet = 1;
             } else {
-                sscanf(buff, "%*d,%*d,%*lf,%*lf,%*lf,%*lf,%d,%lf,%lf,%*lf,%*lf,%*lf,%*lf\n",
+                sscanf(buff, "%*d,%*d,%*lf,%*lf,%*lf,%*lf,%lf,%lf,%lf,%*lf,%*lf,%*lf,%*lf\n",
                        &phi[index], &F[index], &errF[index]);
             }
         }
@@ -204,7 +205,7 @@ static double calcFError(const double replicas[], const double ReH, const double
     double sum_of_squared_percent_errors = 0.0;
 
     for (int index = 0; index < NUM_INDEXES; index++) {
-        const double F_predicted = dvcs + TVA1_UU_getBHUU_plus_getIUU(&tva1_uu, phi[index], F1, F2, ReH, ReE, ReHtilde);
+        const double F_predicted = dvcs + TVA1_UU_getBHUU_plus_getIUU(&tva1_uu, phi[index], ReH, ReE, ReHtilde);
         const double F_actual = F[index] + (replicas[index] * errF[index]);
         const double percent_error = (F_actual - F_predicted) / F_actual;
         sum_of_squared_percent_errors += percent_error * percent_error;
