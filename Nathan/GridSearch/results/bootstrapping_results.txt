@@ -1,0 +1,26 @@
+1000 attempts, 50 indexes/attempt:
+ReH = 0.545592 +/- 0.765684
+ReE = -0.040786 +/- 32.762661
+ReHtilde = 2.906913 +/- 1.600387
+
+100 attempts, 50 indexes/attempt:
+ReH = 0.544027 +/- 0.726800
+ReE = -1.053898 +/- 32.950246
+ReHtilde = 2.895077 +/- 1.383134
+
+1000 attempts, 5 indexes/attempt:
+ReH = 0.123436 +/- 23.147221
+ReE = 9.455447 +/- 426.332088
+ReHtilde = 4.168412 +/- 47.215640
+
+
+100 attempts, 500 indexes/attempt:
+ReH = 0.613122 +/- 0.224706
+ReE = -1.735219 +/- 9.469972
+ReHtilde = 2.973187 +/- 0.394136
+
+10 attempts, 5000 indexes/attempt:
+ReH = 0.583068 +/- 0.108418
+ReE = -0.462222 +/- 3.850022
+ReHtilde = 3.008655 +/- 0.197879
+

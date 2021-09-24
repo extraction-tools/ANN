@@ -76,19 +76,24 @@ int main(int argc, char **argv) {
 
     TVA1_UU_Init(&tva1_uu, QQ, x, t, k, F1, F2, (double *) &phi, 45);
 
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     localFit();
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+    const long double timeLocalFitTook = (long double) (end.tv_sec - start.tv_sec) + ((long double) (end.tv_nsec - start.tv_nsec) / (long double) 1.0e9);
 
     FILE *f = fopen("local_fit_output.csv", "r");
 
     if (f == NULL) {
         f = fopen("local_fit_output.csv", "w");
-        fprintf(f, "Set,ReH_mean,ReH_stddev,ReE_mean,ReE_stddev,ReHtilde_mean,ReHtilde_stddev\n");
+        fprintf(f, "Set,k,QQ,x,t,ReH_mean,ReH_stddev,ReE_mean,ReE_stddev,ReHtilde_mean,ReHtilde_stddev,time\n");
     } else {
         fclose(f);
         f = fopen("local_fit_output.csv", "a");
     }
 
-    fprintf(f, "%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", desiredSet, k, QQ, x, t, ReH_mean, ReH_stddev, ReE_mean, ReE_stddev, ReHtilde_mean, ReHtilde_stddev);
+    fprintf(f, "%d,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.3Lf\n", desiredSet, k, QQ, x, t, ReH_mean, ReH_stddev, ReE_mean, ReE_stddev, ReHtilde_mean, ReHtilde_stddev, timeLocalFitTook);
 
     fclose(f);
 
@@ -218,9 +223,9 @@ static double calcFError(const double replicas[], const double ReH, const double
 
 // Estimate the correct CFF values for a specific replica
 static void calcCFFs(const int replicaNum) {
-    double ReHguess = 0.0;
-    double ReEguess = 0.0;
-    double ReHtildeguess = 0.0;
+    double ReHguess = 0.;
+    double ReEguess = 0.;
+    double ReHtildeguess = 0.;
     double bestError = DBL_MAX;
 
     // replicas: a list of replicas, where each replica represents the number of standard deviations that an index's F value will be off by
@@ -230,7 +235,7 @@ static void calcCFFs(const int replicaNum) {
     }
 
     // num: number of points tested on either side of the guess
-    const int num = 10;
+    const double num = 10.;
 
     // totalDist: the total distance being tested on either side of the guess
     const double totalDist = 1.;
@@ -238,7 +243,7 @@ static void calcCFFs(const int replicaNum) {
 
 
     // dist: distance between each point being tested
-    for (double dist = (double) totalDist / num; dist >= 0.000000001; dist /= num) {
+    for (double dist = totalDist / num; dist >= 0.000001; dist /= num) {
         const double maxChange = dist * num;
         const double minChange = -1 * maxChange;
 
@@ -285,7 +290,7 @@ static void calcCFFs(const int replicaNum) {
 
 // Fits CFFs to all of the replicas
 static void localFit(void) {
-    const double percentCompleteEachReplica = 100 / (double) NUM_REPLICAS;
+    const double percentCompleteEachReplica = 100. / NUM_REPLICAS;
     double percentComplete = 0.0;
 
     printf("Set %d: %.2lf%% complete\n", desiredSet, percentComplete);

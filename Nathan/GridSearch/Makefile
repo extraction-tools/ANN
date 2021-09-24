@@ -33,6 +33,10 @@ LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_PATH := $(LOCAL_FIT_TARGET_EXEC_FROM_PATH)Boot
 LOCAL_FIT_PARALLEL_EXEC_FROM_PATH := $(LOCAL_FIT_TARGET_EXEC_FROM_PATH)Parallel
 LOCAL_FIT_SEQUENTIAL_EXEC_FROM_PATH := $(LOCAL_FIT_TARGET_EXEC_FROM_PATH)Sequential
 
+LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_ROOT := ./bin/LocalFitBootstrapping
+LOCAL_FIT_PARALLEL_EXEC_FROM_ROOT := ./bin/LocalFitParallel
+LOCAL_FIT_SEQUENTIAL_EXEC_FROM_ROOT := ./bin/LocalFitSequential
+
 CLEANER_TARGET_EXEC := bin/$(CLEANER_NAME)
 NARROWER_TARGET_EXEC := bin/$(NARROWER_NAME)
 GLOBAL_FIT_TARGET_EXEC := bin/$(GLOBAL_FIT_NAME)
@@ -64,7 +68,7 @@ NARROWER_OUTPUT_FILE := results/$(NARROWER_NAME)/$(NARROWER_NAME)Output.csv
 GLOBAL_FIT_OUTPUT_FILE := results/$(GLOBAL_FIT_NAME)/$(GLOBAL_FIT_NAME)Output.csv
 
 # Number of sets in data
-NUM_SETS := 342
+NUM_SETS := 100
 
 
 .PHONY: all clean
@@ -87,22 +91,25 @@ local_fits:
 	make --no-print-directory local_fit_bootstrapping
 
 local_fit_bootstrapping: $(LOCAL_FIT_BOOTSTRAPPING_DEPENDENCIES)
-	@echo "Making $(LOCAL_FIT_BOOTSTRAPPING_NAME)..."
-	cd $(LOCAL_FIT_BOOTSTRAPPING_PATH)
-	go build -o $(LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_PATH)
-	chmod +rwx $(LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_PATH)
+	echo "Making $(LOCAL_FIT_BOOTSTRAPPING_NAME)..."; \
+	cd $(LOCAL_FIT_BOOTSTRAPPING_PATH); \
+	go build -o $(LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_PATH); \
+	chmod +rwx $(LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_PATH); \
+	echo "Done."
 
 local_fit_parallel: $(LOCAL_FIT_PARALLEL_DEPENDENCIES)
-	@echo "Making $(LOCAL_FIT_PARALLEL_NAME)..."
-	cd $(LOCAL_FIT_PARALLEL_PATH)
-	go build -o $(LOCAL_FIT_PARALLEL_EXEC_FROM_PATH)
-	chmod +rwx $(LOCAL_FIT_PARALLEL_EXEC_FROM_PATH)
+	echo "Making $(LOCAL_FIT_PARALLEL_NAME)..."; \
+	cd $(LOCAL_FIT_PARALLEL_PATH); \
+	go build -o $(LOCAL_FIT_PARALLEL_EXEC_FROM_PATH); \
+	chmod +rwx $(LOCAL_FIT_PARALLEL_EXEC_FROM_PATH); \
+	echo "Done."
 
 local_fit_sequential: $(LOCAL_FIT_SEQUENTIAL_DEPENDENCIES)
-	@echo "Making $(LOCAL_FIT_SEQUENTIAL_NAME)..."
-	cd $(LOCAL_FIT_SEQUENTIAL_PATH)
-	clang *.c -o $(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_PATH) $(CFLAGS)
-	chmod +rwx $(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_PATH)
+	echo "Making $(LOCAL_FIT_SEQUENTIAL_NAME)..."; \
+	cd $(LOCAL_FIT_SEQUENTIAL_PATH); \
+	clang *.c -o $(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_PATH) $(CFLAGS); \
+	chmod +rwx $(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_PATH); \
+	echo "Done."
 
 
 
@@ -117,15 +124,25 @@ global_fit: $(GLOBAL_FIT_OBJS) $(GLOBAL_FIT_DEPENDENCIES)
 	clang $(GLOBAL_FIT_OBJS) -o $(GLOBAL_FIT_TARGET_EXEC) $(CFLAGS)
 
 
-#run_local_fit:
-#ifdef set
-#	./$(LOCAL_FIT_TARGET_EXEC) $(LOCAL_FIT_INPUT_FILE) $$set;
-#else
-#	for (( i=1; i<=$(NUM_SETS); i+=1 )); \
-#	do \
-#		./$(LOCAL_FIT_TARGET_EXEC) $(LOCAL_FIT_INPUT_FILE) $$i; \
-#	done
-#endif
+run_local_fit_sequential:
+ifdef set
+	$(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_ROOT) $(PSEUDODATA_FILE) $$set;
+else
+	for (( i=1; i<=$(NUM_SETS); i+=1 )); \
+	do \
+		$(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_ROOT) $(PSEUDODATA_FILE) $$i; \
+	done
+endif
+
+run_local_fit_bootstrapping:
+ifdef set
+	$(LOCAL_FIT_BOOTSTRAPPING_EXEC_FROM_ROOT) $$set;
+else
+	for (( i=1; i<=$(NUM_SETS); i+=1 )); \
+	do \
+		$(LOCAL_FIT_SEQUENTIAL_EXEC_FROM_ROOT) $$i; \
+	done
+endif
 
 run_global_fit:
 	./$(GLOBAL_FIT_TARGET_EXEC) $(GLOBAL_FIT_INPUT_FILE)
