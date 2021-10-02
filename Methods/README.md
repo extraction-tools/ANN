@@ -2,7 +2,7 @@
 
 1) Please copy these files to your working folder
 2) Refer to the ANNMethods file for block diagrams related to each method
-3) There were 3 pseudo-data sets Produced by Liliet and those data files with details can be found on https://github.com/extraction-tools/ANN/tree/master/Liliet 
+3) In this folder there is **One** data file provided. There are three pseudo-data sets Produced by Liliet and those data files with details can be found on https://github.com/extraction-tools/ANN/tree/master/Liliet (**Note**: Make sure to replace **BHDVCStf.py** file with the appropriate one when you are working with those data sets. You can find the corresponding file either on Liliet's folder or Nick's folder)
 4) Each data file contains many "kinematic-settings" (check corresponding .csv files)
 5) Cross-Section (so-called "F") is a function of:
 * Kinematics: x_B, k, QQ, t, phi
