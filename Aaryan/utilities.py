@@ -15,6 +15,7 @@ class DvcsData(object):
         self.df = df
         self.X = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'ReH', 'ReE', 'ReHtilde', 'dvcs']]
         self.XnoCFF = df.loc[:, ['phi_x', 'k', 'QQ', 'x_b', 't', 'F1', 'F2', 'dvcs']]
+        self.dvcs = df.loc[:, 'dvcs'] #Added by Aaryan to make sure it is easier to 
         self.CFFs = df.loc[:, ['ReH', 'ReE', 'ReHtilde']]
         self.y = df.loc[:, 'F']
         self.Kinematics = df.loc[:, ['k', 'QQ', 'x_b', 't']]
@@ -33,7 +34,14 @@ class DvcsData(object):
     
     def sampleY(self):
         return np.random.normal(self.y, self.erry)
-    
+
+    #Aaryan Added to make sure expected data is interference 
+    def sampleYforInterference(self):
+        f = np.random.normal(self.y, self.erry)
+        bhdvcs.SetKinematics(self.XnoCFF.loc[:, 'QQ'], self.XnoCFF.loc[:, 'x_b'], self.XnoCFF.loc[:, 't'], self.XnoCFF.loc[:, 'k'])
+        return f - self.dvcs - bhdvcs.GetBHUUxs(self.XnoCFF.loc[:, 'phi_x'], self.XnoCFF.loc[:, 'F1'], self.XnoCFF.loc[:, 'F2'])
+        #calculate interference and return it
+        
     def sampleWeights(self):
         return 1/self.erry
     
@@ -144,7 +152,7 @@ class TotalUUXSlayer(tf.keras.layers.Layer):
         super(TotalUUXSlayer, self).__init__(dtype='float64')
         self.F = BHDVCS()
     def call(self, inputs):
-        return self.F.TotalUUXS(inputs[:, :8], inputs[:, 8], inputs[:, 9], inputs[:, 10])
+        return self.F.Interference(inputs[:, :8], inputs[:, 8], inputs[:, 9], inputs[:, 10]) #Aaryan - Changing call function to return interference instead of F
     
     
 def cffs_from_globalModel(model, kinematics, numHL=1):
