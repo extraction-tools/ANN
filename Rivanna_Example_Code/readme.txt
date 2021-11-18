@@ -15,6 +15,6 @@ cp $CONTAINERDIR/tensorflow-2.1.0-py37.sif /home/$USER
 ### Then run the following command to submit the job ######
 ### here you can include the range of the kinematics #####
 
-sbatch --array=0-14 Job.slurm
+sbatch --array=0-2 Job.slurm
 
 
