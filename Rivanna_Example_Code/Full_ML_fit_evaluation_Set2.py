@@ -112,7 +112,7 @@ def cffs_from_globalModel(model, kinematics):
 # In[16]:
 
 
-numSamples = 1000
+numSamples = 10
 
 i = int(sys.argv[1])
 
