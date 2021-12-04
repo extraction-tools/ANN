@@ -12,69 +12,40 @@ Author: Nathan Snyder
 #include <stdlib.h>
 #include <time.h>
 
-
-#define PSEUDODATASET 1
-#define NUM_REPLICAS 100
-#define RESULTSFILE "results/local_fit_sequential_results.csv"
+#include "TVA1_UU.h"
 
 
-
-#if PSEUDODATASET == 1
-    #include "TBHDVCS.h"
-    #define NUM_INDEXES 36
-    #define DATAFILE "lib/dvcs_xs_newsets_withCFFs_2.csv"
-#elif PSEUDODATASET == 2
-    #include "TVA1_UU.h"
-    #define NUM_INDEXES 45
-    #define DATAFILE "lib/dvcs_xs_May-2021_342_sets.csv"
-#elif PSEUDODATASET == 3
-    #error The code for pseudodataset 3 is not ready yet
-    #define NUM_INDEXES 45
-    #define DATAFILE "lib/dvcs_bkm2002_June2021_4pars.csv"
-#else
-    #error Define the pseudodata set to use
-#endif
+#define NUM_INDEXES 45
+#define NUM_REPLICAS 1000
 
 
-
-static struct {
-    double ReH, ReE, ReHtilde;
-} cffGuesses[NUM_REPLICAS];
 
 static double k, QQ, x, t,
-              F[NUM_INDEXES], errF[NUM_INDEXES],
-              F1, F2,
-              phi[NUM_INDEXES],
-              dvcs,
-              ReH_mean, ReE_mean, ReHtilde_mean,
-              ReH_stddev, ReE_stddev, ReHtilde_stddev;
+       F[NUM_INDEXES], errF[NUM_INDEXES],
+       F1, F2,
+       phi[NUM_INDEXES],
+       dvcs,
+       ReH_mean, ReE_mean, ReHtilde_mean,
+       ReH_stddev, ReE_stddev, ReHtilde_stddev;
 
 static int desiredSet;
 
-#if PSEUDODATASET == 1
-    static BHDVCS bhdvcs;
-#elif PSEUDODATASET == 2
-    static TVA1_UU tva1_uu;
-#elif PSEUDODATASET == 3
-#endif
+static TVA1_UU tva1_uu;
 
 
 
 // Read in the data
 // Returns 0 if success, 1 if error
-static bool readInData(void);
+static bool readInData(const char * const restrict filename);
 
 // Box-Muller Transform --> Turn a uniform distribution into a Gaussian distribution
 static double boxMuller(void);
-
-// Function that calculates the mean and standard deviation of the CFFs over all the replicas
-static void calcMeanAndStdDev(void);
 
 // Calculate the root mean squared percent error in F for a specific replica and the given CFFs
 static double calcFError(const double replicas[], const double ReH, const double ReE, const double ReHtilde);
 
 // Estimate the correct CFF values for a specific replica
-static void calcCFFs(const int replicaNum);
+static void calcCFFs(void);
 
 // Fits CFFs to all of the replicas
 static void localFit(void);
@@ -84,29 +55,19 @@ static void localFit(void);
 int main(int argc, char **argv) {
     srand((unsigned int) time(0));
 
-    if (argc == 1) {
-        printf("Please specify a set number.\n");
-        return 1;
-    } else if (argc == 2) {
-        desiredSet = atoi(argv[1]);
+    if (argc == 3) {
+        desiredSet = atoi(argv[2]);
 
-        if(readInData()) {
+        if(readInData(argv[1])) {
             printf("Read failed.\n");
             return 1;
         }
     } else {
-        printf("Please only specify a set number.\n");
+        printf("Please specify a data file (.csv) and a set number only.\n");
         return 1;
     }
 
-#if PSEUDODATASET == 1
-    BHDVCS_Init(&bhdvcs, QQ, x, t, k, F1, F2, (double *) &phi, NUM_INDEXES);
-#elif PSEUDODATASET == 2
-    TVA1_UU_Init(&tva1_uu, QQ, x, t, k, F1, F2, (double *) &phi, NUM_INDEXES);
-#elif PSEUDODATASET == 3
-#endif
-
-
+    TVA1_UU_Init(&tva1_uu, QQ, x, t, k, F1, F2, (double *) &phi, 45);
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
@@ -115,27 +76,21 @@ int main(int argc, char **argv) {
 
     const long double timeLocalFitTook = (long double) (end.tv_sec - start.tv_sec) + ((long double) (end.tv_nsec - start.tv_nsec) / (long double) 1.0e9);
 
-    FILE *f = fopen(RESULTSFILE, "r");
+    FILE *f = fopen("local_fit_output.csv", "r");
 
     if (f == NULL) {
-        f = fopen(RESULTSFILE, "w");
+        f = fopen("local_fit_output.csv", "w");
         fprintf(f, "Set,k,QQ,x,t,ReH_mean,ReH_stddev,ReE_mean,ReE_stddev,ReHtilde_mean,ReHtilde_stddev,time\n");
     } else {
         fclose(f);
-        f = fopen(RESULTSFILE, "a");
+        f = fopen("local_fit_output.csv", "a");
     }
 
     fprintf(f, "%d,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.6lf,%.3Lf\n", desiredSet, k, QQ, x, t, ReH_mean, ReH_stddev, ReE_mean, ReE_stddev, ReHtilde_mean, ReHtilde_stddev, timeLocalFitTook);
 
     fclose(f);
 
-
-#if PSEUDODATASET == 1
-    BHDVCS_Destruct(&bhdvcs);
-#elif PSEUDODATASET == 2
     TVA1_UU_Destruct(&tva1_uu);
-#elif PSEUDODATASET == 3
-#endif
 
     return 0;
 }
@@ -144,13 +99,13 @@ int main(int argc, char **argv) {
 
 // Read in the data
 // returns 0 if success, 1 if error
-static bool readInData(void) {
-    FILE *f = fopen(DATAFILE, "r");
+static bool readInData(const char * const restrict filename) {
+    FILE *f = fopen(filename, "r");
     char buff[1024] = {0};
     bool previouslyEncounteredSet = false;
 
-    if (!f) {
-        printf("Error: could not open file " DATAFILE ".\n");
+    if (f == NULL) {
+        printf("Error: could not open file %s.\n", filename);
         return 1;
     }
 
@@ -181,7 +136,7 @@ static bool readInData(void) {
     fclose(f);
 
     if (!previouslyEncounteredSet) {
-        printf("Error: could not find set %d in " DATAFILE ".\n", desiredSet);
+        printf("Error: could not find set %d in %s.\n", desiredSet, filename);
         return 1;
     }
 
@@ -202,79 +157,34 @@ static double boxMuller(void) {
 
 
 
-// Function that calculates the mean and standard deviation of the CFFs over all the replicas
-static void calcMeanAndStdDev(void) {
-    ReH_mean = 0.0;
-    ReE_mean = 0.0;
-    ReHtilde_mean = 0.0;
-
-    double ReH_sum_of_differences = 0.0;
-    double ReE_sum_of_differences = 0.0;
-    double ReHtilde_sum_of_differences = 0.0;
-
-
-    for (int replicaNum = 0; replicaNum < NUM_REPLICAS; replicaNum++) {
-        ReH_mean += cffGuesses[replicaNum].ReH;
-        ReE_mean += cffGuesses[replicaNum].ReE;
-        ReHtilde_mean += cffGuesses[replicaNum].ReHtilde;
-    }
-
-
-    ReH_mean /= NUM_REPLICAS;
-    ReE_mean /= NUM_REPLICAS;
-    ReHtilde_mean /= NUM_REPLICAS;
-
-
-    for (int replicaNum = 0; replicaNum < NUM_REPLICAS; replicaNum++) {
-        const double ReH_difference = cffGuesses[replicaNum].ReH - ReH_mean;
-        const double ReE_difference = cffGuesses[replicaNum].ReE - ReE_mean;
-        const double ReHtilde_difference = cffGuesses[replicaNum].ReHtilde - ReHtilde_mean;
-
-        ReH_sum_of_differences += ReH_difference * ReH_difference;
-        ReE_sum_of_differences += ReE_difference * ReE_difference;
-        ReHtilde_sum_of_differences += ReHtilde_difference * ReHtilde_difference;
-    }
-
-
-    ReH_stddev = sqrt(ReH_sum_of_differences / (NUM_REPLICAS - 1));
-    ReE_stddev = sqrt(ReE_sum_of_differences / (NUM_REPLICAS - 1));
-    ReHtilde_stddev = sqrt(ReHtilde_sum_of_differences / (NUM_REPLICAS - 1));
-}
-
-
-
 // Calculate the root root mean squared percent error in F for a specific replica and the given CFFs
 static double calcFError(const double replicas[], const double ReH, const double ReE, const double ReHtilde) {
     double sum_of_squared_percent_errors = 0.0;
 
-    for (int index = 0; index < NUM_INDEXES; index++) { 
-#if PSEUDODATASET == 1
-        const double F_predicted = dvcs + BHDVCS_getBHUU_plus_getIUU(&bhdvcs, phi[index], ReH, ReE, ReHtilde);
-#elif PSEUDODATASET == 2
-        const double F_predicted = dvcs + TVA1_UU_getBHUU_plus_getIUU(&tva1_uu, phi[index], ReH, ReE, ReHtilde);
-#elif PSEUDODATASET == 3
-#endif
-
-        const double F_actual = F[index] + (replicas[index] * errF[index]);
-        const double percent_error = (F_actual - F_predicted) / F_actual;
-        sum_of_squared_percent_errors += percent_error * percent_error;
+    for (int index = 0; index < NUM_INDEXES; index++) {
+        for (int replica = 0; replica < NUM_REPLICAS; replica++) {
+            const double F_predicted = dvcs + TVA1_UU_getBHUU_plus_getIUU(&tva1_uu, phi[index], ReH, ReE, ReHtilde);
+            const double F_actual = F[index] + (replicas[(index * NUM_REPLICAS) + replica] * errF[index]);
+            const double percent_error = (F_actual - F_predicted) / F_actual;
+            sum_of_squared_percent_errors += percent_error * percent_error;
+        }
     }
 
-    return sqrt(sqrt(sum_of_squared_percent_errors / NUM_INDEXES));
+    return sqrt(sum_of_squared_percent_errors / (NUM_INDEXES * NUM_REPLICAS));
 }
 
 
 
 // Estimate the correct CFF values for a specific replica
-static void calcCFFs(const int replicaNum) {
+static void calcCFFs() {
     double ReHguess = 0.;
     double ReEguess = 0.;
     double ReHtildeguess = 0.;
     double bestError = DBL_MAX;
 
     // replicas: a list of replicas, where each replica represents the number of standard deviations that an index's F value will be off by
-    double replicas[NUM_INDEXES];
-    for (int i = 0; i < NUM_INDEXES; i++) {
+    double replicas[NUM_INDEXES * NUM_REPLICAS];
+    for (int i = 0; i < NUM_INDEXES * NUM_REPLICAS; i++) {
         replicas[i] = boxMuller();
     }
 
@@ -325,25 +235,18 @@ static void calcCFFs(const int replicaNum) {
 
 
 
-    cffGuesses[replicaNum].ReH = ReHguess;
-    cffGuesses[replicaNum].ReE = ReEguess;
-    cffGuesses[replicaNum].ReHtilde = ReHtildeguess;
+    ReH_mean = ReHguess;
+    ReE_mean = ReEguess;
+    ReHtilde_mean = ReHtildeguess;
+
+    ReH_stddev = ReHguess * bestError;
+    ReE_stddev = ReEguess * bestError;
+    ReHtilde_stddev = ReHtildeguess * bestError;
 }
 
 
 
 // Fits CFFs to all of the replicas
 static void localFit(void) {
-    const double percentCompleteEachReplica = 100. / NUM_REPLICAS;
-    double percentComplete = 0.0;
-
-    printf("Set %d: %.2lf%% complete\n", desiredSet, percentComplete);
-
-    for (int replicaNum = 0; replicaNum < NUM_REPLICAS; replicaNum++) {
-        percentComplete += percentCompleteEachReplica;
-        calcCFFs(replicaNum);
-        printf("\033[ASet %d: %.2lf%% complete\n", desiredSet, percentComplete);
-    }
-
-    calcMeanAndStdDev();
+    calcCFFs();
 }

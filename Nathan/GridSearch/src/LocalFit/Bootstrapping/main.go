@@ -12,9 +12,9 @@ import (
 	"time"
 )
 
-const NUM_INDEXES int = 45
-const NUM_ATTEMPTS int = 10
-const NUM_INDEXES_IN_ONE_ATTEMPT int = 5000
+const NUM_INDEXES int = 36
+const NUM_ATTEMPTS int = 100
+const NUM_INDEXES_IN_ONE_ATTEMPT int = 100
 
 var k, QQ, x, t, F1, F2, dvcs float64
 var F, errF [NUM_INDEXES]float64
@@ -26,7 +26,7 @@ func boxMuller(r *rand.Rand) float64 {
 	return math.Sqrt(-2.0*math.Log(r.Float64())) * math.Sin(2.0*math.Pi*(r.Float64()))
 }
 
-func getBestCFFs(indexes [NUM_INDEXES_IN_ONE_ATTEMPT]int, tva1_uu TVA1_UU, cffsChan chan<- [4]float64) {
+func getBestCFFs(indexes [NUM_INDEXES_IN_ONE_ATTEMPT]int, bhdvcs BHDVCS, cffsChan chan<- [4]float64) {
 	var phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64
 	var fValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64
 
@@ -37,7 +37,7 @@ func getBestCFFs(indexes [NUM_INDEXES_IN_ONE_ATTEMPT]int, tva1_uu TVA1_UU, cffsC
 		fValues[index] = F[value] + (errF[value] * boxMuller(r))
 	}
 
-	cffsChan <- gridSearch(phiValues, fValues, tva1_uu)
+	cffsChan <- gridSearch(phiValues, fValues, bhdvcs)
 }
 
 func main() {
@@ -49,7 +49,10 @@ func main() {
 	var ReE_values [NUM_ATTEMPTS]float64
 	var ReHtilde_values [NUM_ATTEMPTS]float64
 
-	csvfile, err := os.Open("dvcs_xs_May-2021_342_sets.csv")
+	csvfile, err := os.Open("lib/dvcs_xs_newsets_withCFFs_2.csv") // Pseudodata 1
+	//csvfile, err := os.Open("lib/dvcs_xs_May-2021_342_sets.csv") // Pseudodata 2
+	//csvfile, err := os.Open("lib/dvcs_bkm2002_June2021_4pars.csv") // Pseudodata 3
+
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
 	}
@@ -102,14 +105,13 @@ func main() {
 		}
 	}
 
-	var tva1_uu TVA1_UU
+	var bhdvcs BHDVCS
 
 	var phiValuesArr []float64 = make([]float64, len(phi))
 	for index, value := range phi {
 		phiValuesArr[index] = float64(value)
 	}
-	tva1_uu.init(QQ, x, t, k, F1, F2, phiValuesArr)
-	//TVA1_UU_SetKinematics(QQ, x, t, k)
+	bhdvcs.init(QQ, x, t, k, F1, F2, phiValuesArr)
 
 	var r *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < NUM_ATTEMPTS; i++ {
@@ -118,8 +120,14 @@ func main() {
 			indexes[i] = r.Intn(NUM_INDEXES)
 		}
 
-		go getBestCFFs(indexes, tva1_uu, cffsChannel)
+		go getBestCFFs(indexes, bhdvcs, cffsChannel)
 	}
+
+	f, err := os.OpenFile("local_fit_bootstrapping_output.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
 
 	for {
 		select {
@@ -128,7 +136,6 @@ func main() {
 			ReE_values[numAttemptsCompleted] = cffs[1]
 			ReHtilde_values[numAttemptsCompleted] = cffs[2]
 			numAttemptsCompleted++
-			fmt.Printf("%d:\t%.6f,%.6f,%.6f,%.6f\n", numAttemptsCompleted, cffs[0], cffs[1], cffs[2], cffs[3])
 		default:
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -136,9 +143,13 @@ func main() {
 		if numAttemptsCompleted == NUM_ATTEMPTS {
 			var cffMeans, cffStddevs [3]float64 = calcMeanAndStddevOfCFFs(ReH_values, ReE_values, ReHtilde_values)
 
-			fmt.Printf("ReH = %.6f +/- %.6f\n", cffMeans[0], cffStddevs[0])
-			fmt.Printf("ReE = %.6f +/- %.6f\n", cffMeans[1], cffStddevs[1])
-			fmt.Printf("ReHtilde = %.6f +/- %.6f\n", cffMeans[2], cffStddevs[2])
+			f.WriteString(fmt.Sprintf("%d,%d,%d,%f,%f,%f,%f,%f,%f\n",
+				desiredSet,
+				NUM_ATTEMPTS, NUM_INDEXES_IN_ONE_ATTEMPT,
+				cffMeans[0], cffStddevs[0],
+				cffMeans[1], cffStddevs[1],
+				cffMeans[2], cffStddevs[2]))
+
 			break
 		}
 	}

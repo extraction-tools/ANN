@@ -5,12 +5,11 @@ import (
 )
 
 // Calculate the root root mean squared percent error in F for a specific attempt and the given CFFs
-func calcFError(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, tva1_uu TVA1_UU, ReH float64, ReE float64, ReHtilde float64) float64 {
+func calcFError(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, bhdvcs BHDVCS, ReH float64, ReE float64, ReHtilde float64) float64 {
 	sumOfSquaredPercentErrors := 0.0
 
 	for index := 0; index < NUM_INDEXES_IN_ONE_ATTEMPT; index++ {
-		F_predicted := tva1_uu.getBHUU_plus_getIUU(phiValues[index], ReH, ReE, ReHtilde) + dvcs
-		//F_predicted := TVA1_UU_GetBHUU(float64(phiValues[index]), F1, F2) + TVA1_UU_GetIUU(float64(phiValues[index]), F1, F2, ReH, ReE, ReHtilde) + dvcs
+		F_predicted := bhdvcs.getBHUU_plus_getIUU(int(phiValues[index]), ReH, ReE, ReHtilde) + dvcs
 		F_actual := fValues[index]
 		percentError := (F_actual - F_predicted) / F_actual
 		sumOfSquaredPercentErrors += percentError * percentError
@@ -20,7 +19,7 @@ func calcFError(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDE
 }
 
 // Estimate the correct CFF values for a specific replica
-func gridSearch(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, tva1_uu TVA1_UU) [4]float64 {
+func gridSearch(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, bhdvcs BHDVCS) [4]float64 {
 	var ReHguess, ReEguess, ReHtildeguess float64 = 0.0, 0.0, 0.0
 	var bestError float64 = math.MaxFloat64
 
@@ -46,7 +45,7 @@ func gridSearch(phiValues [NUM_INDEXES_IN_ONE_ATTEMPT]float64, fValues [NUM_INDE
 			for ReHchange := minChange; ReHchange <= maxChange; ReHchange += dist {
 				for ReEchange := minChange; ReEchange <= maxChange; ReEchange += dist {
 					for ReHtildechange := minChange; ReHtildechange <= maxChange; ReHtildechange += dist {
-						var error float64 = calcFError(phiValues, fValues, tva1_uu, ReHguess+ReHchange, ReEguess+ReEchange, ReHtildeguess+ReHtildechange)
+						var error float64 = calcFError(phiValues, fValues, bhdvcs, ReHguess+ReHchange, ReEguess+ReEchange, ReHtildeguess+ReHtildechange)
 
 						if error < bestError {
 							bestReHguess = ReHguess + ReHchange
