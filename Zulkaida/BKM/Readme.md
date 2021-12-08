@@ -17,7 +17,8 @@ The code also outputs plot of the fit for each dataset. For example
 ![image](https://user-images.githubusercontent.com/68297438/145281206-1dff06ea-b2e2-482f-8ae1-fd7877b8162c.png)
 
 To run the job on grid
-./jobscript.sh <job name> <replica number>
+./jobscript.sh job_name replica_number
+For exampke ./jobscript.sh CFF_BKM_Test 1000
 
 If you use tensorflow, you need to modify the code. In BHDVCS_torch.py you need to change torch.cos to np.cos (just an example if you use numpy). I think you also need to modify the loss function (MSE, MAE, etc)
 
