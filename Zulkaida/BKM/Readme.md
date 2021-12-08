@@ -8,7 +8,7 @@ There are 4 fit parameters which are 3 CFFs and a constant dvcs term. This code 
 singularity run --nv /home/za2hd/pytorch-1.5.1.sif localfit_v2.py 
 
 First, you need to copy the pytorch*.sif file to your home directory. More information about container and singularity in Rivanna can be seen here:
-https://www.rc.virginia.edu/userinfo/rivanna/software/containers/
+https://www.rc.virginia.edu/userinfo/rivanna/software/containers/ and
 https://www.rc.virginia.edu/userinfo/rivanna/software/pytorch/
 
 The output is a series of number indicate: ReH, ReE, ReHTilde, final loss number, loss val 1, loss val 2 , loss val3. loss val 1,2 and 3 are validation loss that you can choose from the available functions or you can also create your own
