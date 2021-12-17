@@ -5,7 +5,7 @@
 
 **part1_kinematics_vs_cross_section_graphs**, 
 **part2_CFFs_vs_cross_section_graphs**, and 
-**part3_derivative_graphs**
+**part3_derivative_graphs** create 3d plots using the VA formulation with different combinations of axes
 
 # Graphs in Python matplotlib
 
