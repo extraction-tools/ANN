@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 """
 creates a 2d scatterplot with [k, QQ, x_b, t, ReH, ReE, ReHtilde, or dvcs]
-on the x-axis and the integral of F w/ respect to phi on the y-axis
+on the x-axis and F w/ respect to phi on the y-axis
 
  * constant values of kinematics, CFF's, etc. are from any #Set in datafile
  * range of values for x-axis depend on the range in datafile
