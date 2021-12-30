@@ -9,7 +9,7 @@
 //      -- DVCS_UU_10, I_UU_10                                                  //
 //                                                                              //
 //  Written by: Liliet Calero Diaz 
-//  (Slightly) modified by Zulkaida Akbar
+//  
 //                                                                              //
 //  Email: lc2fc@virginia.edu                                                   //
 //                                                                              //
