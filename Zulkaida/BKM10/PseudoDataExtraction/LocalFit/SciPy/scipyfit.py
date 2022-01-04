@@ -1,14 +1,6 @@
-import torch
-import torch.nn as nn 
-from torch.autograd import Variable 
-import torch.nn.functional as F 
-import torch.utils.data as Data
-
 import numpy as np
 import pandas as pd 
-from BHDVCS_torch import TBHDVCS
 from BHDVCS_fit import DVCSFIT
-
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -20,16 +12,9 @@ from scipy.optimize import minimize
 from scipy.stats import chisquare
 from statistics import median
 
-
-tb = TBHDVCS()
-f = tb.curve_fit
-
 dv = DVCSFIT()
 func_fit = dv.curve_fit2
-
-loss_validation1 = tb.loss_MSE
-loss_validation2 = tb.loss_chisq
-loss_validation3 = tb.loss_MAE
+f = dv.plot_fit
 
 dats = pd.read_csv('pseudo_BKM10_hallB_t3.csv')
 
@@ -77,6 +62,11 @@ def fit_scipy(n):
     ##popt, pcov = curve_fit(func_fit, xdat, F[a:b][mask], sigma=errF[a:b][mask], method='trf', bounds = (-100.,100))
     return popt[0], popt[1], popt[2], popt[3], popt[4]
 
+def chisq(ReH, ReE, ReHtilde, c0fit, c1fit):
+    return np.mean((ydat - func_fit(xdat, ReH, ReE, ReHtilde, c0fit, c1fit)) ** 2 / errs ** 2)
+def MAE(ReH, ReE, ReHtilde, c0fit, c1fit):
+    return np.mean(np.abs(ydat - func_fit(xdat, ReH, ReE, ReHtilde, c0fit, c1fit))/ydat)
+
 for ii in range(5):
  a = 24*ii # start index of set
  b = a+24 # end index of set
@@ -84,19 +74,14 @@ for ii in range(5):
  mask = (errF[a:b] > 0)
  xdat = np.array([phi[a:b][mask], qq[a:b][mask], xb[a:b][mask], t[a:b][mask], k[a:b][mask], F1[a:b][mask], F2[a:b][mask]])
  ydat = np.array([F[a:b][mask]])
-
- 
- y = Variable(torch.from_numpy(ydat.transpose()))
- xdat = Variable(torch.from_numpy(xdat))
- errs = Variable(torch.from_numpy(errF[a:b][mask]))
+ errs = np.array([errF[a:b][mask]])
  
  popt = fit_scipy(ii)
  cffs = [popt[0], popt[1], popt[2], popt[3], popt[4]]  
- loss_val1 = loss_validation1((xdat.float()), cffs, errs, y)
- loss_val2 = loss_validation2((xdat.float()), cffs, errs, y)
- loss_val3 = loss_validation3((xdat.float()), cffs, errs, y)
+ chisq_val = chisq(popt[0], popt[1], popt[2], popt[3], popt[4])
+ MAE_val = MAE(popt[0], popt[1], popt[2], popt[3], popt[4])
 
- print('%.4f %.4f %.4f %.8f %.4f %.4f' % (popt[0], popt[1], popt[2], loss_val1, loss_val2, loss_val3 ))
+ print('%.4f %.4f %.4f %.8f %.4f' % (popt[0], popt[1], popt[2], chisq_val, MAE_val ))
  F2VsPhi(df,ii+1,xdat,cffs)
  plt.clf()  
 
