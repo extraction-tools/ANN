@@ -1,4 +1,3 @@
-import torch
 import numpy as np
 
 class DVCSFIT(object):
@@ -150,3 +149,15 @@ class DVCSFIT(object):
         xsiuu    = self.IUU(kinematics, phi, F1, F2, ReH, ReE, ReHtilde, "t3")
         f_pred = xsbhuu + xsiuu + c0fit + c1fit * np.cos( self.PI - (phi * self.RAD) )
         return f_pred
+
+
+    def plot_fit(self, kins, cffs):
+        phi, kin1, kin2, kin3, kin4, F1, F2 = kins
+        ReH, ReE, ReHtilde, c0fit, c1fit = cffs #output of network
+        kinematics = [kin1, kin2, kin3, kin4]
+        self.SetKinematics(kinematics)
+        xsbhuu   = self.BHUU(kinematics, phi, F1, F2)
+        xsiuu    = self.IUU(kinematics, phi, F1, F2, ReH, ReE, ReHtilde, "t3")
+        f_pred = xsbhuu + xsiuu + c0fit + c1fit * np.cos( self.PI - (phi * self.RAD) )
+        return f_pred
+
