@@ -5,4 +5,4 @@
 #SBATCH --output=slurm.out
 #SBATCH --error=slurm.err
 #SBATCH --partition=standard
-singularity run --nv ~/pytorch-1.5.1.sif ann_smeartest.py
+singularity run --nv ~/pytorch-1.5.1.sif ann.py
