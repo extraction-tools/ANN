@@ -11,8 +11,8 @@ First, you need to copy the pytorch*.sif file to your home directory. More infor
 The output is a series of number indicate: ReH, ReE, ReHTilde, final loss number, loss val 1, loss val 2 , loss val3. loss val 1,2 and 3 are validation loss that you can choose from the available functions or you can also create your own
 
 The code also outputs plot of the fit for each dataset. For example
-![image](https://user-images.githubusercontent.com/68297438/145281206-1dff06ea-b2e2-482f-8ae1-fd7877b8162c.png)
 
+https://user-images.githubusercontent.com/68297438/145281206-1dff06ea-b2e2-482f-8ae1-fd7877b8162c.png
 
 To run the job on grid ./jobscript.sh job_name replica_number. For example ./jobscript.sh CFF_BKM_Test 1000
 
