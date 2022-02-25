@@ -54,17 +54,21 @@ that aren't already included in common ML-language libraries (i.e. the stigmergi
 5. Explore custom loss function and optimizer designs that may yield different performances within the existing models. 
 
 # Custom Loss Function Implementation 
+- New custom loss function template added and pushed for entire group's use
 
 # Baselining 
+- Successfully baselined against MSE loss function
 
 # Custom Optimizer Implementation 
+- New custom loss function template added and pushed for entire group's use
 
 # Baselining 
+- Baselining still in-progree against the MSE loss function 
 
 
-
-
-
+# Remainning tasks
+- Design a practical custom loss function to potentially yield different model performance
+- Design a practical custom optimizer to potentially yield different model performance
 
 
 
