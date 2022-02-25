@@ -29,7 +29,6 @@ Dropout layer placement with respect to hidden layers: TBD <br />
 Nodes per layer (shape): TBD <br />
 
 
-
 ## Remainning Tasks:
  1. Modify the code to allow for hyperparameter-tuning by adjusting the number of hidden layers
  2. Modify the code to allow for hyperparameter-tuning by adjusting the number of dropout layers
@@ -45,6 +44,9 @@ Nodes per layer (shape): TBD <br />
 # Introduction
 My current task is the implementation of custom loss functions and optimizers within the current method. The purpose is to allow for future custom designs in loss functions <br />
 that aren't already included in common ML-language libraries (i.e. the stigmergic loss function). <br />
+
+Resources used:
+- Custom Optimizer: https://cloudxlab.com/blog/writing-custom-optimizer-in-tensorflow-and-keras/ 
 
 # Plan of action
 1. Create custom loss function template code compatible with all of the current methods.
