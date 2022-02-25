@@ -38,3 +38,35 @@ Nodes per layer (shape): TBD <br />
  5. Implement the consistent global-fitting schema provided by Nathan
  6. Add in functionality that stores searched hyperparameter results according the the schema
  7. Have a functionality that prevents duplicate 
+
+
+# Sammy's Custom Optimizer and Custom Loss Function Template Code Creation (Date: 2/25/22)
+
+# Introduction
+My current task is the implementation of custom loss functions and optimizers within the current method. The purpose is to allow for future custom designs in loss functions <br />
+that aren't already included in common ML-language libraries (i.e. the stigmergic loss function). <br />
+
+# Plan of action
+1. Create custom loss function template code compatible with all of the current methods.
+2. Baseline the loss function against common libraries to ensure working implementation (Mean-squared error loss).
+3. Create custom optimizer template code compatible with all of the current methods.
+4. Baseline the custom optimizers against common libraries to ensure working implementation (Stochastic Gradient Descent, Adam Optimizer).
+5. Explore custom loss function and optimizer designs that may yield different performances within the existing models. 
+
+# Custom Loss Function Implementation 
+
+# Baselining 
+
+# Custom Optimizer Implementation 
+
+# Baselining 
+
+
+
+
+
+
+
+
+
+
