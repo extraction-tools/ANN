@@ -70,8 +70,8 @@ Resources used:
 
 # Remainning tasks
 - Design a practical custom loss function to potentially yield different model performance
-- Design a practical custom optimizer to potentially yield different model performance
-- Implement Stimergic loss
+- Design a practical custom optimizer to potentially yield different model performance (optimizer)
+- Implement Stimergic loss (optimizer first)
 
 
 
