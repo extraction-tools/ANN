@@ -37,6 +37,8 @@ F1 = np.array(dats['F1'])
 F2 = np.array(dats['F2'])
 const = np.array(dats['dvcs'])
 
+##F = (np.random.normal(F, errF))
+
 def cosinus(x):
   return np.cos(x*3.1415926535/180. )
 
