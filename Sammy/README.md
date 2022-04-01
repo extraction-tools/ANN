@@ -75,5 +75,14 @@ Resources used:
 
 
 
+# Overleaf Documentation Update on Sections 2,9, Local-fit Hyperparameter Tuning and Custom Optimizer/Loss-Function (4/1/22)
+
+Overleaf Link: https://www.overleaf.com/project/61ef779610e38807c590b717
+Refer to sections 2 and 9.
+
+
+
+
+
 
 
