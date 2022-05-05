@@ -1,3 +1,17 @@
 Files regarding ROOT Universal Struct (RUS)
 
 Example Root File:
+DYTarget_April13.root
+JPsiDump_April13.root
+
+Script example to read the file:
+ReadUproot.py
+
+Script to generate Messy MC:
+GenerateMCTDC.py
+
+The output from GenerateMCTDC.py is a numpy file (*.npy) contain simulation events. To plot histogram of the detector Id and Element Id:
+Readnpy_v2.py
+
+Readnpy_v2.py also produce text file contain Detector Id and Element Id. A script to produce the plot from this text file (much faster):
+plothist.C
