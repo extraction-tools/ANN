@@ -40,15 +40,72 @@ Wsave = tfModel.get_weights()
 #!!High-overfitting from batch_size 1, 2 100 node hidden layers no validation data, huge number of epochs!!#
 # Over-fitting to F will likely not reflect well in CFF predictions
 
-#Number of kinematic sets
+def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
+  f = BHDVCStf().curve_fit
+  TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
+  TempFvals=TempFvalSilces["F"]
+  TempFvals_sigma=TempFvalSilces["errF"]
+  temp_phi=TempFvalSilces["phi_x"]
+
+  calculated_points = f(xdat,cffs)
+
+  return get_total_error(calculated_points, TempFvals), get_max_residual(temp_phi, calculated_points, TempFvals)
+
+
+################################################# FINDING THE BEST COMBINATION OF EPOCH AND BATCH #######################################
+total_errors = {}
+total_residuals = {}
+
+best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best errors for each set
+
+best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
+
+for epoch in np.arange(5,1001,10):
+  for batch in np.arange(1,31,1):
+    by_set = []
+    for i in range(5):
+      setI = data.getSet(i, itemsInSet=45)
+
+      tfModel.set_weights(Wsave)
+
+      tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
+                            epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback])
+      
+      
+      cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
+
+      by_set.append(cffs)
+
+      new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
+
+      # Avoid recalculating F-values from cffs when that is what the model is predicting already
+      total_error, max_residual = F2VsPhi_noPlot(df,i+1,new_xdat,cffs); #runs the version without plotting to save time
+      total_errors[(epoch, batch, i)] = total_error
+      total_residuals[(epoch, batch, i)] = max_residual
+
+      if best_combination_errors[i][2] > total_error:
+        best_combination_errors[i] = (epoch, batch, total_error)
+
+      if best_combination_residual[i][2] > max_residual[1]:
+        best_combination_residual[i] = (epoch, batch, max_residual[1])
+
+most_common = []
+for i,j in zip(best_combination_errors.values(), best_combination_residual.values()):
+  most_common.append(i[:2])
+  most_common.append(j[:2])
+final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
+print("The best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
+
+
 by_set = []
-for i in range(5):
+for i in range(5): #use the final outcome to have a final fit
   setI = data.getSet(i, itemsInSet=45)
 
   tfModel.set_weights(Wsave)
 
   tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                        epochs=15000, verbose=0, batch_size=1, callbacks=[early_stopping_callback])
+                        epochs=final_outcome[0], verbose=0, batch_size=final_outcome[1], callbacks=[early_stopping_callback])
+  
   
   cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
@@ -57,8 +114,9 @@ for i in range(5):
   new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
   # Avoid recalculating F-values from cffs when that is what the model is predicting already
-  F2VsPhi(df,i+1,new_xdat,cffs)
+  F2VsPhi(df,i+1,new_xdat,cffs);
   plt.clf()
+
 
 df = pd.DataFrame(by_set)
 df.to_csv('bySetCFFs.csv')
