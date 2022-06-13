@@ -5,7 +5,7 @@ import pandas as pd
 # from BHDVCS_tf import DvcsData
 # from BHDVCS_tf import cffs_from_globalModel
 # from BHDVCS_tf import F2VsPhi
-from BHDVCStf import *
+from BHDVCS_tf import *
 import tensorflow as tf
 
 import matplotlib
