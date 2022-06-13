@@ -41,6 +41,24 @@ Wsave = tfModel.get_weights()
 #!!High-overfitting from batch_size 1, 2 100 node hidden layers no validation data, huge number of epochs!!#
 # Over-fitting to F will likely not reflect well in CFF predictions
 
+def get_total_error(experimental_values, expected_values):
+  experimental_values, expected_values = list(experimental_values), list(expected_values)
+  tot = 0
+  for i,j in zip(experimental_values, expected_values):
+    tot += abs(float(j) - float(i))
+  return tot
+
+def get_max_residual(x_values, experimental_values, expected_values):
+  x_values, experimental_values, expected_values = list(x_values), list(experimental_values), list(expected_values)
+  max = 0
+  maxIndex = 0
+  for n, (i,j) in enumerate(zip(experimental_values, expected_values)):
+    residual = abs(float(j) - float(i))
+    if residual > max:
+      max = residual
+      maxIndex = n
+  return (x_values[n], max)
+
 def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
   f = BHDVCStf().curve_fit
   TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
