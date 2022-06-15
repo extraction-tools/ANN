@@ -3,12 +3,12 @@
 dir_macros=$(dirname $(readlink -f $BASH_SOURCE))
 
 jobname=$1
-njobs=$2
+njobs=2
 
 echo "njobs=$njobs"
 echo "nevents=$nevents"
 
-work=/scratch/$USER/ANN/$jobname
+work=/scratch/mvs2dq/ANN/$jobname
 
 
 mkdir -p $work

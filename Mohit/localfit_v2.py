@@ -80,7 +80,7 @@ best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4
 best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
 
 for epoch in np.arange(5,1001,10):
-  for batch in np.arange(1,31,1):
+  for batch in np.arange(1,10,1):
     by_set = []
     for i in range(5):
       setI = data.getSet(i, itemsInSet=45)
@@ -112,6 +112,13 @@ most_common = []
 for i,j in zip(best_combination_errors.values(), best_combination_residual.values()):
   most_common.append(i[:2])
   most_common.append(j[:2])
+
+final_outcome = max(set(best_combination_residual.values()), key = list(best_combination_residual.values()).count)
+print("Just be residuals, the best epoch number is:", final_outcome[0], "with a batch size of", final_outcome[1])
+
+final_outcome = max(set(best_combination_errors.values()), key = list(best_combination_errors.values()).count)
+print("Just be residuals, the best epoch number is:", final_outcome[0], "with a batch size of", final_outcome[1])
+
 final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
 print("The best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
 
