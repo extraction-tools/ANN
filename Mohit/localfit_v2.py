@@ -113,35 +113,36 @@ for i,j in zip(best_combination_errors.values(), best_combination_residual.value
   most_common.append(i[:2])
   most_common.append(j[:2])
 
-final_outcome = max(set(best_combination_residual.values()), key = list(best_combination_residual.values()).count)
-print("Just be residuals, the best epoch number is:", final_outcome[0], "with a batch size of", final_outcome[1])
+res_outcome = max(set(best_combination_residual.values()), key = list(best_combination_residual.values()).count)
+print("Just using residuals, the best epoch number is:", res_outcome[0], "with a batch size of", res_outcome[1])
 
-final_outcome = max(set(best_combination_errors.values()), key = list(best_combination_errors.values()).count)
-print("Just be residuals, the best epoch number is:", final_outcome[0], "with a batch size of", final_outcome[1])
+err_outcome = max(set(best_combination_errors.values()), key = list(best_combination_errors.values()).count)
+print("Just using residuals, the best epoch number is:", err_outcome[0], "with a batch size of", err_outcome[1])
 
 final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
-print("The best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
+print("Using both metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
 
 
-by_set = []
-for i in range(5): #use the final outcome to have a final fit
-  setI = data.getSet(i, itemsInSet=45)
+for designator in ("error", "residual", "overall"):
+  by_set = []
+  for i in range(5): #use the final outcome to have a final fit
+    setI = data.getSet(i, itemsInSet=45)
 
-  tfModel.set_weights(Wsave)
+    tfModel.set_weights(Wsave)
 
-  tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                        epochs=final_outcome[0], verbose=0, batch_size=final_outcome[1], callbacks=[early_stopping_callback])
-  
-  
-  cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
+    tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
+                          epochs=final_outcome[0], verbose=0, batch_size=final_outcome[1], callbacks=[early_stopping_callback])
+    
+    
+    cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
-  by_set.append(cffs)
+    by_set.append(cffs)
 
-  new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
+    new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
-  # Avoid recalculating F-values from cffs when that is what the model is predicting already
-  F2VsPhi(df,i+1,new_xdat,cffs);
-  plt.clf()
+    # Avoid recalculating F-values from cffs when that is what the model is predicting already
+    F2VsPhi(df,i+1,new_xdat,cffs, designation = designator);
+    plt.clf()
 
 
 df = pd.DataFrame(by_set)

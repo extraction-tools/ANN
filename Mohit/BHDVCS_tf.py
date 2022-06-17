@@ -123,7 +123,7 @@ class DvcsData(object):
     def getAllKins(self, itemsInSets=36):
       return self.Kinematics.iloc[np.array(range(len(df)//itemsInSets))*itemsInSets, :]
 
-def F2VsPhi(dataframe,SetNum,xdat,cffs):
+def F2VsPhi(dataframe,SetNum,xdat,cffs,designation="overall"):
   f = BHDVCStf().curve_fit
   TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
   TempFvals=TempFvalSilces["F"]
@@ -138,7 +138,7 @@ def F2VsPhi(dataframe,SetNum,xdat,cffs):
   plt.legend(loc=4,fontsize=10,handlelength=3)
   plt.title("Local fit with data set #"+str(SetNum),fontsize=20)
   plt.plot(temp_phi, f(xdat,cffs), 'g--', label='fit')
-  file_name = "plot_set_number_{}.png".format(SetNum)
+  file_name = "plot_set_number_{}_"+designation+".png".format(SetNum)
   plt.savefig(file_name)
     
 def cffs_from_globalModel(model, kinematics, numHL=1):
