@@ -48,7 +48,7 @@ for i in range(5):
   tfModel.set_weights(Wsave)
 
   tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                        epochs=15000, verbose=0, batch_size=1, callbacks=[early_stopping_callback])
+                        epochs=15000, verbose=0, batch_size=45, callbacks=[early_stopping_callback])
   
   cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
