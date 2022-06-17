@@ -145,5 +145,5 @@ for designator in ("error", "residual", "overall"):
     plt.clf()
 
 
-df = pd.DataFrame(by_set)
-df.to_csv('bySetCFFs.csv')
+  df = pd.DataFrame(by_set)
+  df.to_csv('bySetCFFs_'+designator+'.csv')
