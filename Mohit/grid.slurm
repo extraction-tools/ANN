@@ -7,3 +7,4 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-user=mohit@virginia.edu
 singularity run --nv /home/mvs2dq/tensorflow-2.1.0-py37.sif localfit_v2.py
+singularity tun --nv /home/mvs2dq/tensorflow-2.1.0-py37.sif localfit_v2_orig.py

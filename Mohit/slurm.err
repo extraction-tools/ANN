@@ -1,14 +1,55 @@
-2022-06-15 15:57:36.594548: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer.so.6
-2022-06-15 15:57:36.647716: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer_plugin.so.6
-2022-06-15 15:57:38.211753: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
-2022-06-15 15:57:38.278131: E tensorflow/stream_executor/cuda/cuda_driver.cc:351] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
-2022-06-15 15:57:38.278174: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-aw29-19a): /proc/driver/nvidia/version does not exist
-2022-06-15 15:57:38.278484: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
-2022-06-15 15:57:38.290146: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2400000000 Hz
-2022-06-15 15:57:38.291377: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5452550 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2022-06-15 15:57:38.291393: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
-WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.setKinematics at 0x2b6422e13ef0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
-WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.BHLeptonPropagators at 0x2b6422e1e830> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
-WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.BHUU at 0x2b6422e7ba70> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
-WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.IUU at 0x2b6419eedd40> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
-WARNING:tensorflow:5 out of the last 7 calls to <function BHDVCStf.curve_fit_array at 0x2b64205b4560> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+2022-06-17 15:20:20.403104: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer.so.6
+2022-06-17 15:20:20.494160: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer_plugin.so.6
+2022-06-17 15:20:22.109565: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2022-06-17 15:20:22.155486: E tensorflow/stream_executor/cuda/cuda_driver.cc:351] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2022-06-17 15:20:22.155514: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-aw34-7c1): /proc/driver/nvidia/version does not exist
+2022-06-17 15:20:22.155778: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2022-06-17 15:20:22.165459: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2500000000 Hz
+2022-06-17 15:20:22.166478: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x4f44800 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2022-06-17 15:20:22.166488: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.setKinematics at 0x2b258e014a70> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.BHLeptonPropagators at 0x2b258e0364d0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.BHUU at 0x2b258e07cdd0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+WARNING:tensorflow:5 out of the last 5 calls to <function BHDVCStf.IUU at 0x2b25810d1cb0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+WARNING:tensorflow:5 out of the last 7 calls to <function BHDVCStf.curve_fit_array at 0x2b25877974d0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings is likely due to passing python objects instead of tensors. Also, tf.function has experimental_relax_shapes=True option that relaxes argument shapes that can avoid unnecessary retracing. Please refer to https://www.tensorflow.org/tutorials/customization/performance#python_or_tensor_args and https://www.tensorflow.org/api_docs/python/tf/function for more details.
+Traceback (most recent call last):
+  File "localfit_v2.py", line 144, in <module>
+    F2VsPhi(df,i+1,new_xdat,cffs, designation = designator);
+  File "/home/mvs2dq/ANN/Mohit/BHDVCS_tf.py", line 141, in F2VsPhi
+    file_name = "plot_set_number_"+str(setNum)+"_gridMetric_"+designation+".png"
+NameError: name 'setNum' is not defined
+Error: unknown command "tun" for "singularity"
+
+Did you mean this?
+	run
+
+
+Usage:
+  singularity [global options...] <command>
+
+Available Commands:
+  build       Build a Singularity image
+  cache       Manage the local cache
+  capability  Manage Linux capabilities for users and groups
+  config      Manage various singularity configuration (root user only)
+  delete      Deletes requested image from the library
+  exec        Run a command within a container
+  inspect     Show metadata for an image
+  instance    Manage containers running as services
+  key         Manage OpenPGP keys
+  oci         Manage OCI containers
+  plugin      Manage Singularity plugins
+  pull        Pull an image from a URI
+  push        Upload image to the provided URI
+  remote      Manage singularity remote endpoints, keyservers and OCI/Docker registry credentials
+  run         Run the user-defined default command within a container
+  run-help    Show the user-defined help for an image
+  search      Search a Container Library for images
+  shell       Run a shell within a container
+  sif         siftool is a program for Singularity Image Format (SIF) file manipulation
+  sign        Attach digital signature(s) to an image
+  test        Run the user-defined tests within a container
+  verify      Verify cryptographic signatures attached to an image
+  version     Show the version for Singularity
+
+Run 'singularity --help' for more detailed usage information.
