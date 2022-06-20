@@ -135,10 +135,12 @@ def F2VsPhi(dataframe,SetNum,xdat,cffs,designation="overall"):
   plt.ylim(np.min(TempFvals)-temp_unit,np.max(TempFvals)+temp_unit)
   plt.xticks(fontsize=15)
   plt.yticks(fontsize=15)
-  plt.legend(loc=4,fontsize=10,handlelength=3)
   plt.title("Local fit with data set #"+str(SetNum),fontsize=20)
   plt.plot(temp_phi, f(xdat,cffs), 'g--', label='fit')
-  file_name = "plot_set_number_"+str(setNum)+"_gridMetric_"+designation+".png"
+  plt.xlabel("phi")
+  plt.ylabel("F")
+  plt.legend(loc=4,fontsize=10,handlelength=3)
+  file_name = "plot_set_number_"+str(SetNum)+"_gridMetric_"+designation+".png"
   plt.savefig(file_name)
     
 def cffs_from_globalModel(model, kinematics, numHL=1):

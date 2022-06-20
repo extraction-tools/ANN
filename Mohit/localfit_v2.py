@@ -51,19 +51,16 @@ def get_total_error(experimental_values, expected_values):
 def get_max_residual(x_values, experimental_values, expected_values):
   x_values, experimental_values, expected_values = list(x_values), list(experimental_values), list(expected_values)
   max = 0
-  maxIndex = 0
   for n, (i,j) in enumerate(zip(experimental_values, expected_values)):
     residual = abs(float(j) - float(i))
     if residual > max:
       max = residual
-      maxIndex = n
   return (x_values[n], max)
 
 def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
   f = BHDVCStf().curve_fit
   TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
   TempFvals=TempFvalSilces["F"]
-  TempFvals_sigma=TempFvalSilces["errF"]
   temp_phi=TempFvalSilces["phi_x"]
 
   calculated_points = f(xdat,cffs)
@@ -79,8 +76,8 @@ best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4
 
 best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
 
-for epoch in np.arange(5,1001,10):
-  for batch in np.arange(1,10,1):
+for epoch in np.arange(400,1001,20):
+  for batch in np.arange(1,47,3): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
     for i in range(5):
       setI = data.getSet(i, itemsInSet=45)
@@ -117,7 +114,7 @@ res_outcome = max(set(best_combination_residual.values()), key = list(best_combi
 print("Just using residuals, the best epoch number is:", res_outcome[0], "with a batch size of", res_outcome[1])
 
 err_outcome = max(set(best_combination_errors.values()), key = list(best_combination_errors.values()).count)
-print("Just using residuals, the best epoch number is:", err_outcome[0], "with a batch size of", err_outcome[1])
+print("Just using error, the best epoch number is:", err_outcome[0], "with a batch size of", err_outcome[1])
 
 final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
 print("Using both metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
