@@ -138,9 +138,9 @@ for designator in ("error", "residual", "overall"):
     new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
     # Avoid recalculating F-values from cffs when that is what the model is predicting already
-    F2VsPhi(df,i+1,new_xdat,cffs, designation = designator);
+    F2VsPhi(df.copy(),i+1,new_xdat,cffs, designation = designator);
     plt.clf()
 
 
-  df = pd.DataFrame(by_set)
-  df.to_csv('bySetCFFs_'+designator+'.csv')
+  newdf = pd.DataFrame(by_set)
+  newdf.to_csv('bySetCFFs_'+designator+'.csv')

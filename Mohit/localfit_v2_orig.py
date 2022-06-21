@@ -1,10 +1,6 @@
 import numpy as np
 import pandas as pd 
-# from BHDVCS_tf import BHDVCStf
-from BHDVCS_tf import TotalFLayer
-from BHDVCS_tf import DvcsData
-from BHDVCS_tf import cffs_from_globalModel
-from BHDVCS_tf import F2VsPhi
+from BHDVCS_tf import *
 import tensorflow as tf
 
 import matplotlib
@@ -57,7 +53,7 @@ for i in range(5):
   new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
   # Avoid recalculating F-values from cffs when that is what the model is predicting already
-  F2VsPhi(df,i+1,new_xdat,cffs)
+  F2VsPhi(df.copy(),i+1,new_xdat,cffs)
   plt.clf()
 
 df = pd.DataFrame(by_set)

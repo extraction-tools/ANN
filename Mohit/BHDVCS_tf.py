@@ -123,7 +123,7 @@ class DvcsData(object):
     def getAllKins(self, itemsInSets=36):
       return self.Kinematics.iloc[np.array(range(len(df)//itemsInSets))*itemsInSets, :]
 
-def F2VsPhi(dataframe,SetNum,xdat,cffs,designation="overall"):
+def F2VsPhi(dataframe,SetNum,xdat,cffs,designation="NONE"):
   f = BHDVCStf().curve_fit
   TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
   TempFvals=TempFvalSilces["F"]
