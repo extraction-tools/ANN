@@ -50,12 +50,20 @@ def get_total_error(experimental_values, expected_values):
 
 def get_max_residual(x_values, experimental_values, expected_values):
   x_values, experimental_values, expected_values = list(x_values), list(experimental_values), list(expected_values)
-  max = 0
+  maximum = 0
   for n, (i,j) in enumerate(zip(experimental_values, expected_values)):
     residual = abs(float(j) - float(i))
-    if residual > max:
-      max = residual
-  return (x_values[n], max)
+    if residual > maximum:
+      maximum = residual
+  return (x_values[n], maximum)
+
+
+def get_rms(experimental_values, expected_values):
+  experimental_values, expected_values = list(experimental_values), list(expected_values)
+  tot = 0
+  for i,j in zip(experimental_values, expected_values):
+    tot += np.sqrt((float(j) - float(i))**2)
+  return tot
 
 def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
   f = BHDVCStf().curve_fit
@@ -65,27 +73,36 @@ def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
 
   calculated_points = f(xdat,cffs)
 
-  return get_total_error(calculated_points, TempFvals), get_max_residual(temp_phi, calculated_points, TempFvals)
+  return (get_total_error(calculated_points, TempFvals), 
+    get_max_residual(temp_phi, calculated_points, TempFvals), 
+    get_rms(calculated_points, TempFvals))
 
 
 ################################################# FINDING THE BEST COMBINATION OF EPOCH AND BATCH #######################################
 total_errors = {}
 total_residuals = {}
+total_rms = {}
 
 best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best errors for each set
 
 best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
 
-for epoch in np.arange(400,15001,100):
+best_combination_rms = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best rms for each set
+
+
+for epoch in np.arange(100,15001,100):
   for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
-    for i in range(5):
+    for i in range(1, 10, 2): #runs 5 times
       setI = data.getSet(i, itemsInSet=45)
+
+      validationI = data.getSet(i - 1, itemsInSet=45) #uses the set before it as a validation sample
 
       tfModel.set_weights(Wsave)
 
       tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                            epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback])
+                            epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback],
+                            validation_data = (validationI.Kinematics, validationI.XnoCFF))
       
       
       cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
@@ -95,9 +112,10 @@ for epoch in np.arange(400,15001,100):
       new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
       # Avoid recalculating F-values from cffs when that is what the model is predicting already
-      total_error, max_residual = F2VsPhi_noPlot(df,i+1,new_xdat,cffs); #runs the version without plotting to save time
+      total_error, max_residual, total_rms = F2VsPhi_noPlot(df,i+1,new_xdat,cffs); #runs the version without plotting to save time
       total_errors[(epoch, batch, i)] = total_error
       total_residuals[(epoch, batch, i)] = max_residual
+      total_rms[(epoch, batch, i)] = total_rms
 
       if best_combination_errors[i][2] > total_error:
         best_combination_errors[i] = (epoch, batch, total_error)
@@ -105,10 +123,21 @@ for epoch in np.arange(400,15001,100):
       if best_combination_residual[i][2] > max_residual[1]:
         best_combination_residual[i] = (epoch, batch, max_residual[1])
 
+      if best_combination_rms[i][2] > total_rms:
+        best_combination_rms[i] = (epoch, batch, total_rms)
+
+best_combination_errors = pd.DataFrame.from_dict(best_combination_errors, orient="index")
+best_combination_errors.to_csv("best_combination_errors.csv")
+best_combination_residual = pd.DataFrame.from_dict(best_combination_residual, orient="index")
+best_combination_residual.to_csv("best_combination_residual.csv")
+best_combination_rms = pd.DataFrame.from_dict(best_combination_residual, orient="index")
+best_combination_rms.to_csv("best_combination_rms.csv")
+
 most_common = []
-for i,j in zip(best_combination_errors.values(), best_combination_residual.values()):
+for i,j,k in zip(best_combination_errors.values(), best_combination_residual.values(), best_combination_rms.values()):
   most_common.append(i[:2])
   most_common.append(j[:2])
+  most_common.append(k[:2])
 
 res_outcome = max(set(best_combination_residual.values()), key = list(best_combination_residual.values()).count)
 print("Just using residuals, the best epoch number is:", res_outcome[0], "with a batch size of", res_outcome[1])
@@ -116,20 +145,21 @@ print("Just using residuals, the best epoch number is:", res_outcome[0], "with a
 err_outcome = max(set(best_combination_errors.values()), key = list(best_combination_errors.values()).count)
 print("Just using error, the best epoch number is:", err_outcome[0], "with a batch size of", err_outcome[1])
 
+rms_outcome = max(set(best_combination_rms.values()), key = list(best_combination_rms.values()).count)
+print("Just using error, the best epoch number is:", rms_outcome[0], "with a batch size of", rms_outcome[1])
+
 final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
-print("Using both metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
+print("Using all 3 metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
 
 
-for designator in ("error", "residual", "overall"):
+for designator in ("err", "res", "final"):
   by_set = []
   for i in range(5): #use the final outcome to have a final fit
     setI = data.getSet(i, itemsInSet=45)
 
     tfModel.set_weights(Wsave)
-
     tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                          epochs=final_outcome[0], verbose=0, batch_size=final_outcome[1], callbacks=[early_stopping_callback])
-    
+                          epochs=eval(designator + "_outcome[0]"), verbose=0, batch_size=eval(designator + "_outcome[1]"), callbacks=[early_stopping_callback])
     
     cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
