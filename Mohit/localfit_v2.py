@@ -76,8 +76,8 @@ best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4
 
 best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
 
-for epoch in np.arange(400,1001,20):
-  for batch in np.arange(1,47,3): #46 is greater than the 45 we need, but it will floor to 45
+for epoch in np.arange(400,15001,100):
+  for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
     for i in range(5):
       setI = data.getSet(i, itemsInSet=45)
