@@ -81,13 +81,13 @@ def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
 ################################################# FINDING THE BEST COMBINATION OF EPOCH AND BATCH #######################################
 total_errors = {}
 total_residuals = {}
-total_rms = {}
+total_rms_vals = {}
 
-best_combination_errors = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best errors for each set
+best_combination_errors = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best errors for each set
 
-best_combination_residual = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best residuals for each set
+best_combination_residual = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best residuals for each set
 
-best_combination_rms = {0:(0,0,100), 1:(0,0,100), 2:(0,0,100), 3:(0,0,100), 4:(0,0,100)} #best rms for each set
+best_combination_rms = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best rms for each set
 
 
 for epoch in np.arange(100,15001,100):
@@ -115,7 +115,7 @@ for epoch in np.arange(100,15001,100):
       total_error, max_residual, total_rms = F2VsPhi_noPlot(df,i+1,new_xdat,cffs); #runs the version without plotting to save time
       total_errors[(epoch, batch, i)] = total_error
       total_residuals[(epoch, batch, i)] = max_residual
-      total_rms[(epoch, batch, i)] = total_rms
+      total_rms_vals[(epoch, batch, i)] = total_rms
 
       if best_combination_errors[i][2] > total_error:
         best_combination_errors[i] = (epoch, batch, total_error)
