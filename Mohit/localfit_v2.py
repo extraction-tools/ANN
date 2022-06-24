@@ -101,8 +101,7 @@ for epoch in np.arange(100,15001,100):
       tfModel.set_weights(Wsave)
 
       tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(), # one replica of samples from F vals
-                            epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback],
-                            validation_data = (validationI.Kinematics, validationI.XnoCFF))
+                            epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback])
       
       
       cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
@@ -126,12 +125,12 @@ for epoch in np.arange(100,15001,100):
       if best_combination_rms[i][2] > total_rms:
         best_combination_rms[i] = (epoch, batch, total_rms)
 
-best_combination_errors = pd.DataFrame.from_dict(best_combination_errors, orient="index")
-best_combination_errors.to_csv("best_combination_errors.csv")
-best_combination_residual = pd.DataFrame.from_dict(best_combination_residual, orient="index")
-best_combination_residual.to_csv("best_combination_residual.csv")
-best_combination_rms = pd.DataFrame.from_dict(best_combination_residual, orient="index")
-best_combination_rms.to_csv("best_combination_rms.csv")
+best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index")
+best_combination_errors_df.to_csv("best_combination_errors.csv")
+best_combination_residual_df = pd.DataFrame.from_dict(best_combination_residual, orient="index")
+best_combination_residual_df.to_csv("best_combination_residual.csv")
+best_combination_rms_df = pd.DataFrame.from_dict(best_combination_rms, orient="index")
+best_combination_rms_df.to_csv("best_combination_rms.csv")
 
 most_common = []
 for i,j,k in zip(best_combination_errors.values(), best_combination_residual.values(), best_combination_rms.values()):
@@ -146,13 +145,13 @@ err_outcome = max(set(best_combination_errors.values()), key = list(best_combina
 print("Just using error, the best epoch number is:", err_outcome[0], "with a batch size of", err_outcome[1])
 
 rms_outcome = max(set(best_combination_rms.values()), key = list(best_combination_rms.values()).count)
-print("Just using error, the best epoch number is:", rms_outcome[0], "with a batch size of", rms_outcome[1])
+print("Just using root mean square error, the best epoch number is:", rms_outcome[0], "with a batch size of", rms_outcome[1])
 
 final_outcome = max(set(most_common), key=most_common.count) #the final_outcome is a tuple of (epoch#, batch#)
 print("Using all 3 metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
 
 
-for designator in ("err", "res", "final"):
+for designator in ("err", "res", "rms", "final"):
   by_set = []
   for i in range(5): #use the final outcome to have a final fit
     setI = data.getSet(i, itemsInSet=45)
