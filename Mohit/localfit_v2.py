@@ -125,11 +125,11 @@ for epoch in np.arange(100,15001,100):
       if best_combination_rms[i][2] > total_rms:
         best_combination_rms[i] = (epoch, batch, total_rms)
 
-best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index")
+best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index", columns=['epoch', 'batch', 'rms'])
 best_combination_errors_df.to_csv("best_combination_errors.csv")
-best_combination_residual_df = pd.DataFrame.from_dict(best_combination_residual, orient="index")
+best_combination_residual_df = pd.DataFrame.from_dict(best_combination_residual, orient="index", columns=['epoch', 'batch', 'rms'])
 best_combination_residual_df.to_csv("best_combination_residual.csv")
-best_combination_rms_df = pd.DataFrame.from_dict(best_combination_rms, orient="index")
+best_combination_rms_df = pd.DataFrame.from_dict(best_combination_rms, orient="index", columns=['epoch', 'batch', 'rms'])
 best_combination_rms_df.to_csv("best_combination_rms.csv")
 
 most_common = []
@@ -153,7 +153,8 @@ print("Using all 3 metrics, the best epoch number is: ", final_outcome[0], "with
 
 for designator in ("err", "res", "rms", "final"):
   by_set = []
-  for i in range(5): #use the final outcome to have a final fit
+  by_set_metrics = []
+  for i in range(45): #use the final outcome to have a final fit
     setI = data.getSet(i, itemsInSet=45)
 
     tfModel.set_weights(Wsave)
@@ -163,6 +164,7 @@ for designator in ("err", "res", "rms", "final"):
     cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
     by_set.append(cffs)
+    by_set_metrics.append(F2VsPhi_noPlot(df.copy(),i+1,new_xdat,cffs))
 
     new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
@@ -173,3 +175,6 @@ for designator in ("err", "res", "rms", "final"):
 
   newdf = pd.DataFrame(by_set)
   newdf.to_csv('bySetCFFs_'+designator+'.csv')
+
+  newdf2 = pd.DataFrame(by_set_metrics, columns=["abs_err", "max_res", "rms_err"])
+  newdf2.to_csv("metrics_"+designator+".csv")
