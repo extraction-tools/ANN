@@ -55,14 +55,18 @@ def get_max_residual(x_values, experimental_values, expected_values):
     residual = abs(float(j) - float(i))
     if residual > maximum:
       maximum = residual
-  return (x_values[n], maximum)
+  return maximum
 
 
 def get_rms(experimental_values, expected_values):
   experimental_values, expected_values = list(experimental_values), list(expected_values)
   tot = 0
   for i,j in zip(experimental_values, expected_values):
-    tot += np.sqrt((float(j) - float(i))**2)
+    tot += (float(j) - float(i))**2
+
+  tot /= len(experimental_values)
+  tot = np.sqrt(tot)
+  tot /= (np.mean(expected_values))
   return tot
 
 def F2VsPhi_noPlot(dataframe,SetNum,xdat,cffs):
@@ -119,8 +123,8 @@ for epoch in np.arange(100,15001,100):
       if best_combination_errors[i][2] > total_error:
         best_combination_errors[i] = (epoch, batch, total_error)
 
-      if best_combination_residual[i][2] > max_residual[1]:
-        best_combination_residual[i] = (epoch, batch, max_residual[1])
+      if best_combination_residual[i][2] > max_residual:
+        best_combination_residual[i] = (epoch, batch, max_residual)
 
       if best_combination_rms[i][2] > total_rms:
         best_combination_rms[i] = (epoch, batch, total_rms)
