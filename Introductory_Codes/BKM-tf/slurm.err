@@ -1,6 +1,0 @@
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
-FATAL:   could not open image /home/asa2rc/pytorch-1.5.1.sif: failed to retrieve path for /home/asa2rc/pytorch-1.5.1.sif: lstat /sfs/qumulo/qhome/asa2rc/pytorch-1.5.1.sif: no such file or directory
