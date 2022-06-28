@@ -135,13 +135,21 @@ def F2VsPhi(dataframe,SetNum,xdat,cffs,designation="NONE"):
   plt.ylim(np.min(TempFvals)-temp_unit,np.max(TempFvals)+temp_unit)
   plt.xticks(fontsize=15)
   plt.yticks(fontsize=15)
-  plt.title("Local fit with data set #"+str(SetNum),fontsize=20)
+  plt.title("Local fit with data set #"+str(SetNum)+" using grid search minimization metric: " + designation,fontsize=20)
   plt.plot(temp_phi, f(xdat,cffs), 'g--', label='fit')
   plt.xlabel("phi")
   plt.ylabel("F")
   plt.legend(loc=4,fontsize=10,handlelength=3)
   file_name = "plot_set_number_"+str(SetNum)+"_gridMetric_"+designation+".png"
   plt.savefig(file_name)
+
+def F2VsPhi_multiple_designations(dataframe,SetNum,xdat,cffs,designation="NONE"):
+  f = BHDVCStf().curve_fit
+  TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
+  TempFvals=TempFvalSilces["F"]
+  TempFvals_sigma=TempFvalSilces["errF"]
+  temp_phi=TempFvalSilces["phi_x"]
+  return ( designation, (temp_phi, TempFvals, TempFvals_sigma), (temp_phi, f(xdat,cffs)) )#returns the designation, x values and the y values
     
 def cffs_from_globalModel(model, kinematics, numHL=1):
   '''

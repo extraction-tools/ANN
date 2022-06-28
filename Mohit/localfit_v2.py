@@ -1,10 +1,5 @@
 import numpy as np
 import pandas as pd 
-# from BHDVCS_tf import BHDVCStf
-# from BHDVCS_tf import TotalFLayer
-# from BHDVCS_tf import DvcsData
-# from BHDVCS_tf import cffs_from_globalModel
-# from BHDVCS_tf import F2VsPhi
 from BHDVCS_tf import *
 import tensorflow as tf
 
@@ -41,14 +36,14 @@ Wsave = tfModel.get_weights()
 #!!High-overfitting from batch_size 1, 2 100 node hidden layers no validation data, huge number of epochs!!#
 # Over-fitting to F will likely not reflect well in CFF predictions
 
-def get_total_error(experimental_values, expected_values):
+def get_total_error(experimental_values, expected_values): #gets the mean absolute error
   experimental_values, expected_values = list(experimental_values), list(expected_values)
   tot = 0
   for i,j in zip(experimental_values, expected_values):
     tot += abs(float(j) - float(i))
-  return tot
+  return tot/len(experimental_values)
 
-def get_max_residual(x_values, experimental_values, expected_values):
+def get_max_residual(x_values, experimental_values, expected_values): #gets the maximum residual
   x_values, experimental_values, expected_values = list(x_values), list(experimental_values), list(expected_values)
   maximum = 0
   for n, (i,j) in enumerate(zip(experimental_values, expected_values)):
@@ -57,8 +52,7 @@ def get_max_residual(x_values, experimental_values, expected_values):
       maximum = residual
   return maximum
 
-
-def get_rms(experimental_values, expected_values):
+def get_rms(experimental_values, expected_values): #normalized root mean square error
   experimental_values, expected_values = list(experimental_values), list(expected_values)
   tot = 0
   for i,j in zip(experimental_values, expected_values):
@@ -87,17 +81,22 @@ total_errors = {}
 total_residuals = {}
 total_rms_vals = {}
 
-best_combination_errors = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best errors for each set
+best_combination_errors = {} #best errors for each set
 
-best_combination_residual = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best residuals for each set
+best_combination_residual = {} #best residuals for each set
 
-best_combination_rms = {1:(0,0,100), 3:(0,0,100), 5:(0,0,100), 7:(0,0,100), 9:(0,0,100)} #best rms for each set
+best_combination_rms = {} #best rms for each set
+
+for i in range(45):
+  best_combination_errors[i] = (0,0,100)
+  best_combination_residual[i] = (0,0,100)
+  best_combination_rms[i] = (0,0,100) #sets all the dictionary entries
 
 
-for epoch in np.arange(100,15001,100):
+for epoch in np.arange(1000,15001,100):
   for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
-    for i in range(1, 10, 2): #runs 5 times
+    for i in range(45): #runs 5 times
       setI = data.getSet(i, itemsInSet=45)
 
       validationI = data.getSet(i - 1, itemsInSet=45) #uses the set before it as a validation sample
@@ -155,10 +154,12 @@ final_outcome = max(set(most_common), key=most_common.count) #the final_outcome 
 print("Using all 3 metrics, the best epoch number is: ", final_outcome[0], "with a batch size of", final_outcome[1])
 
 
-for designator in ("err", "res", "rms", "final"):
-  by_set = []
-  by_set_metrics = []
-  for i in range(45): #use the final outcome to have a final fit
+by_set = []
+by_set_metrics = []
+
+for i in range(45): #use the final outcome to have a final fit
+  by_metric_fits = []
+  for designator in ("err", "res", "rms", "final"):
     setI = data.getSet(i, itemsInSet=45)
 
     tfModel.set_weights(Wsave)
@@ -167,18 +168,46 @@ for designator in ("err", "res", "rms", "final"):
     
     cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
-    by_set.append(cffs)
-    by_set_metrics.append(F2VsPhi_noPlot(df.copy(),i+1,new_xdat,cffs))
+    by_set.append([i, designator] + list(cffs))
+    by_set_metrics.append([designator] + list(F2VsPhi_noPlot(df.copy(),i+1,new_xdat,cffs)))
 
     new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
     # Avoid recalculating F-values from cffs when that is what the model is predicting already
-    F2VsPhi(df.copy(),i+1,new_xdat,cffs, designation = designator);
-    plt.clf()
+    by_metric_fits.append(F2VsPhi_multiple_designations(df.copy(),i+1,new_xdat,cffs, designation = designator))
+
+  for n, fit in enumerate(by_metric_fits): #iterate over the fits that were just produced
+    if n == 0:
+      plt.errorbar(*fit[1],fmt='.',color='blue',label="Data") #this is the "real" data
+
+    plt.xlim(0,368)
+    TempFvals = fit[1][1]
+    temp_unit=(np.max(TempFvals)-np.min(TempFvals))/len(TempFvals)
+    plt.ylim(np.min(TempFvals)-temp_unit,np.max(TempFvals)+temp_unit)
+
+    grid_metric = ""
+    if fit[0] == "err":
+      grid_metric = "Mean Absolute Error"
+    elif fit[0] == "res":
+      grid_metric = "Maximum Residual"
+    elif fit[0] == "rms":
+      grid_metric = "NRMSE"
+    else:
+      grid_metric = "Most Common Hyperparameter Set"
+    plt.plot(*fit[2], label='fit using ' + grid_metric)
+
+  plt.xticks(fontsize=15)
+  plt.yticks(fontsize=15)
+  plt.title("Local fits with data set #"+str(SetNum),fontsize=20)
+  plt.xlabel("phi")
+  plt.ylabel("F")
+  plt.legend(loc=4,fontsize=10,handlelength=3)
+  file_name = "plot_set_number_"+str(i)+".png"
+  plt.savefig(file_name)
 
 
-  newdf = pd.DataFrame(by_set)
-  newdf.to_csv('bySetCFFs_'+designator+'.csv')
+newdf = pd.DataFrame(by_set)
+newdf.to_csv('bySetCFFs.csv')
 
-  newdf2 = pd.DataFrame(by_set_metrics, columns=["abs_err", "max_res", "rms_err"])
-  newdf2.to_csv("metrics_"+designator+".csv")
+newdf2 = pd.DataFrame(by_set_metrics, columns=["designator", "abs_err", "max_res", "rms_err"])
+newdf2.to_csv("metrics.csv")
