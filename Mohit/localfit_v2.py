@@ -87,7 +87,9 @@ best_combination_residual = {} #best residuals for each set
 
 best_combination_rms = {} #best rms for each set
 
-for i in range(45):
+testnum = 5
+
+for i in range(5):
   best_combination_errors[i] = (0,0,100)
   best_combination_residual[i] = (0,0,100)
   best_combination_rms[i] = (0,0,100) #sets all the dictionary entries
@@ -96,7 +98,7 @@ for i in range(45):
 for epoch in np.arange(1000,15001,100):
   for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
-    for i in range(45): #runs 5 times
+    for i in range(5): #runs 5 times
       setI = data.getSet(i, itemsInSet=45)
 
       validationI = data.getSet(i - 1, itemsInSet=45) #uses the set before it as a validation sample
@@ -169,7 +171,7 @@ for i in range(45): #use the final outcome to have a final fit
     cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
     by_set.append([i, designator] + list(cffs))
-    by_set_metrics.append([designator] + list(F2VsPhi_noPlot(df.copy(),i+1,new_xdat,cffs)))
+    by_set_metrics.append([i, designator] + list(F2VsPhi_noPlot(df.copy(),i+1,new_xdat,cffs)))
 
     new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32)) #NB: Could rewrite BHDVCS curve_fit to not require transposition
 
@@ -198,7 +200,7 @@ for i in range(45): #use the final outcome to have a final fit
 
   plt.xticks(fontsize=15)
   plt.yticks(fontsize=15)
-  plt.title("Local fits with data set #"+str(SetNum),fontsize=20)
+  plt.title("Local fits with data set #"+str(i),fontsize=20)
   plt.xlabel("phi")
   plt.ylabel("F")
   plt.legend(loc=4,fontsize=10,handlelength=3)
@@ -209,5 +211,5 @@ for i in range(45): #use the final outcome to have a final fit
 newdf = pd.DataFrame(by_set)
 newdf.to_csv('bySetCFFs.csv')
 
-newdf2 = pd.DataFrame(by_set_metrics, columns=["designator", "abs_err", "max_res", "rms_err"])
+newdf2 = pd.DataFrame(by_set_metrics, columns=["set", "designator", "abs_err", "max_res", "rms_err"])
 newdf2.to_csv("metrics.csv")
