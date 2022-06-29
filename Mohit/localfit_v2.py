@@ -203,9 +203,10 @@ for i in range(45): #use the final outcome to have a final fit
   plt.title("Local fits with data set #"+str(i),fontsize=20)
   plt.xlabel("phi")
   plt.ylabel("F")
-  plt.legend(loc=4,fontsize=10,handlelength=3)
+  plt.legend(bbox_to_anchor=[1, 0.5], loc='center left', fontsize=10,handlelength=3)
   file_name = "plot_set_number_"+str(i)+".png"
   plt.savefig(file_name)
+  plt.clf()
 
 
 newdf = pd.DataFrame(by_set)
