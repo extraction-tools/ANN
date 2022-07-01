@@ -87,9 +87,10 @@ best_combination_residual = {} #best residuals for each set
 
 best_combination_rms = {} #best rms for each set
 
-testnum = 5
+testnum = 200
+skip = 20
 
-for i in range(5):
+for i in range(0,testnum,20):
   best_combination_errors[i] = (0,0,100)
   best_combination_residual[i] = (0,0,100)
   best_combination_rms[i] = (0,0,100) #sets all the dictionary entries
@@ -98,7 +99,7 @@ for i in range(5):
 for epoch in np.arange(1000,15001,100):
   for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
-    for i in range(5): #runs 5 times
+    for i in np.arange(0,testnum,20): #runs 5 times
       setI = data.getSet(i, itemsInSet=45)
 
       validationI = data.getSet(i - 1, itemsInSet=45) #uses the set before it as a validation sample
@@ -203,7 +204,7 @@ for i in range(45): #use the final outcome to have a final fit
   plt.title("Local fits with data set #"+str(i),fontsize=20)
   plt.xlabel("phi")
   plt.ylabel("F")
-  plt.legend(bbox_to_anchor=[1, 0.5], loc='center left', fontsize=10,handlelength=3)
+  plt.legend(loc='best', fontsize=10,handlelength=3)
   file_name = "plot_set_number_"+str(i)+".png"
   plt.savefig(file_name)
   plt.clf()
