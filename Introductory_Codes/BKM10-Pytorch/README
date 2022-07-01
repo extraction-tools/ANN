@@ -1,6 +1,6 @@
 BKM10 Formulism with pytorch tools
 
-This is based on the BKM10 formulism and the real HallA data which proved can be extracted using local fit. 
+This is based on the BKM10 formulism for a sample of the real HallA data (data_hallA_allv2.csv) and also pseudo data that contain the truth value (pseudo_KM15.csv)  ,which proved can be extracted using local fit. 
 
 There are 4 fit parameters which are 3 CFFs and a constant dvcs term. This code is based on PyTorch. To run the code run:
 
