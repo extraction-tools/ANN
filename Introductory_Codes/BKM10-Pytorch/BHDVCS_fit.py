@@ -10,6 +10,32 @@ class DVCSFIT(object):
         self.M = 0.938272 #Mass of the proton in GeV
         self.GeV2nb = .389379*1000000 # Conversion from GeV to NanoBar
         self.M2 = self.M*self.M #Mass of the proton  squared in GeV
+        self.a1_GEp = -0.24
+        self.b1_GEp = 10.98
+        self.b2_GEp = 12.82
+        self.b3_GEp = 21.97
+        self.a1_GMp = 0.12
+        self.b1_GMp = 10.97
+        self.b2_GMp = 18.86
+        self.b3_GMp = 6.55        
+
+    def Get_F2(self, ti):
+        tau = - ti / 4. / self.M / self.M
+        GM0 = 2.7928473
+        GMp = GM0 * ( 1. + self.a1_GMp * tau )/( 1. + self.b1_GMp * tau + self.b2_GMp * tau * tau + self.b3_GMp * tau * tau * tau )
+        ffGMp = GMp
+        GEp = ( 1. + self.a1_GEp * tau )/( 1. + self.b1_GEp * tau + self.b2_GEp * tau * tau + self.b3_GEp * tau * tau * tau )
+        ffGEp = GEp
+        f2_K = ( ffGMp - ffGEp ) / ( 1. + tau )
+        return f2_K
+
+    def Get_F1(self, ti):
+        tau = - ti / 4. / self.M / self.M
+        GM0 = 2.7928473
+        GMp = GM0 * ( 1. + self.a1_GMp * tau )/( 1. + self.b1_GMp * tau + self.b2_GMp * tau * tau + self.b3_GMp * tau * tau * tau )
+        ffGMp = GMp
+        f1_K = ( ffGMp - self.Get_F2(ti) )
+        return f1_K      
         
 
       
