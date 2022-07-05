@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.stats import chisquare
 
-df = pd.read_csv("BKM_pseudodata.csv", dtype=np.float64)
+df = pd.read_csv("BKM_pseudodata2.csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
 
 data = DvcsData(df)
@@ -87,10 +87,10 @@ best_combination_residual = {} #best residuals for each set
 
 best_combination_rms = {} #best rms for each set
 
-testnum = 200
-skip = 20
+testnum = df['#Set'].max()
+skip = 20 #samples a series of different sets
 
-for i in range(0,testnum,20):
+for i in range(0,testnum,skip): #sets up dictionaries to record the data
   best_combination_errors[i] = (0,0,100)
   best_combination_residual[i] = (0,0,100)
   best_combination_rms[i] = (0,0,100) #sets all the dictionary entries
@@ -99,7 +99,7 @@ for i in range(0,testnum,20):
 for epoch in np.arange(1000,15001,100):
   for batch in np.arange(1,47,5): #46 is greater than the 45 we need, but it will floor to 45
     by_set = []
-    for i in np.arange(0,testnum,20): #runs 5 times
+    for i in np.arange(0,testnum,skip):
       setI = data.getSet(i, itemsInSet=45)
 
       validationI = data.getSet(i - 1, itemsInSet=45) #uses the set before it as a validation sample
@@ -160,7 +160,7 @@ print("Using all 3 metrics, the best epoch number is: ", final_outcome[0], "with
 by_set = []
 by_set_metrics = []
 
-for i in range(45): #use the final outcome to have a final fit
+for i in range(0, testnum, skip//2): #use the final outcome to have a final fit
   by_metric_fits = []
   for designator in ("err", "res", "rms", "final"):
     setI = data.getSet(i, itemsInSet=45)
@@ -197,7 +197,7 @@ for i in range(45): #use the final outcome to have a final fit
       grid_metric = "NRMSE"
     else:
       grid_metric = "Most Common Hyperparameter Set"
-    plt.plot(*fit[2], label='fit using ' + grid_metric)
+    plt.plot(*fit[2], label='fit using ' + grid_metric, linestyle='dashed')
 
   plt.xticks(fontsize=15)
   plt.yticks(fontsize=15)

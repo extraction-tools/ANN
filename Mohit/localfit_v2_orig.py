@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.stats import chisquare
 
-df = pd.read_csv("BKM_pseudodata.csv", dtype=np.float64)
+df = pd.read_csv("test_data/BKM_pseudodata2.csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
 
 data = DvcsData(df)
