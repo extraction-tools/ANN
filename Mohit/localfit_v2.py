@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.stats import chisquare
 
-df = pd.read_csv("BKM_pseudodata2.csv", dtype=np.float64)
+df = pd.read_csv("test_data/BKM_pseudodata2.csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
 
 data = DvcsData(df)
@@ -87,7 +87,7 @@ best_combination_residual = {} #best residuals for each set
 
 best_combination_rms = {} #best rms for each set
 
-testnum = df['#Set'].max()
+testnum = int(df['#Set'].max())
 skip = 20 #samples a series of different sets
 
 for i in range(0,testnum,skip): #sets up dictionaries to record the data
