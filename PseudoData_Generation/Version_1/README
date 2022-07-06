@@ -1,0 +1,7 @@
+This is a python code to generate pseudo data with the same kinematics of the real Hall A and Hall B data (195 sets). The truth value based on KM15 modal
+To use it:
+module load anaconda
+python pseudogen.py
+
+The structure of the file:
+Set, index, k, qq, xb, t, phi, F, errorF,  F1, F2, gReH, gReE, gReHTilde, gc0fit

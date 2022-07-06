@@ -36,9 +36,7 @@ class DVCSFIT(object):
         ffGMp = GMp
         f1_K = ( ffGMp - self.Get_F2(ti) )
         return f1_K      
-        
 
-      
     def SetKinematics(self, kinematics):
         _QQ, _x, _t, _k = kinematics        
 
@@ -168,14 +166,13 @@ class DVCSFIT(object):
 
     
     
-    def curve_fit2(self, kins, ReH, ReE, ReHtilde, c0fit, c1fit):
+    def curve_fit2(self, kins, ReH, ReE, ReHtilde, c0fit):
         phi, kin1, kin2, kin3, kin4, F1, F2 = kins
         kinematics = (kin1, kin2, kin3, kin4)
         self.SetKinematics(kinematics)
         xsbhuu   = self.BHUU(kinematics, phi, F1, F2)
         xsiuu    = self.IUU(kinematics, phi, F1, F2, ReH, ReE, ReHtilde, "t2")
-        #f_pred = xsbhuu + xsiuu + c0fit + c1fit * np.cos( self.PI - (phi * self.RAD) )
-        f_pred = xsbhuu + xsiuu + c0fit
+        f_pred = xsbhuu + xsiuu + c0fit 
         return f_pred
 
     def plot_fit(self, kins, cffs):
@@ -185,16 +182,6 @@ class DVCSFIT(object):
         self.SetKinematics(kinematics)
         xsbhuu   = self.BHUU(kinematics, phi, F1, F2)
         xsiuu    = self.IUU(kinematics, phi, F1, F2, ReH, ReE, ReHtilde, "t2")
-        #f_pred = xsbhuu + xsiuu + c0fit + c1fit * np.cos( self.PI - (phi * self.RAD) )
-        f_pred = xsbhuu + xsiuu + c0fit 
+        f_pred = xsbhuu + xsiuu + c0fit + c1fit * np.cos( self.PI - (phi * self.RAD) )
         return f_pred
-
-
-    def BHplusC0(self, kins, cffs):
-        phi, kin1, kin2, kin3, kin4, F1, F2 = kins
-        ReH, ReE, ReHtilde, c0fit, c1fit = cffs #output of network
-        kinematics = [kin1, kin2, kin3, kin4]
-        self.SetKinematics(kinematics)
-        xsbhuu   = self.BHUU(kinematics, phi, F1, F2)
-        BHC0 = xsbhuu + c0fit 
-        return BHC0
+     
