@@ -5,7 +5,7 @@ This is the repo the code I'm developing for UVA's spin physics research group. 
 
 # Files
 
-The two folder BKM02 and BKM10 contain the code for the local fits using the BKM 2002 and BKM 2010 formulations respectively.  The folders contain 2 folders: one with the code for the current baseline neural network architecture and one with the code for the radial basis function neural network I implemented based off the work *Neural  Networks and  Deep Learning* by Charu C. Aggarwal.
+The two folder BKM02 and BKM10 contain the code for the local fits using the BKM 2002 and BKM 2010 formalisms respectively.  The folders contain 2 folders: one with the code for the current baseline neural network architecture and one with the code for the radial basis function neural network I implemented based off the work *Neural  Networks and  Deep Learning* by Charu C. Aggarwal.
 
 
 # Radial Basis Function (RBF) Neural Networks
