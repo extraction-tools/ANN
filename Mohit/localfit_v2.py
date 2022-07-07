@@ -123,8 +123,8 @@ for epoch in np.arange(1000,15001,500):
 
       F, total_error, max_residual, total_rms = F2VsPhi_noPlot(df,i+1,new_xdat,cffs); #runs the version without plotting to save time
 
-      F_vals[(epoch, batch, i)] = F
-      cffs_record[(epoch, batch, i)] = cffs
+      F_vals[(epoch, batch, i)] = np.array(F)
+      cffs_record[(epoch, batch, i)] = np.array(cffs)
       total_errors[(epoch, batch, i)] = total_error
       total_residuals[(epoch, batch, i)] = max_residual
       total_rms_vals[(epoch, batch, i)] = total_rms
@@ -156,7 +156,7 @@ total_rms_vals.columns = ["Epoch", "Batch", "Set", "NRMSE"]
 
 total_metrics = F_vals.merge(cffs_record).merge(total_errors).merge(total_residuals).merge(total_rms_vals)
 
-
+total_metrics.to_csv('metrics.csv')
 
 # best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index", columns=['epoch', 'batch', 'rms'])
 # best_combination_errors_df.to_csv("best_combination_errors.csv")

@@ -1,4 +1,0 @@
-Just using residuals, the best epoch number is: 8200 with a batch size of 6
-Just using error, the best epoch number is: 8000 with a batch size of 31
-Just using root mean square error, the best epoch number is: 5400 with a batch size of 26
-Using all 3 metrics, the best epoch number is:  4000 with a batch size of 26
