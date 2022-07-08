@@ -1,1 +1,12 @@
-test
+This is a python code to generate pseudo data with some discrete and arbitrary kinematics and arbritary model of the Compton Form Factors. 
+To use it:
+module load anaconda
+python pseudogen2.py
+
+The code require several input:
+Line 12-15 for the kinematics input
+Line 17 for the number of phi in each kinematics set
+Line 49-54 for the CFFs model and smearing error
+
+The structure of the output/generated file:
+Set, index, k, qq, xb, t, phi, F, errorF,  F1, F2, gReH, gReE, gReHTilde, gc0fit
