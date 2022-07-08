@@ -17,4 +17,8 @@ So for the $i$th neuron in the hidden layer its activation function is:
 $$\Phi_i(\bar{X})=\textrm{exp}(-\frac{|| \bar{X} - \bar{\mu_i}||^2}{2\sigma_i^2}) \quad \forall i \in \{1,...,m\}$$
 
 The parameters $\bar{\mu}_i$ and $\sigma_{i}$ are the prototype vector and bandwidth of the $i$th neuron respectively. 
-The prototype vectors are learned from the training data in a unsupervised way either by randomly selecting $m$ points from the training data or via clustering. In the code in this repo I use Scikit-learn's K-means clustering algorithm to learn the prototype vectors. The bandwidth's are all set to the same value and the code provides the option to initialize them all either to $2d_{avg}$ or $\frac{d_{max}}{m}$. Where $d_{avg}$ and $d_{max}$ are the average distance between prototype vectors and the maximum distance between prototype vectors respectively. In my implementation of the RBF network I also follow each RBF layer with a linear layer.
+The prototype vectors are learned from the training data in a unsupervised way either by randomly selecting $m$ points from the training data or via clustering. 
+
+In the code in this repo I use Scikit-learn's K-means clustering algorithm to learn the prototype vectors. The bandwidth's are all set to the same value and the code provides the option to initialize them all either to $2d_{avg}$ or $\frac{d_{max}}{m}$. 
+
+Where $d_{avg}$ and $d_{max}$ are the average distance between prototype vectors and the maximum distance between prototype vectors respectively. In my implementation of the RBF network I also follow each RBF layer with a linear layer.
