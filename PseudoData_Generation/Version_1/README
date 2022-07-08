@@ -3,5 +3,5 @@ To use it:
 module load anaconda
 python pseudogen.py
 
-The structure of the file:
+The structure of the output/generated file:
 Set, index, k, qq, xb, t, phi, F, errorF,  F1, F2, gReH, gReE, gReHTilde, gc0fit
