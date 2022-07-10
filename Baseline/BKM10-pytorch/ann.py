@@ -38,8 +38,18 @@ phi = np.array(dats['phi_x'])
 F = np.array(dats['F'])
 errF_temp = np.array(dats['sigmaF'])
 errF = 1.0 * errF_temp
+
+#Use the following two lines if you use real data. Comment out if you use pseudo data
 F1 = np.array(dats['F1'])
 F2 = np.array(dats['F2'])
+
+#Use following line if you use pseudo data. Comment out if you use real data
+#F1_term = tb.Get_F1
+#F2_term = tb.Get_F2
+#F1 = F1_term(t)
+#F2 = F2_term(t)
+
+
 
 #We don't use this for now:
 def cosinus(x):
