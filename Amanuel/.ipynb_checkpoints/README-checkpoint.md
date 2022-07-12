@@ -17,7 +17,7 @@ So for the $i$-th neuron in the hidden layer its activation function is:
 $$\Phi_i(\bar{X})=\textrm{exp}(-\frac{|| \bar{X} - \bar{\mu_i}||^2}{2\sigma_i^2}) \quad \forall i \in (1,...,m)$$
 
 The parameters 
-$\bar{\mu}_{i}$ and $\sigma_{i}$ are the prototype vector and bandwidth of the $i$th neuron respectively. 
+$\bar{\mu_i}$ and $\sigma_i$ are the prototype vector and bandwidth of the $i$-th neuron respectively. 
 The prototype vectors are learned from the training data in a unsupervised way either by randomly selecting 
 $m$ points from the training data or via clustering. 
 
