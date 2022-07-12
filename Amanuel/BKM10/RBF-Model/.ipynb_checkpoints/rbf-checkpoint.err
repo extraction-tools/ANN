@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "ann-rbf.py", line 225, in <module>
+    p = net(x_norm.float())
+  File "/usr/local/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/asa2rc/ANN/Amanuel/BKM10/RBF-Model/rbf.py", line 74, in forward
+    x = self.rbf1(x)
+  File "/usr/local/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/asa2rc/ANN/Amanuel/BKM10/RBF-Model/rbf.py", line 40, in forward
+    Phi = torch.exp(-torch.divide( torch.pow(X-mu, 2), 2*torch.pow(self.sigma,2) ).sum(2,keepdim=False))
+RuntimeError: The size of tensor a (4) must match the size of tensor b (60) at non-singleton dimension 2
+
+real	0m8.930s
+user	0m2.764s
+sys	0m4.130s

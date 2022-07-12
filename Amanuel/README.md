@@ -12,16 +12,16 @@ The two folder BKM02 and BKM10 contain the code for the local fits using the BKM
 # Radial Basis Function (RBF) Neural Networks
 
 In their simplest form RBF networks consist of an input layer, a hidden layer and an output layer. Where they differ from regular neural networks is that each of the $m$ neurons in the hidden layer uses a radial basis function as an activation function. The most common type of RBF function used is a Gaussian function. 
-So for the $i$th neuron in the hidden layer its activation function is:
+So for the $i$-th neuron in the hidden layer its activation function is:
 
-$$\Phi_i(\bar{X})=\textrm{exp}(-\frac{|| \bar{X} - \bar{\mu_i}||^2}{2\sigma_i^2}) \quad \forall i \in \{1,...,m\}$$
+$$\Phi_i(\bar{X})=\textrm{exp}(-\frac{|| \bar{X} - \bar{\mu_i}||^2}{2\sigma_i^2}) \quad \forall i \in (1,...,m)$$
 
 The parameters 
-$\bar{\mu}_i$ and $\sigma_{i}$ are the prototype vector and bandwidth of the $i$th neuron respectively. 
+$\bar{\mu}_{i}$ and $\sigma_{i}$ are the prototype vector and bandwidth of the $i$th neuron respectively. 
 The prototype vectors are learned from the training data in a unsupervised way either by randomly selecting 
 $m$ points from the training data or via clustering. 
 
 In the code in this repo I use Scikit-learn's K-means clustering algorithm to learn the prototype vectors. The bandwidth's are all set to the same value and the code provides the option to initialize them all either to 
-$2d_{avg}$ or $\frac{d_{max}}{m}$. 
+$2d_{avg}$ or $d_{max} / \sqrt{m}$. 
 
 Where $d_{avg}$ and $d_{max}$ are the average distance between prototype vectors and the maximum distance between prototype vectors respectively. In my implementation of the RBF network I also follow each RBF layer with a linear layer.

@@ -28,7 +28,7 @@ loss_validation = tb.loss_chisq
 loss_validation2 = tb.loss_MAE
 loss_validation3 = tb.loss_MSE
 
-dats = pd.read_csv('data_hallA_allv2.csv')
+dats = pd.read_csv('pseudo_KM15.csv')
 k = np.array(dats['k'])
 qq = np.array(dats['QQ'])
 xb = np.array(dats['x_b'])
@@ -38,8 +38,22 @@ phi = np.array(dats['phi_x'])
 F = np.array(dats['F'])
 errF_temp = np.array(dats['sigmaF'])
 errF = 1.0 * errF_temp
-F1 = np.array(dats['F1'])
-F2 = np.array(dats['F2'])
+
+#Use the following two lines if you use real data. Comment out if you use pseudo data
+#F1 = np.array(dats['F1'])
+#F2 = np.array(dats['F2'])
+
+#Use following line if you use pseudo data. Comment out if you use real data
+F1_term = tb.Get_F1
+F2_term = tb.Get_F2
+F1 = F1_term(t)
+F2 = F2_term(t)
+
+# The true CFFs
+ReH = np.array(dats['ReH'])
+ReE = np.array(dats['ReE'])
+ReHTilde = np.array(dats['ReHTilde'])
+dvcs = np.array(dats['dvcs'])
 
 #We don't use this for now:
 def cosinus(x):
@@ -54,15 +68,16 @@ xb_norm = -1. + 2 * (xb - 0.11) / (0.65 - 0.11)
 t_norm = -1. + 2 * (t - (-1.4)) / (-0.1 - (-1.4))
 
 #This is for plotting
-df = pd.read_csv("data_hallA_allv2.csv")
+df = pd.read_csv("pseudo_KM15.csv")
 
 #Plotting F fit
 def F2VsPhi(dataframe,SetNum,xdat,cffs):
     TempFvalSilces=dataframe[dataframe["#Set"]==SetNum]
     TempFvals=TempFvalSilces["F"]
     TempFvals_sigma=TempFvalSilces["sigmaF"]
+    mask = (TempFvals_sigma[0:24] > 0)
     temp_phi=TempFvalSilces["phi_x"]
-    plt.errorbar(temp_phi,TempFvals,TempFvals_sigma,fmt='.', color='blue', label="Data")
+    plt.errorbar(temp_phi[mask],TempFvals[mask],TempFvals_sigma[mask],fmt='.',color='blue',label="Data")
     plt.xlim(0,368)
     rmse = 0
     mae = 0
@@ -80,12 +95,9 @@ def F2VsPhi(dataframe,SetNum,xdat,cffs):
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
     plt.legend(loc=4,fontsize=10,handlelength=3)
-    plt.xlabel('$\phi_x$')
-    plt.ylabel("F")
     plt.title("Local fit with data set #"+str(SetNum)+"\nModel: Baseline Network," \
               + " RMSE: " + rmse + ", MAE: " + mae ,fontsize=12)
-    plt.plot(temp_phi, pred, 'r--', label="Fit")
-    plt.legend(loc="upper center")
+    plt.plot(temp_phi[mask], f(xdat,cffs), 'g--', label='fit')
     file_name = "plots/plot_set_number_{}.png".format(SetNum)
     plt.savefig(file_name)
 
@@ -145,13 +157,15 @@ ReE_all = np.array([])
 ReHT_all = np.array([])
 c0fit_all = np.array([])
 
-for ii in range(10): # set how many sets to process
+numberOfSets = 100
+
+for ii in range(numberOfSets): # set how many sets to process
  datset = ii
  yrep = []
  
  #current architecture that I use
  blank_net = torch.nn.Sequential(
-         torch.nn.Linear(5, 100),
+         torch.nn.Linear(4, 100),
          #torch.nn.Tanh(),
          #torch.nn.Dropout(0.25),
          #torch.nn.Linear(200, 200), 
@@ -171,7 +185,7 @@ for ii in range(10): # set how many sets to process
  decayRate = 0.96
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
- EPOCH = 25000 #maximum epoch
+ EPOCH = 20000 #maximum epoch
   
  i = datset
  a = 24*i # start index of set
@@ -194,7 +208,7 @@ for ii in range(10): # set how many sets to process
  ydat = np.array(yrep)[mask]
  errs = np.array([errF[a:b][mask]])
  
- x = Variable(torch.from_numpy(xdat[0:5].transpose()))
+ x = Variable(torch.from_numpy(xdat[1:5].transpose()))
  y = Variable(torch.from_numpy(ydat.transpose()))
 
  xdat_var = Variable(torch.from_numpy(xdat))
@@ -202,7 +216,7 @@ for ii in range(10): # set how many sets to process
 
  #Normalize variable
  xdat_norm = np.array([phi[a:b][mask], qq_norm[a:b][mask], xb_norm[a:b][mask], t_norm[a:b][mask], k_norm[a:b][mask], F1[a:b][mask], F2[a:b][mask]])
- x_norm = Variable(torch.from_numpy(xdat_norm[0:5].transpose()))
+ x_norm = Variable(torch.from_numpy(xdat_norm[1:5].transpose()))
 
  # to track the loss as the model trains. We don't use it for now. Maybe useful for later
  ##train_losses = []
@@ -214,10 +228,10 @@ for ii in range(10): # set how many sets to process
 
  early_stopping = EarlyStopping(patience=25, verbose=False, delta = 0.0000005)
  for epoch in range(EPOCH):
-
+    
      
      p = net(x_norm.float())
-     
+
      hs = torch.transpose(p, 0, 1)[0] 
      es = torch.transpose(p, 0, 1)[1] # array of 45 values for ReE at each increment of phi
      hts = torch.transpose(p, 0, 1)[2] 
@@ -229,7 +243,7 @@ for ii in range(10): # set how many sets to process
      c0fit = torch.mean(c0s)
     
      cffs = [ReHfit, ReEfit, ReHTfit, c0fit]
-
+     
      loss = loss_func((xdat_var.float()), cffs, errs_var, y)
      loss_val = loss_validation((xdat_var.float()), cffs, errs_var, y)
      loss_val2 = loss_validation2((xdat_var.float()), cffs, errs_var, y)
@@ -278,7 +292,7 @@ for ii in range(10): # set how many sets to process
  loss_val2_np = MAE(ReHfit, ReEfit, ReHTfit, c0fit, c1fit)
  loss_val3_np = MSE(ReHfit, ReEfit, ReHTfit, c0fit, c1fit)
  print('%.4f %.4f %.4f %.4f %.8f' % (ii, epoch, loss_val_np, loss_val2_np, loss_val3_np))
- F2VsPhi(df,ii+1,xdat,fit_cffs)
+ #F2VsPhi(df,ii+1,xdat,fit_cffs)
  plt.clf()
 
  ##these few lines below are to make loss vs epoch plot. The plot is still ugly, need improvement
@@ -291,5 +305,60 @@ for ii in range(10): # set how many sets to process
 
 ## save in txt
 dat = np.array([ReH_all, ReE_all, ReHT_all, c0fit_all])
+fig, axs = plt.subplots(2, 2, figsize=(8,8))
+axs = axs.flatten()
+x = []
+for i in range(numberOfSets):
+    x.append(i+1)
+
+ReH_MAE = 0
+ReE_MAE = 0
+ReHTilde_MAE = 0
+dvcs_MAE = 0
+
+for i in range(numberOfSets):
+    ReH_MAE += abs(ReH_all[i] - ReH[:numberOfSets][i])
+    ReE_MAE += abs(ReE_all[i] - ReE[:numberOfSets][i])
+    ReHTilde_MAE += abs(ReHT_all[i] - ReHTilde[:numberOfSets][i])
+    dvcs_MAE += abs(c0fit_all[i] - dvcs[:numberOfSets][i])
+
+ReH_MAE /= numberOfSets
+ReE_MAE /= numberOfSets
+ReHTilde_MAE /= numberOfSets
+dvcs_MAE /= numberOfSets
+
+axs[0].scatter(x, ReH_all, label="Predicted")
+axs[0].scatter(x, ReH[:numberOfSets], label="Data")
+axs[0].set_ylabel("Re($\mathcal{H}$)", fontsize=12)
+axs[0].set_xlabel("Set number")
+axs[0].set_title("Model: Baseline - MAE: " + "{:.5f}".format(ReH_MAE), fontsize=12)
+axs[0].legend()
+
+axs[1].scatter(x, ReE_all, label="Predicted")
+axs[1].scatter(x, ReE[:numberOfSets], label="Data")
+axs[1].set_ylabel("Re($\mathcal{E}$)", fontsize=12)
+axs[1].set_xlabel("Set number")
+axs[1].set_title("Model: Baseline - MAE: " + "{:.5f}".format(ReE_MAE), fontsize=12)
+axs[1].legend()
+
+axs[2].scatter(x, ReHT_all, label="Predicted")
+axs[2].scatter(x, ReHTilde[:numberOfSets], label="Data")
+axs[2].set_ylabel("Re($\mathcal{H}t$)", fontsize=12)
+axs[2].set_xlabel("Set number")
+axs[2].set_title("Model: Baseline - MAE: " + "{:.5f}".format(ReHTilde_MAE), fontsize=12)
+axs[2].legend()
+
+axs[3].scatter(x, c0fit_all, label="Predicted")
+axs[3].scatter(x, dvcs[:numberOfSets], label="Data")
+axs[3].set_ylabel("$c_0$", fontsize=12)
+axs[3].set_xlabel("Set number")
+axs[3].set_title("Model: Baseline - MAE: " + "{:.5f}".format(dvcs_MAE), fontsize=12)
+axs[3].legend()
+
+fig.tight_layout()
+
+file_name = "Baseline-CFFs.png"
+plt.savefig(file_name)
+
 dat = dat.T
 np.savetxt('ResultData_HallA_all_local.txt', dat, delimiter = '\t', fmt='%.5f')
