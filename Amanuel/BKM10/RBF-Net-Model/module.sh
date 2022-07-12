@@ -1,1 +1,0 @@
-module load singularity/3.7.1 pytorch/1.8.1 
