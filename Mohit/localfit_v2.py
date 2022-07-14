@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.stats import chisquare
 
-df = pd.read_csv("test_data/BKM_pseudodata2.csv", dtype=np.float64)
+data_number = '3' #the data file to use
+
+df = pd.read_csv("test_data/BKM_pseudodata"+data_number+".csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
 
 data = DvcsData(df)
@@ -169,7 +171,7 @@ total_rms_vals.columns = ["Epoch", "Batch", "Set", "NRMSE"]
 total_metrics = F_vals.merge(cffs_record).merge(
     total_errors).merge(total_residuals).merge(total_rms_vals)
 
-total_metrics.to_csv('metrics.csv')
+total_metrics.to_csv('metrics'+data_number+'.csv')
 
 # best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index", columns=['epoch', 'batch', 'rms'])
 # best_combination_errors_df.to_csv("best_combination_errors.csv")
