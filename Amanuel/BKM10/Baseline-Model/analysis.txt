@@ -1,0 +1,11 @@
+Model:
+ Sequential(
+  (0): Linear(in_features=4, out_features=100, bias=True)
+  (1): Linear(in_features=100, out_features=100, bias=True)
+  (2): Tanh()
+  (3): Linear(in_features=100, out_features=100, bias=True)
+  (4): Tanh()
+  (5): Linear(in_features=100, out_features=100, bias=True)
+  (6): Tanh()
+  (7): Linear(in_features=100, out_features=4, bias=True)
+)

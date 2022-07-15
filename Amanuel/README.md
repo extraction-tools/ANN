@@ -1,7 +1,7 @@
 
 # Neural Network Architectures for Predicting Compton Form Factors
 
-This is the repo the code I'm developing for UVA's spin physics research group. The group is using artificial neural networks to predict the 3 Compton form factors (CFFs) $\textrm{Re}(\mathcal{H}), \textrm{Re}(\mathcal{E})$ and $\textrm{Re}(\mathcal{\tilde{H}})$. These form factors are then used generate an approximation curve of a function $F$. The neural networks are feed 4 variables that the CFFs depend on: $x_B$, $Q^2$, $t$ and $k$ and output 4 values: the three CFFs and a constant deeply virtual compton scattering (DVCS) term $c_0$.
+This is the repo for the code I'm developing for UVA's spin physics research group. The group is using artificial neural networks to predict the 3 Compton form factors (CFFs) $\textrm{Re}(\mathcal{H}), \textrm{Re}(\mathcal{E})$ and $\textrm{Re}(\mathcal{\tilde{H}})$. These form factors are then used generate an approximation curve of a function $F$. The neural networks are feed 4 variables that the CFFs depend on: $x_B$, $Q^2$, $t$ and $k$ and output 4 values: the three CFFs and a deeply virtual compton scattering (DVCS) constant $c_0$.
 
 
 # Files

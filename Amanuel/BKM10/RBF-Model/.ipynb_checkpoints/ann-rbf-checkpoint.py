@@ -160,24 +160,26 @@ ReHT_all = np.array([])
 c0fit_all = np.array([])
 
 numberOfSets = 100
+useDavg = False
+
 kmeansInput = np.array([qq_norm, xb_norm, t_norm, k_norm])
-kmeans = KMeans(n_clusters=100, random_state=0).fit(kmeansInput.reshape(-1,1)) 
+kmeans = KMeans(n_clusters=150, random_state=0).fit(kmeansInput.reshape(-1,1)) 
 centers1 = kmeans.cluster_centers_
-#kmeans = KMeans(n_clusters=100, random_state=1).fit(kmeansInput.reshape(-1,1)) 
-#centers2 = kmeans.cluster_centers_
+kmeans = KMeans(n_clusters=150, random_state=1).fit(kmeansInput.reshape(-1,1)) 
+centers2 = kmeans.cluster_centers_
 
 for ii in range(numberOfSets): # set how many sets to process
  datset = ii
  yrep = []
  
  # RBF architecture
- blank_net = RBFNet(4, 4, centers1, True)
+ blank_net = RBFNet2Layer(4, 4, centers1, centers2, useDavg)
 
  optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.0005)
  decayRate = 0.96
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
- EPOCH = 20000 # maximum epoch
+ EPOCH = 25000 # maximum epoch
   
  i = datset
  a = 24*i # start index of set
@@ -186,6 +188,9 @@ for ii in range(numberOfSets): # set how many sets to process
 
  net = blank_net # untrain/reset network
 
+ if i == 0: # just print model once
+    print("Model:\n", net)
+    
  yrep = [0] * (b-a) # create array to be filled with replicated F values
 
  for l in range(b-a): # populate yrep with random normal values with mean = F and sd = errF
@@ -308,48 +313,67 @@ ReE_MAE = 0
 ReHTilde_MAE = 0
 dvcs_MAE = 0
 
+ReH_RMSE = 0
+ReE_RMSE = 0
+ReHTilde_RMSE = 0
+dvcs_RMSE = 0
+
 for i in range(numberOfSets):
     ReH_MAE += abs(ReH_all[i] - ReH[:numberOfSets][i])
     ReE_MAE += abs(ReE_all[i] - ReE[:numberOfSets][i])
     ReHTilde_MAE += abs(ReHT_all[i] - ReHTilde[:numberOfSets][i])
     dvcs_MAE += abs(c0fit_all[i] - dvcs[:numberOfSets][i])
+    
+    ReH_RMSE += (ReH_all[i] - ReH[:numberOfSets][i])**2
+    ReE_RMSE += (ReE_all[i] - ReE[:numberOfSets][i])**2
+    ReHTilde_RMSE += (ReHT_all[i] - ReHTilde[:numberOfSets][i])**2
+    dvcs_RMSE += (c0fit_all[i] - dvcs[:numberOfSets][i])**2
 
 ReH_MAE /= numberOfSets
 ReE_MAE /= numberOfSets
 ReHTilde_MAE /= numberOfSets
 dvcs_MAE /= numberOfSets
 
+ReH_RMSE =  np.sqrt(ReH_RMSE/numberOfSets)
+ReE_RMSE =  np.sqrt(ReE_RMSE/numberOfSets)
+ReHTilde_RMSE = np.sqrt(ReHTilde_RMSE/numberOfSets)
+dvcs_RMSE =  np.sqrt(dvcs_RMSE/numberOfSets)
+
 axs[0].scatter(x, ReH_all, label="Predicted")
 axs[0].scatter(x, ReH[:numberOfSets], label="Data")
-axs[0].set_ylabel("Re($\mathcal{H}$)", fontsize=12)
-axs[0].set_xlabel("Set number")
-axs[0].set_title("Model: RBFNet - MAE: " + "{:.5f}".format(ReH_MAE), fontsize=12)
+axs[0].set_ylabel("Re($\mathcal{H}$)", fontsize=14)
+axs[0].set_xlabel("Set number", fontsize=12)
+axs[0].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReH_MAE) + " RMSE: " + "{:.4f}".format(ReH_RMSE), fontsize=12)
 axs[0].legend()
 
 axs[1].scatter(x, ReE_all, label="Predicted")
 axs[1].scatter(x, ReE[:numberOfSets], label="Data")
-axs[1].set_ylabel("Re($\mathcal{E}$)", fontsize=12)
-axs[1].set_xlabel("Set number")
-axs[1].set_title("Model: RBFNet - MAE: " + "{:.5f}".format(ReE_MAE), fontsize=12)
+axs[1].set_ylabel("Re($\mathcal{E}$)", fontsize=14)
+axs[1].set_xlabel("Set number", fontsize=14)
+axs[1].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReE_MAE)+ " RMSE: " + "{:.4f}".format(ReE_RMSE), fontsize=12)
 axs[1].legend()
 
 axs[2].scatter(x, ReHT_all, label="Predicted")
 axs[2].scatter(x, ReHTilde[:numberOfSets], label="Data")
-axs[2].set_ylabel("Re($\mathcal{H}t$)", fontsize=12)
-axs[2].set_xlabel("Set number")
-axs[2].set_title("Model: RBFNet - MAE: " + "{:.5f}".format(ReHTilde_MAE), fontsize=12)
+axs[2].set_ylabel("Re($\mathcal{H}t$)", fontsize=14)
+axs[2].set_xlabel("Set number", fontsize=14)
+axs[2].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReHTilde_MAE)+ " RMSE: " + "{:.4f}".format(ReHTilde_RMSE), fontsize=12)
 axs[2].legend()
 
 axs[3].scatter(x, c0fit_all, label="Predicted")
 axs[3].scatter(x, dvcs[:numberOfSets], label="Data")
-axs[3].set_ylabel("$c_0$", fontsize=12)
-axs[3].set_xlabel("Set number")
-axs[3].set_title("Model: RBFNet - MAE: " + "{:.5f}".format(dvcs_MAE), fontsize=12)
+axs[3].set_ylabel("$c_0$", fontsize=14)
+axs[3].set_xlabel("Set number", fontsize=14)
+axs[3].set_title("Model: RBF\n MAE: " + "{:.4f}".format(dvcs_MAE)+ " RMSE: " + "{:.4f}".format(dvcs_RMSE), fontsize=12)
 axs[3].legend()
 
 fig.tight_layout()
 
-file_name = "RBF-CFFs.png"
+if (useDavg):
+    file_name = "RBF-CFFs-DAvg.png"
+else:
+    file_name = "RBF-CFFs-DMax.png"
+
 plt.savefig(file_name)
 
 dat = dat.T

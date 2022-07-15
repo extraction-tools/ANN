@@ -19,10 +19,12 @@ class RBFLayer(nn.Module):
         self.inFeatures = inFeatures
         self.outFeatures = outFeatures
         self.centers = torch.from_numpy(centers).float()
+        
         # calcualte distance of any two cluster centers in centers variable
         clusterDistances = [np.linalg.norm(c1 - c2) for c1 in centers for c2 in centers] 
         dMax = max(clusterDistances)
         dAvg = sum(clusterDistances)  /  len(clusterDistances)
+        
         # tensor of sigmas of dimension 1 x len(centers) 
         if useAvgDist == True:
              self.sigma = torch.full( (1, len(self.centers)), (2*dAvg) )
@@ -39,8 +41,7 @@ class RBFLayer(nn.Module):
     
         #Phi = torch.exp(-torch.divide( torch.pow(X-mu, 2), 2*torch.pow(self.sigma,2) ).sum(2,keepdim=False))
         Phi = torch.exp(-self.sigma.mul((X-mu).pow(2).sum(2, keepdim=False).sqrt() ) )
-        
-        #print(Phi.size())
+
         return(Phi)
         
         
@@ -73,8 +74,35 @@ class RBFNet2Layer(nn.Module):
     def forward(self, x):
         x = self.rbf1(x)
         x = self.linear1(x)
-        #x = torch.tanh(x)
+        x = torch.tanh(x)
         x = self.rbf2(x)
         x = self.linear2(x)
-        #x = torch.tanh(x)
+        x = torch.tanh(x)
+        return(x.squeeze(1))
+    
+    
+class RBFNet3Layer(nn.Module):
+    def __init__(self, inFeatures, outFeatures, centers1, centers2, centers3, useAvgDist):
+        super(RBFNet3Layer, self).__init__()
+        self.inFeatures = inFeatures
+        self.outFeatures = outFeatures
+        self.rbf1 = RBFLayer(inFeatures, len(centers1), centers1, useAvgDist)
+        self.linear1 = nn.Linear(len(centers1), len(centers2))
+        
+        self.rbf2 = RBFLayer(len(centers2), len(centers2), centers2, useAvgDist)
+        self.linear2 = nn.Linear(len(centers2), len(centers3))
+        
+        self.rbf3 = RBFLayer(len(centers3), len(centers3), centers3, useAvgDist)
+        self.linear3 = nn.Linear(len(centers3), outFeatures)
+    
+    def forward(self, x):
+        x = self.rbf1(x)
+        x = self.linear1(x)
+        x = torch.tanh(x)
+        x = self.rbf2(x)
+        x = self.linear2(x)
+        x = torch.tanh(x)
+        x = self.rbf3(x)
+        x = self.linear3(x)
+        x = torch.tanh(x)
         return(x.squeeze(1))

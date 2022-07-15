@@ -12,6 +12,8 @@ from pytorchtools import EarlyStopping
 
 import matplotlib
 import matplotlib.pyplot as plt
+from rbf import RBFLayer, RBFNet, RBFNet2Layer, RBFNet3Layer
+from sklearn.cluster import KMeans
 
 import sys
 from scipy.stats import chisquare
@@ -95,7 +97,7 @@ def F2VsPhi(dataframe,SetNum,xdat,cffs):
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
     plt.legend(loc=4,fontsize=10,handlelength=3)
-    plt.title("Local fit with data set #"+str(SetNum)+"\nModel: Baseline Network," \
+    plt.title("Local fit with data set #"+str(SetNum)+"\nModel: RBF Network," \
               + " RMSE: " + rmse + ", MAE: " + mae ,fontsize=12)
     plt.plot(temp_phi[mask], f(xdat,cffs), 'g--', label='fit')
     file_name = "plots/plot_set_number_{}.png".format(SetNum)
@@ -158,34 +160,29 @@ ReHT_all = np.array([])
 c0fit_all = np.array([])
 
 numberOfSets = 100
+useDavg = False
+
+kmeansInput = np.array([qq_norm, xb_norm, t_norm, k_norm])
+kmeans = KMeans(n_clusters=90, random_state=0).fit(kmeansInput.reshape(-1,1)) 
+centers1 = kmeans.cluster_centers_
+kmeans = KMeans(n_clusters=90, random_state=1).fit(kmeansInput.reshape(-1,1)) 
+centers2 = kmeans.cluster_centers_
+kmeans = KMeans(n_clusters=90, random_state=3).fit(kmeansInput.reshape(-1,1)) 
+centers3 = kmeans.cluster_centers_
+
 
 for ii in range(numberOfSets): # set how many sets to process
  datset = ii
  yrep = []
  
- #current architecture that I use
- blank_net = torch.nn.Sequential(
-         torch.nn.Linear(4, 100),
-         torch.nn.Tanh(),
-         torch.nn.Dropout(0.25),
-         torch.nn.Linear(100, 100), 
-         torch.nn.Tanhshrink(),
-         torch.nn.Linear(100, 100),
-         torch.nn.Tanhshrink(),
-         torch.nn.Tanh(),
-         torch.nn.Dropout(0.35),
-         torch.nn.Linear(100, 100),
-         torch.nn.Tanh(),
-         torch.nn.Linear(100, 100),
-         torch.nn.Tanh(),
-         torch.nn.Linear(100, 4)
-     )
+ # RBF architecture
+ blank_net = RBFNet3Layer(4, 4, centers1, centers2, centers3, useDavg)
 
  optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.0005)
  decayRate = 0.96
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
- EPOCH = 25000 #maximum epoch
+ EPOCH = 25000 # maximum epoch
   
  i = datset
  a = 24*i # start index of set
@@ -193,7 +190,7 @@ for ii in range(numberOfSets): # set how many sets to process
 
 
  net = blank_net # untrain/reset network
-
+ 
  if i == 0: # just print model once
     print("Model:\n", net)
     
@@ -349,33 +346,37 @@ axs[0].scatter(x, ReH_all, label="Predicted")
 axs[0].scatter(x, ReH[:numberOfSets], label="Data")
 axs[0].set_ylabel("Re($\mathcal{H}$)", fontsize=14)
 axs[0].set_xlabel("Set number", fontsize=12)
-axs[0].set_title("Model: Baseline\n MAE: " + "{:.4f}".format(ReH_MAE) + " RMSE: " + "{:.4f}".format(ReH_RMSE), fontsize=12)
+axs[0].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReH_MAE) + " RMSE: " + "{:.4f}".format(ReH_RMSE), fontsize=12)
 axs[0].legend()
 
 axs[1].scatter(x, ReE_all, label="Predicted")
 axs[1].scatter(x, ReE[:numberOfSets], label="Data")
 axs[1].set_ylabel("Re($\mathcal{E}$)", fontsize=14)
 axs[1].set_xlabel("Set number", fontsize=14)
-axs[1].set_title("Model: Baseline\n MAE: " + "{:.4f}".format(ReE_MAE)+ " RMSE: " + "{:.4f}".format(ReE_RMSE), fontsize=12)
+axs[1].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReE_MAE)+ " RMSE: " + "{:.4f}".format(ReE_RMSE), fontsize=12)
 axs[1].legend()
 
 axs[2].scatter(x, ReHT_all, label="Predicted")
 axs[2].scatter(x, ReHTilde[:numberOfSets], label="Data")
 axs[2].set_ylabel("Re($\mathcal{H}t$)", fontsize=14)
 axs[2].set_xlabel("Set number", fontsize=14)
-axs[2].set_title("Model: Baseline\n MAE: " + "{:.4f}".format(ReHTilde_MAE)+ " RMSE: " + "{:.4f}".format(ReHTilde_RMSE), fontsize=12)
+axs[2].set_title("Model: RBF\n MAE: " + "{:.4f}".format(ReHTilde_MAE)+ " RMSE: " + "{:.4f}".format(ReHTilde_RMSE), fontsize=12)
 axs[2].legend()
 
 axs[3].scatter(x, c0fit_all, label="Predicted")
 axs[3].scatter(x, dvcs[:numberOfSets], label="Data")
 axs[3].set_ylabel("$c_0$", fontsize=14)
 axs[3].set_xlabel("Set number", fontsize=14)
-axs[3].set_title("Model: Baseline\n MAE: " + "{:.4f}".format(dvcs_MAE)+ " RMSE: " + "{:.4f}".format(dvcs_RMSE), fontsize=12)
+axs[3].set_title("Model: RBF\n MAE: " + "{:.4f}".format(dvcs_MAE)+ " RMSE: " + "{:.4f}".format(dvcs_RMSE), fontsize=12)
 axs[3].legend()
 
 fig.tight_layout()
 
-file_name = "Baseline-CFFs.png"
+if (useDavg):
+    file_name = "RBF-CFFs-DAvg-3Layer.png"
+else:
+    file_name = "RBF-CFFs-DMax-3Layer.png"
+
 plt.savefig(file_name)
 
 dat = dat.T

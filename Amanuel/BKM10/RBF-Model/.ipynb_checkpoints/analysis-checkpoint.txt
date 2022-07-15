@@ -1,0 +1,11 @@
+Using Dmax over Davg results in about the same MAE and RMSE but takes ~3 hours less than when using Davg. RBF with Dmax model takes ~2.5 hours longer to finish than baseline (baseline took ~7 hours).
+
+Model:
+ RBFNet3Layer(
+  (rbf1): RBFLayer()
+  (linear1): Linear(in_features=60, out_features=60, bias=True)
+  (rbf2): RBFLayer()
+  (linear2): Linear(in_features=60, out_features=60, bias=True)
+  (rbf3): RBFLayer()
+  (linear3): Linear(in_features=60, out_features=4, bias=True)
+)
