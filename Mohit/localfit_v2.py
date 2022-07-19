@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.stats import chisquare
 
+import os
+
 data_number = '3' #the data file to use
 
 df = pd.read_csv("test_data/BKM_pseudodata"+data_number+".csv", dtype=np.float64)
@@ -100,36 +102,9 @@ testnum = int(df['#Set'].max())
 skip = 20  # samples a series of different sets
 
 
-for epoch in np.arange(10, 1000, 75):
+for epoch in np.arange(15000, 30001, 500): #parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
-  for batch in np.arange(1, 47, 5):
-    for i in np.arange(0, testnum, skip):
-      tfModel.set_weights(Wsave)  # resets the model
-      setI = data.getSet(i, itemsInSet=45)
-
-      tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
-                  epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split = 0.2)
-
-      cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
-
-      new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
-
-      # Avoid recalculating F-values from cffs when that is what the model is predicting already
-
-      F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
-          df, i + 1, new_xdat, cffs
-      )  # runs the version without plotting to save time
-
-      F_vals[(epoch, batch, i)] = np.array(F)
-      cffs_record[(epoch, batch, i)] = np.array(cffs)
-      total_errors[(epoch, batch, i)] = total_error
-      total_residuals[(epoch, batch, i)] = max_residual
-      total_rms_vals[(epoch, batch, i)] = total_rms
-
-
-for epoch in np.arange(1000, 15001, 500): #parse the upper region less thoroughly
-  # 46 is greater than the 45 we need, but it will floor to 45
-  for batch in np.arange(1, 47, 5):
+  for batch in np.arange(1, 37, 5):
     for i in np.arange(0, testnum, skip):
       tfModel.set_weights(Wsave)  # resets the model
       setI = data.getSet(i, itemsInSet=45)
@@ -171,7 +146,14 @@ total_rms_vals.columns = ["Epoch", "Batch", "Set", "NRMSE"]
 total_metrics = F_vals.merge(cffs_record).merge(
     total_errors).merge(total_residuals).merge(total_rms_vals)
 
-total_metrics.to_csv('metrics'+data_number+'.csv')
+base_filestr = 'metrics'+data_number
+final_str = base_filestr
+filestr_num = 1
+while os.path.exists(final_str+'.csv'):
+  final_str = base_filestr+'_'+str(filestr_num)
+  filestr_num += 1
+
+total_metrics.to_csv(final_str+'.csv') #ensures data is saved
 
 # best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index", columns=['epoch', 'batch', 'rms'])
 # best_combination_errors_df.to_csv("best_combination_errors.csv")
