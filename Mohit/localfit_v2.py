@@ -9,8 +9,9 @@ import sys
 from scipy.stats import chisquare
 
 import os
+import itertools
 
-data_number = '3' #the data file to use
+data_number = '2' #the data file to use
 
 df = pd.read_csv("test_data/BKM_pseudodata"+data_number+".csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
