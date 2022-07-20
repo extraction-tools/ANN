@@ -9,15 +9,14 @@ import sys
 from scipy.stats import chisquare
 
 import os
-import itertools
 
-data_number = '2' #the data file to use
+data_number = '3'  # the data file to use
 
-df = pd.read_csv("test_data/BKM_pseudodata"+data_number+".csv", dtype=np.float64)
+df = pd.read_csv("test_data/BKM_pseudodata" +
+                 data_number + ".csv", dtype=np.float64)
 df = df.rename(columns={"sigmaF": "errF"})
 
 data = DvcsData(df)
-
 
 
 kinematics = tf.keras.Input(shape=(4))
@@ -103,7 +102,7 @@ testnum = int(df['#Set'].max())
 skip = 20  # samples a series of different sets
 
 
-for epoch in np.arange(15000, 30001, 500): #parse the upper region less thoroughly
+for epoch in np.arange(15000, 30001, 500):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
   for batch in np.arange(1, 37, 5):
     for i in np.arange(0, testnum, skip):
@@ -111,7 +110,7 @@ for epoch in np.arange(15000, 30001, 500): #parse the upper region less thorough
       setI = data.getSet(i, itemsInSet=45)
 
       tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
-                  epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split = 0.2)
+                  epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
 
       cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
@@ -147,14 +146,14 @@ total_rms_vals.columns = ["Epoch", "Batch", "Set", "NRMSE"]
 total_metrics = F_vals.merge(cffs_record).merge(
     total_errors).merge(total_residuals).merge(total_rms_vals)
 
-base_filestr = 'metrics'+data_number
+base_filestr = 'metrics' + data_number
 final_str = base_filestr
 filestr_num = 1
-while os.path.exists(final_str+'.csv'):
-  final_str = base_filestr+'_'+str(filestr_num)
+while os.path.exists(final_str + '.csv'):
+  final_str = base_filestr + '_' + str(filestr_num)
   filestr_num += 1
 
-total_metrics.to_csv(final_str+'.csv') #ensures data is saved
+total_metrics.to_csv(final_str + '.csv')  # ensures data is saved
 
 # best_combination_errors_df = pd.DataFrame.from_dict(best_combination_errors, orient="index", columns=['epoch', 'batch', 'rms'])
 # best_combination_errors_df.to_csv("best_combination_errors.csv")
