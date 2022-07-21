@@ -55,9 +55,7 @@ class RBFNet(nn.Module):
     
     def forward(self, x):
         x = self.rbf(x)
-        #x = torch.tanh(x)
         x = self.linear(x)
-        #x = torch.tanh(x)
         return(x.squeeze(1))
     
     
@@ -74,10 +72,8 @@ class RBFNet2Layer(nn.Module):
     def forward(self, x):
         x = self.rbf1(x)
         x = self.linear1(x)
-        x = torch.tanh(x)
         x = self.rbf2(x)
         x = self.linear2(x)
-        x = torch.tanh(x)
         return(x.squeeze(1))
     
     
@@ -98,11 +94,8 @@ class RBFNet3Layer(nn.Module):
     def forward(self, x):
         x = self.rbf1(x)
         x = self.linear1(x)
-        x = torch.tanh(x)
         x = self.rbf2(x)
         x = self.linear2(x)
-        x = torch.tanh(x)
         x = self.rbf3(x)
         x = self.linear3(x)
-        x = torch.tanh(x)
         return(x.squeeze(1))

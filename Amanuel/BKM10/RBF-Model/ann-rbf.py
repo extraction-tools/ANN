@@ -12,7 +12,7 @@ from pytorchtools import EarlyStopping
 
 import matplotlib
 import matplotlib.pyplot as plt
-from rbf import RBFLayer, RBFNet, RBFNet2Layer
+from rbf import RBFLayer, RBFNet, RBFNet2Layer, RBFNet3Layer
 from sklearn.cluster import KMeans
 
 import sys
@@ -162,20 +162,23 @@ c0fit_all = np.array([])
 numberOfSets = 100
 useDavg = False
 
+# define protoype vectors for each layer
 kmeansInput = np.array([qq_norm, xb_norm, t_norm, k_norm])
-kmeans = KMeans(n_clusters=150, random_state=0).fit(kmeansInput.reshape(-1,1)) 
+kmeans = KMeans(n_clusters=100, random_state=0).fit(kmeansInput.reshape(-1,1)) 
 centers1 = kmeans.cluster_centers_
-kmeans = KMeans(n_clusters=150, random_state=1).fit(kmeansInput.reshape(-1,1)) 
+kmeans = KMeans(n_clusters=100, random_state=1).fit(kmeansInput.reshape(-1,1)) 
 centers2 = kmeans.cluster_centers_
+kmeans = KMeans(n_clusters=100, random_state=2).fit(kmeansInput.reshape(-1,1)) 
+centers3 = kmeans.cluster_centers_
 
 for ii in range(numberOfSets): # set how many sets to process
  datset = ii
  yrep = []
  
  # RBF architecture
- blank_net = RBFNet2Layer(4, 4, centers1, centers2, useDavg)
+ blank_net = RBFNet3Layer(4, 4, centers1, centers2, centers3, useDavg)
 
- optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.0005)
+ optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.01)
  decayRate = 0.96
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 

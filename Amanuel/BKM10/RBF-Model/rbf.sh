@@ -11,4 +11,4 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-type=ALL
 
-time singularity run --nv ~/pytorch-1.8.1.sif ann-rbf-3Layer.py
+time singularity run --nv ~/pytorch-1.8.1.sif ann-rbf.py
