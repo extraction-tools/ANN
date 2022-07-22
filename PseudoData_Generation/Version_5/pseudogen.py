@@ -122,7 +122,7 @@ Form = np.array([str(Formalism) for i in range(0,len(F))])
 
 #######################################################################################
 
-data_dictionary = {"Formalism": [],"#Set":[], "index":[], "k":[], "QQ":[], "t":[], "phi_x":[], "F1":[], "F2":[], "ReH_true":[], "ReE_true":[], "ReHTilde_true":[], "c0_true":[], "F":[], "sigmaF":[]}
+data_dictionary = {"Formalism": [],"#Set":[], "index":[], "k":[], "QQ":[], "x_b":[], "t":[], "phi_x":[], "F1":[], "F2":[], "ReH_true":[], "ReE_true":[], "ReHTilde_true":[], "c0_true":[], "F":[], "sigmaF":[]}
 
 data_dictionary["#Set"] = Set
 data_dictionary["index"] = ind
@@ -143,5 +143,3 @@ data_dictionary["Formalism"] = Form
 
 df = pd.DataFrame(data_dictionary)
 df.to_csv(str(Formalism)+'_'+'pseudodata_generation.csv')
-
-
