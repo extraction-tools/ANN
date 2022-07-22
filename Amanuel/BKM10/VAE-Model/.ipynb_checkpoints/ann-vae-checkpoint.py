@@ -152,11 +152,6 @@ def MAE(ReH, ReE, ReHtilde, c0fit, c1fit):
 def MSE(ReH, ReE, ReHtilde, c0fit, c1fit):
     return np.mean((ydat - func_fit(xdat, ReH, ReE, ReHtilde, c0fit, c1fit)) ** 2 )
 
-def loss_functionVAE(x, x_hat, mean, log_var):
-    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction='sum')
-    KLD      = - 0.5 * torch.sum(1+ log_var - mean.pow(2) - log_var.exp())
-
-    return reproduction_loss + KLD
 
 
 ReH_all = np.array([])
@@ -180,7 +175,7 @@ for ii in range(numberOfSets): # set how many sets to process
  #current architecture that I use
  blank_net = VAENet(Encoder=encoder, Decoder=decoder)
 
- optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.0005)
+ optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.0009)
  decayRate = 0.96
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
@@ -243,8 +238,8 @@ for ii in range(numberOfSets): # set how many sets to process
     
      cffs = [ReHfit, ReEfit, ReHTfit, c0fit]
      
-     loss = loss_func((xdat_var.float()), cffs, errs_var, y)
-     loss_val = loss_validation((xdat_var.float()), cffs, errs_var, y)
+     loss = loss_func((xdat_var.float()), cffs, errs_var, y, mean, log_var)
+     loss_val = loss_validation((xdat_var.float()), cffs, errs_var, y, mean, log_var)
      loss_val2 = loss_validation2((xdat_var.float()), cffs, errs_var, y)
      loss_val3 = loss_validation3((xdat_var.float()), cffs, errs_var, y)
      ##losses.append(float(loss.data.float())) # not using for now but maybe useful for later

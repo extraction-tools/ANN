@@ -198,7 +198,7 @@ class TBHDVCS(object):
         f_pred = xsbhuu + xsiuu + c0fit
         return f_pred
 
-    def loss_chisq(self, kins, cffs, errs, f_true):
+    def loss_chisq(self, kins, cffs, errs, f_true, mean, log_var):
         phi, kin1, kin2, kin3, kin4, F1, F2 = kins
         ReH, ReE, ReHtilde, c0fit = cffs #output of network
         kinematics = [kin1, kin2, kin3, kin4]
@@ -206,5 +206,7 @@ class TBHDVCS(object):
         xsbhuu   = self.BHUU(kinematics, phi, F1, F2)
         xsiuu    = self.IUU(kinematics, phi, F1, F2, ReH, ReE, ReHtilde, "t2")
         f_pred = xsbhuu + xsiuu +  c0fit 
-        return torch.mean(torch.square((f_pred-f_true)/errs))
+        # add KLD for VAE model loss
+        KLD = - 0.5 * torch.sum(1+ log_var - mean.pow(2) - log_var.exp())
+        return(torch.mean(torch.square((f_pred-f_true)/errs)) + KLD)
         #return torch.mean(torch.square((f_pred-f_true)))

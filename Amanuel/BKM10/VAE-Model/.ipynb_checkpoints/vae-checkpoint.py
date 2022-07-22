@@ -22,7 +22,7 @@ class Encoder(nn.Module):
         h_       = self.LeakyReLU(self.FC_input2(h_))
         mean     = self.FC_mean(h_)
         log_var  = self.FC_var(h_)       # encoder produces mean and log of variance 
-                                         # (i.e., parameters of simple tractable normal distribution "q"
+                                         # (i.e., parameters of simple tractable normal distribution "q")
         
         return mean, log_var
     
