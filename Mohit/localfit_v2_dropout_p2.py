@@ -103,7 +103,7 @@ F_vals = {}
 testnum = int(df['#Set'].max())
 skip = 20  # samples a series of different sets
 
-for epoch in np.arange(10001, 30001, 500):  # parse the upper region less thoroughly
+for epoch in np.arange(7001, 30001, 500):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
   for batch in np.arange(1, 47, 5):
     for i in np.arange(0, testnum, skip):
