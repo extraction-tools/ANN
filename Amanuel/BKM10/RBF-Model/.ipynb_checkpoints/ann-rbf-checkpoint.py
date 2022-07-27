@@ -179,7 +179,7 @@ for ii in range(numberOfSets): # set how many sets to process
  blank_net = RBFNet3Layer(4, 4, centers1, centers2, centers3, useDavg)
 
  optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.01)
- decayRate = 0.96
+ decayRate = 0.99
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
  EPOCH = 25000 # maximum epoch
