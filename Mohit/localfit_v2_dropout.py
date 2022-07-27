@@ -147,7 +147,7 @@ for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
         total_rms_vals[selection_key] = total_rms
 
 
-for epoch in np.arange(1000, 150001, 500):  # parse the upper region less thoroughly
+for epoch in np.arange(1000, 10001, 500):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
   for batch in np.arange(1, 47, 5):
     for i in np.arange(0, testnum, skip):
