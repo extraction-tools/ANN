@@ -178,7 +178,7 @@ for ii in range(numberOfSets): # set how many sets to process
  # RBF architecture
  blank_net = RBFNet3Layer(4, 4, centers1, centers2, centers3, useDavg)
 
- optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.01)
+ optimizer = torch.optim.Adam(blank_net.parameters(), lr=0.05)
  decayRate = 0.99
  my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decayRate)
 
