@@ -101,49 +101,50 @@ F_vals = {}
 
 
 testnum = int(df['#Set'].max())
-skip = 20  # samples a series of different sets
+skip = 50  # samples a series of different sets
 
-for epoch in np.arange(7001, 30001, 500):  # parse the upper region less thoroughly
+for epoch in np.arange(1001, 7001, 500):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
-  for batch in np.arange(1, 47, 5):
+  for batch in np.arange(1, 11):
     for i in np.arange(0, testnum, skip):
       for d_rate in np.arange(0, 0.61, 0.2):
+        for trial in np.arange(0,10):
 
-        for n, layer in enumerate(tfModel.layers):
-          if 'dropout' in layer.name:
-            print(layer.rate)
-            # changes the dropout rate for the model
-            tfModel.layers[n].rate = d_rate
+          for n, layer in enumerate(tfModel.layers):
+            if 'dropout' in layer.name:
+              print(layer.rate)
+              # changes the dropout rate for the model
+              tfModel.layers[n].rate = d_rate
 
-        tfModel.compile(
-            optimizer=tf.keras.optimizers.Adam(.0085),
-            loss=tf.keras.losses.MeanSquaredError()
-        )
+          tfModel.compile(
+              optimizer=tf.keras.optimizers.Adam(.0085),
+              loss=tf.keras.losses.MeanSquaredError()
+          )
 
-        tfModel.set_weights(Wsave)  # resets the model
-        setI = data.getSet(i, itemsInSet=45)
+          tfModel.set_weights(Wsave)  # resets the model
+          setI = data.getSet(i, itemsInSet=45)
 
-        tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
-                    epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
+          tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
+                      epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
 
-        cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=4)
+          cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=4)
 
-        new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
+          new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
 
-        # Avoid recalculating F-values from cffs when that is what the model is predicting already
+          # Avoid recalculating F-values from cffs when that is what the model is predicting already
 
-        F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
-            df, i + 1, new_xdat, cffs
-        )  # runs the version without plotting to save time
+          F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
+              df, i + 1, new_xdat, cffs
+          )  # runs the version without plotting to save time
 
-        selection_key = (epoch, batch, d_rate, i)
-        F_vals[selection_key] = np.array(F)
-        cffs_record[selection_key] = np.array(cffs)
-        total_errors[selection_key] = total_error
-        total_residuals[selection_key] = max_residual
-        total_rms_vals[selection_key] = total_rms
+          selection_key = (epoch, batch, d_rate, trial, i)
+          F_vals[selection_key] = np.array(F)
+          cffs_record[selection_key] = np.array(cffs)
+          total_errors[selection_key] = total_error
+          total_residuals[selection_key] = max_residual
+          total_rms_vals[selection_key] = total_rms
 
-base_cols = ["Epoch", "Batch", "Dropout Rate", "Set"]
+base_cols = ["Epoch", "Batch", "Dropout Rate", "Trial", "Set"]
 
 F_vals = pd.Series(F_vals).reset_index()
 F_vals.columns = base_cols + ["Calculated Points"]
