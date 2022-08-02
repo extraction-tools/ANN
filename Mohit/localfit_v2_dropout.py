@@ -101,50 +101,50 @@ F_vals = {}
 
 
 testnum = int(df['#Set'].max())
-skip = 20  # samples a series of different sets
+skip = 50  # samples a series of different sets
 
 for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
-  # 46 is greater than the 45 we need, but it will floor to 45
-  for batch in np.arange(1, 47, 5):
+  for batch in np.arange(1, 11):
     for i in np.arange(0, testnum, skip):
       for d_rate in np.arange(0, 0.61, 0.2):
-        
-        for n, layer in enumerate(tfModel.layers):
-          if 'dropout' in layer.name:
-            # changes the dropout rate for the model
-            tfModel.layers[n].rate = d_rate
+        for trial in np.arange(0, 10):
 
-        tfModel.compile(
-            optimizer=tf.keras.optimizers.Adam(.0085),
-            loss=tf.keras.losses.MeanSquaredError()
-        )
+          for n, layer in enumerate(tfModel.layers):
+            if 'dropout' in layer.name:
+              # changes the dropout rate for the model
+              tfModel.layers[n].rate = d_rate
 
-        tfModel.set_weights(Wsave)  # resets the model
-        setI = data.getSet(i, itemsInSet=45)
+          tfModel.compile(
+              optimizer=tf.keras.optimizers.Adam(.0085),
+              loss=tf.keras.losses.MeanSquaredError()
+          )
 
-        # one replica of samples from F vals
-        tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),
-                    epochs=epoch, verbose=0, batch_size=batch,
-                    callbacks=[early_stopping_callback], validation_split=0.2)
+          tfModel.set_weights(Wsave)  # resets the model
+          setI = data.getSet(i, itemsInSet=45)
 
-        # 2 hidden layers and 2 dropout layers for numHL parameter
-        cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=4)
+          # one replica of samples from F vals
+          tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),
+                      epochs=epoch, verbose=0, batch_size=batch,
+                      callbacks=[early_stopping_callback], validation_split=0.2)
 
-        new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
+          # 2 hidden layers and 2 dropout layers for numHL parameter
+          cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=4)
 
-        # Avoid recalculating F-values from cffs when that is what the model is predicting already
+          new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
 
-        F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
-            df, i + 1, new_xdat, cffs
-        )  # runs the version without plotting to save time
+          # Avoid recalculating F-values from cffs when that is what the model is predicting already
 
-        # the inputs to place in the dictionary
-        selection_key = (epoch, batch, d_rate, i)
-        F_vals[selection_key] = np.array(F)
-        cffs_record[selection_key] = np.array(cffs)
-        total_errors[selection_key] = total_error
-        total_residuals[selection_key] = max_residual
-        total_rms_vals[selection_key] = total_rms
+          F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
+              df, i + 1, new_xdat, cffs
+          )  # runs the version without plotting to save time
+
+          # the inputs to place in the dictionary
+          selection_key = (epoch, batch, d_rate, trial, i)
+          F_vals[selection_key] = np.array(F)
+          cffs_record[selection_key] = np.array(cffs)
+          total_errors[selection_key] = total_error
+          total_residuals[selection_key] = max_residual
+          total_rms_vals[selection_key] = total_rms
 
 
 # for epoch in np.arange(1000, 7001, 500):  # parse the upper region less thoroughly
@@ -186,7 +186,7 @@ for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
 #         total_residuals[selection_key] = max_residual
 #         total_rms_vals[selection_key] = total_rms
 
-base_cols = ["Epoch", "Batch", "Dropout Rate", "Set"]
+base_cols = ["Epoch", "Batch", "Dropout Rate", "Trial", "Set"]
 
 F_vals = pd.Series(F_vals).reset_index()
 F_vals.columns = base_cols + ["Calculated Points"]
