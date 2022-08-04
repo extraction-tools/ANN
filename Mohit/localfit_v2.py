@@ -99,11 +99,11 @@ F_vals = {}
 
 
 testnum = int(df['#Set'].max())
-skip = 20  # samples a series of different sets
+skip = 100  # samples a series of different sets
 
 for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
-  for batch in np.arange(1, 47, 5):
+  for batch in np.arange(1, 11, 2):
     for i in np.arange(0, testnum, skip):
       tfModel.set_weights(Wsave)  # resets the model
       setI = data.getSet(i, itemsInSet=45)
