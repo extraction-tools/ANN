@@ -104,7 +104,6 @@ testnum = int(df['#Set'].max())
 skip = 100  # samples a series of different sets
 
 for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
-  print(epoch)
   for batch in np.arange(1, 11, 2):
     for i in np.arange(0, testnum, skip):
       for d_rate in np.arange(0, 0.41, 0.2):

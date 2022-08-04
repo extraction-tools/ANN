@@ -105,72 +105,83 @@ for epoch in np.arange(10, 1000, 50):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
   for batch in np.arange(1, 11, 2):
     for i in np.arange(0, testnum, skip):
-      tfModel.set_weights(Wsave)  # resets the model
-      setI = data.getSet(i, itemsInSet=45)
+      for trial in np.arange(0,10):
+        d_rate = 0
+        tfModel.set_weights(Wsave)  # resets the model
+        setI = data.getSet(i, itemsInSet=45)
 
-      tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
-                  epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
+        tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
+                    epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
 
-      cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
+        cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
-      new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
+        new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
 
-      # Avoid recalculating F-values from cffs when that is what the model is predicting already
+        # Avoid recalculating F-values from cffs when that is what the model is predicting already
 
-      F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
-          df, i + 1, new_xdat, cffs
-      )  # runs the version without plotting to save time
+        F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
+            df, i + 1, new_xdat, cffs
+        )  # runs the version without plotting to save time
 
-      F_vals[(epoch, batch, i)] = np.array(F)
-      cffs_record[(epoch, batch, i)] = np.array(cffs)
-      total_errors[(epoch, batch, i)] = total_error
-      total_residuals[(epoch, batch, i)] = max_residual
-      total_rms_vals[(epoch, batch, i)] = total_rms
+        selection_key = (epoch, batch, d_rate, trial, i)
+        F_vals[selection_key] = np.array(F)
+        cffs_record[selection_key] = np.array(cffs)
+        total_errors[selection_key] = total_error
+        total_residuals[selection_key] = max_residual
+        total_rms_vals[selection_key] = total_rms
 
 
-for epoch in np.arange(1000, 30001, 500):  # parse the upper region less thoroughly
+for epoch in np.arange(1000, 15001, 500):  # parse the upper region less thoroughly
   # 46 is greater than the 45 we need, but it will floor to 45
   for batch in np.arange(1, 47, 5):
     for i in np.arange(0, testnum, skip):
-      tfModel.set_weights(Wsave)  # resets the model
-      setI = data.getSet(i, itemsInSet=45)
+      for trial in np.arange(0,10):
+        d_rate = 0
+        tfModel.set_weights(Wsave)  # resets the model
+        setI = data.getSet(i, itemsInSet=45)
 
-      tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
-                  epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
+        tfModel.fit([setI.Kinematics, setI.XnoCFF], setI.sampleY(),  # one replica of samples from F vals
+                    epochs=epoch, verbose=0, batch_size=batch, callbacks=[early_stopping_callback], validation_split=0.2)
 
-      cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
+        cffs = cffs_from_globalModel(tfModel, setI.Kinematics, numHL=2)
 
-      new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
+        new_xdat = np.transpose(setI.XnoCFF.to_numpy(dtype=np.float32))
 
-      # Avoid recalculating F-values from cffs when that is what the model is predicting already
+        # Avoid recalculating F-values from cffs when that is what the model is predicting already
 
-      F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
-          df, i + 1, new_xdat, cffs
-      )  # runs the version without plotting to save time
+        F, total_error, max_residual, total_rms = F2VsPhi_noPlot(
+            df, i + 1, new_xdat, cffs
+        )  # runs the version without plotting to save time
 
-      F_vals[(epoch, batch, i)] = np.array(F)
-      cffs_record[(epoch, batch, i)] = np.array(cffs)
-      total_errors[(epoch, batch, i)] = total_error
-      total_residuals[(epoch, batch, i)] = max_residual
-      total_rms_vals[(epoch, batch, i)] = total_rms
+        selection_key = (epoch, batch, d_rate, trial, i)
+        F_vals[selection_key] = np.array(F)
+        cffs_record[selection_key] = np.array(cffs)
+        total_errors[selection_key] = total_error
+        total_residuals[selection_key] = max_residual
+        total_rms_vals[selection_key] = total_rms
+
+
+base_cols = ["Epoch", "Batch", "Dropout Rate", "Trial", "Set"]
 
 F_vals = pd.Series(F_vals).reset_index()
-F_vals.columns = ["Epoch", "Batch", "Set", "Calculated Points"]
+F_vals.columns = base_cols + ["Calculated Points"]
 
 cffs_record = pd.Series(cffs_record).reset_index()
-cffs_record.columns = ["Epoch", "Batch", "Set", "Calculated CFFs"]
+cffs_record.columns = base_cols + ["Calculated CFFs"]
 
 total_errors = pd.Series(total_errors).reset_index()
-total_errors.columns = ["Epoch", "Batch", "Set", "MAE"]
+total_errors.columns = base_cols + ["MAE"]
 
 total_residuals = pd.Series(total_residuals).reset_index()
-total_residuals.columns = ["Epoch", "Batch", "Set", "Max Residual"]
+total_residuals.columns = base_cols + ["Max Residual"]
 
 total_rms_vals = pd.Series(total_rms_vals).reset_index()
-total_rms_vals.columns = ["Epoch", "Batch", "Set", "NRMSE"]
+total_rms_vals.columns = base_cols + ["NRMSE"]
 
 total_metrics = F_vals.merge(cffs_record).merge(
     total_errors).merge(total_residuals).merge(total_rms_vals)
+
+total_metrics['Set'] += 1
 
 base_filestr = 'metrics' + data_number
 final_str = base_filestr
