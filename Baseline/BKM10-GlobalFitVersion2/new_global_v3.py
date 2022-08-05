@@ -84,14 +84,14 @@ for ii in range(0,195):
 
 #here to play the neuron architecture
 blank_net = torch.nn.Sequential(
-         torch.nn.Linear(3, 20),
-         torch.nn.Linear(20, 20),
+         torch.nn.Linear(3, 100),
+         torch.nn.Linear(100, 100),
          torch.nn.Tanhshrink(),
-         torch.nn.Linear(20, 20),
+         torch.nn.Linear(100, 100),
          torch.nn.Tanhshrink(),
-         torch.nn.Linear(20, 20),
+         torch.nn.Linear(100, 100),
          torch.nn.Tanh(), #usually Tanh
-         torch.nn.Linear(20, 4)
+         torch.nn.Linear(100, 4)
      )
 
 #option for weight initialization
@@ -120,9 +120,13 @@ trigger_times = 0
 arr_val = np.array([])
 arr_epoch = np.array([])
 
-import random
-EPOCH = random.randrange(27500, 227500, 25000)
-EPOCH = int(EPOCH)
+#Dyanamic epoch
+#import random
+#EPOCH = random.randrange(27500, 227500, 25000)
+#EPOCH = int(EPOCH)
+
+#Static epoch
+EPOCH = 52500
 
 print(EPOCH)
 mask = (F > 0)
