@@ -1,0 +1,1 @@
+{"node_type":"standard","bc_num_hours":"4","num_cores":"1","num_memory":"6","work_dir":"--notebook-dir=/home/","bc_account":"","gpu_type":"--gres=gpu:","num_gpu":"1","option":"","optional_group":"","bc_email_on_started":"0"}
