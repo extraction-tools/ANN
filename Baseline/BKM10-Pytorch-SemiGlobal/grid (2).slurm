@@ -6,4 +6,4 @@
 #SBATCH --error=slurm.err
 #SBATCH --partition=standard
 #SBATCH -A polarizedtarget
-singularity run --nv ~/pytorch-1.5.1.sif new_global_v3_truthsmear.py 
+singularity run --nv ~/pytorch-1.5.1.sif semiglobal.py 
