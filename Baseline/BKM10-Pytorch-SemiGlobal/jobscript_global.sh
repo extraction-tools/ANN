@@ -23,7 +23,6 @@ do
   chmod -R 01755 $work/$id
   cd $work/$id/
   cp $dir_macros/*.py .
-  cp $dir_macros/result_august16_newglobal_stage1.txt .
   cp $dir_macros/*.csv .
   cp $dir_macros/*.slurm .
   #sed -i "s/1234/$id/" ann_global_3input_ori.py
