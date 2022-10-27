@@ -1,0 +1,14 @@
+To execute the default application inside the container, run:
+singularity run --nv $CONTAINERDIR/tensorflow-2.8.0.sif
+
+2022-10-05 14:32:03.201319: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2022-10-05 14:32:03.201369: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-aw29-19b): /proc/driver/nvidia/version does not exist
+2022-10-05 14:32:03.204753: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-10-05 14:32:04.900183: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+2.8.0
+
+ 
+ I'm running! 
+ 
+

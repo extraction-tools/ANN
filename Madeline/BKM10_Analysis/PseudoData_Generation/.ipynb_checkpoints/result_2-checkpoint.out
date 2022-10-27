@@ -1,0 +1,3 @@
+To execute the default application inside the container, run:
+singularity run --nv $CONTAINERDIR/tensorflow-2.8.0.sif
+
