@@ -4,7 +4,7 @@
 Make pseudo data using BKM10
 * Note: Files modified from Github (ANN/PseudoData_Generation/Version_5)
 
-## Step 2) Make Data
+## Step 2) Make many sets of data
 Vary smear error to make multiple sets of pseudo data. Example done for one set of errors: 0.0, 0.01, 0.05, 0.1 (recommend doing a lot more sets and including a larger range of smear errors).
 * Note: Files modified from Github (ANN/Aaryan/ErrF Experiments/BKM02)
 
