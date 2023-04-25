@@ -80,7 +80,7 @@ class ComparisonPlot:
         if self.folder_path is not None:
             plt.title(f'{self.cff} Comparison Plot for {num_files} Replicas (range:{self.x_range})')
         else:
-            plt.title(f'{self.cff} Comparison Plot (range:{self.x_range})')
+            plt.title(f'{self.cff} Plot (range:{self.x_range})')
         plt.legend()
         plt.xlabel('Bin')
         plt.ylabel(f'{self.cff}')
