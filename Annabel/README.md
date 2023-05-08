@@ -28,5 +28,9 @@ on the x- and y-axis and the integral of F w/ respect to phi on the z-axis
 creates a 3d scatterplot allowing for input from [k, QQ, x_b, t, ReH, ReE, ReHtilde, or dvcs] for x-, y-, and z-axis
 while color varies according to the total cross-section
 
+<img width="368" alt="set 5" src="https://user-images.githubusercontent.com/78767440/236943941-a394551f-657c-4619-89e9-9e5be0763aa8.png">
+
 **triangles_color**
 creates a 3d plot of Delauney triangulation with color varying according to the total cross-section and any three axes from the variables above
+
+<img width="368" alt="triangles" src="https://user-images.githubusercontent.com/78767440/236946183-c8bbd429-4a8b-43e4-b1e2-aa1d41060689.png">
