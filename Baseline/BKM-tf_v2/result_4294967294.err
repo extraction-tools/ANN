@@ -1,0 +1,8 @@
+2023-03-31 15:30:28.215905: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2023-03-31 15:30:28.216094: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-aw34-18c1): /proc/driver/nvidia/version does not exist
+2023-03-31 15:30:28.216534: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "Fit.py", line 82, in <module>
+    df.to_csv(f"/project/ptgroup/Devin/ANN/BKM_T/CFF_Data/bySetCFFs(195)_" + sys.argv[1] + ".csv")
+IndexError: list index out of range
