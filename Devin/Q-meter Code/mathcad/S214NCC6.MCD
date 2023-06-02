@@ -1,0 +1,1151 @@
+.MCAD 304020000 1 79 636 0
+.CMD PLOTFORMAT
+0 0 1 1 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 21 15 0 0 3 
+.CMD FORMAT  rd=d ct=10 im=i et=3 zt=15 pr=3 mass length time charge temperature tr=0 vm=1
+.CMD SET ORIGIN 0
+.CMD SET TOL 0.001000000000000
+.CMD SET PRNCOLWIDTH 8
+.CMD SET PRNPRECISION 4
+.CMD PRINT_SETUP 1.200000 0.750000 1.200000 1.200000 0
+.CMD HEADER_FOOTER 1 1 *empty* *empty* *empty* 0 1 *empty* *empty* *empty*
+.CMD HEADER_FOOTER_FONT fontID=14 family=Arial points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD HEADER_FOOTER_FONT fontID=15 family=Arial points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFAULT_TEXT_PARPROPS 0 0 0
+.CMD DEFINE_FONTSTYLE_NAME fontID=0 name=Variables
+.CMD DEFINE_FONTSTYLE_NAME fontID=1 name=Constants
+.CMD DEFINE_FONTSTYLE_NAME fontID=2 name=Text
+.CMD DEFINE_FONTSTYLE_NAME fontID=4 name=User^1
+.CMD DEFINE_FONTSTYLE_NAME fontID=5 name=User^2
+.CMD DEFINE_FONTSTYLE_NAME fontID=6 name=User^3
+.CMD DEFINE_FONTSTYLE_NAME fontID=7 name=User^4
+.CMD DEFINE_FONTSTYLE_NAME fontID=8 name=User^5
+.CMD DEFINE_FONTSTYLE_NAME fontID=9 name=User^6
+.CMD DEFINE_FONTSTYLE_NAME fontID=10 name=User^7
+.CMD DEFINE_FONTSTYLE fontID=0 family=Times^New^Roman points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=1 family=Times^New^Roman points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=2 family=Times^New^Roman points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=4 family=Arial points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=5 family=Courier^New points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=6 family=System points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=7 family=Script points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=8 family=Roman points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=9 family=Modern points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD DEFINE_FONTSTYLE fontID=10 family=Times^New^Roman points=10 bold=0 italic=0 underline=0 colrid=-1
+.CMD UNITS U=1
+.CMD DIMENSIONS_ANALYSIS 0 0
+.CMD FILENAME coil current.dat
+.CMD COLORTAB_ENTRY 0 0 0
+.CMD COLORTAB_ENTRY 128 0 0
+.CMD COLORTAB_ENTRY 0 128 0
+.CMD COLORTAB_ENTRY 128 128 0
+.CMD COLORTAB_ENTRY 0 0 128
+.CMD COLORTAB_ENTRY 128 0 128
+.CMD COLORTAB_ENTRY 0 128 128
+.CMD COLORTAB_ENTRY 128 128 128
+.CMD COLORTAB_ENTRY 192 192 192
+.CMD COLORTAB_ENTRY 255 0 0
+.CMD COLORTAB_ENTRY 0 255 0
+.CMD COLORTAB_ENTRY 255 255 0
+.CMD COLORTAB_ENTRY 0 0 255
+.CMD COLORTAB_ENTRY 255 0 255
+.CMD COLORTAB_ENTRY 0 255 255
+.CMD COLORTAB_ENTRY 255 255 255
+.TXT 0 25 1 0 0
+Cg a74.000000,74.000000,35
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1  Proton at 214 MHz with 7 l/2 cable}}
+.TXT 2 -24 268 0 0
+Cg a74.000000,74.000000,80
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 WITH  stray capacitance to ground in coil BUT INCLUDE 
+NON- CONSTANT COIL CURRENT}}
+.EQN 4 -1 3 0 0
+{0:U}NAME:.1
+.TXT 0 10 4 0 0
+Cg a74.000000,74.000000,15
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 100 mV RF input}}
+.TXT 0 38 5 0 0
+Cg a74.000000,74.000000,17
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 file s214ncc6.mcd}}
+.TXT 3 0 404 0 0
+Cg a26.000000,26.000000,27
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 "THIS IS MATHCAD 6+ VERSION}}
+.TXT 5 -48 7 0 0
+Cg a74.000000,74.000000,26
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1  Inductance of coil  30 nH}}
+.EQN 3 43 372 0 0
+{0:r}NAME:10
+.TXT 0 12 373 0 0
+Cg a74.000000,74.000000,16
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Damping resistor}}
+.EQN 1 -55 8 0 0
+{0:L.0}NAME:3.*(10)^(-8)
+.EQN 0 11 362 0 0
+{0:R.coil}NAME:.35
+.EQN 0 11 365 0 0
+{0:f}NAME:213*(10)^(6)
+.EQN 2 0 366 0 0
+{0:\w.res}NAME:2*{0:\p}NAME*{0:f}NAME
+.TXT 0 38 380 0 0
+Cg a14.000000,14.000000,14
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Tuning Cap, pF}}
+.EQN 3 -8 603 0 0
+{0:Cmain}NAME:20*(10)^(-12)*{0:knob}NAME
+.TXT 1 -42 367 0 0
+Cg a74.000000,74.000000,26
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Ideal Constant current, mA}}
+.EQN 0 21 10 0 0
+{0:I}NAME:{0:U}NAME*(1000)/({0:R}NAME)
+.EQN 4 1 368 0 0
+{0:I}NAME={0}?_n_u_l_l_
+.TXT 0 33 559 0 0
+Cg a9.000000,9.000000,2
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard pF}
+.EQN 1 -17 558 0 0
+{0:C.stray}NAME*(10)^(12)={0}?_n_u_l_l_
+.EQN 5 -46 369 0 0
+{0:\w.low}NAME:2*{0:\p}NAME*(213-.25)*(10)^(6)
+.EQN 0 23 370 0 0
+{0:\w.hi}NAME:2*{0:\p}NAME*(213+.25)*(10)^(6)
+.EQN 2 23 604 0 0
+({0:\w.res}NAME*{0:L.0}NAME)/({0:R.coil}NAME)={0}?_n_u_l_l_
+.TXT 2 -40 371 0 0
+Cg a74.000000,74.000000,37
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 500 KHz scan width centred on 214 MHz}}
+.EQN 9 0 374 0 0
+{0:slope}NAME:({0:\dC}NAME)/(.25*2*{0:\p}NAME*(10)^(6))
+.EQN 0 17 375 0 0
+{0:slope\f}NAME:({0:\d\f}NAME)/(.25*2*{0:\p}NAME*(10)^(6))
+.TXT 0 17 376 0 0
+Cg a74.000000,74.000000,21
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 trim phase in degrees}}
+.EQN 8 -34 377 0 0
+{0:C.trim}NAME({0:\w}NAME):{0:slope}NAME*({0:\w}NAME-{0:\w.res}NAME)
+.EQN 7 0 381 0 0
+{0:C}NAME({0:\w}NAME):{0:Cmain}NAME+{0:C.trim}NAME({0:\w}NAME)*(10)^(-12)
+.EQN 6 0 382 0 0
+{0:C.pF}NAME:{0:C}NAME({0:\w.res}NAME)*(10)^(12)
+.EQN 0 19 384 0 0
+{0:C.pF}NAME={0}?_n_u_l_l_
+.TXT 45 -2 29 0 0
+Cg a74.000000,74.000000,22
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Cable characteristics:}}
+.EQN 2 -24 286 0 0
+{0:\a}NAME:.0343
+.TXT 0 8 287 0 0
+Cg a74.000000,74.000000,18
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 My estimate Aug 97}}
+.EQN 3 -8 288 0 0
+{0:\b.1}NAME:4.752*(10)^(-9)
+.TXT 0 13 289 0 0
+Cg a74.000000,74.000000,18
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 My estimate Aug 97}}
+.EQN 3 -13 290 0 0
+{0:\b}NAME({0:\w}NAME):{0:\b.1}NAME*{0:\w}NAME
+.EQN 5 -1 35 0 0
+{0:S}NAME:2*50*{0:\a}NAME
+.TXT 0 16 36 0 0
+Cg a74.000000,74.000000,20
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 50 = cable impedance}}
+.EQN 0 27 37 0 0
+{0:S}NAME={0}?_n_u_l_l_
+.TXT 0 14 38 0 0
+Cg a74.000000,74.000000,6
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Ohms/m}}
+.EQN 4 -57 39 0 0
+{0:D}NAME:10.27*(10)^(-11)
+.TXT 0 14 293 0 0
+Cg a74.000000,74.000000,3
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 F/m}}
+.EQN 5 -14 41 0 0
+{0:M}NAME:2.542*(10)^(-7)
+.TXT 0 17 291 0 0
+Cg a74.000000,74.000000,3
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 H/m}}
+.EQN 4 -16 292 0 0
+{0:Z.0}NAME({0:\w}NAME):\(({0:S}NAME+{0:\w}NAME*{0:M}NAME*1i)/({0:\w}NAME*{0:D}NAME*1i))
+.TXT 0 32 43 0 0
+Cg a74.000000,74.000000,34
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Need this as function of frequency}}
+.EQN 2 1 296 0 0
+{0:Z.0}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 8 -33 294 0 0
+{0:vel}NAME:(1)/({0:\b}NAME(1))
+.EQN 1 11 295 0 0
+{0:vel}NAME={0}?_n_u_l_l_
+.TXT 4 21 353 0 0
+Cg a36.000000,36.000000,15
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Length of cable}}
+.EQN 2 -32 49 0 0
+{0:\l}NAME({0:\w}NAME):({0:vel}NAME)/({0:f}NAME)
+.EQN 1 12 352 0 0
+{0:l}NAME:{0:trim}NAME*{0:\l}NAME({0:\w.res}NAME)
+.EQN 0 20 354 0 0
+{0:l}NAME={0}?_n_u_l_l_
+.EQN 1 14 606 0 0
+{0:S}NAME*{0:l}NAME={0}?_n_u_l_l_
+.TXT 0 9 608 0 0
+Cg a17.125000,17.125000,23
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Resistance at 
+resonance}
+.EQN 3 -55 300 0 0
+{0:l}NAME({0:\w}NAME):{0:l}NAME+{0:\dl}NAME
+.TXT 0 11 301 0 0
+Cg a74.000000,74.000000,56
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Cable length. Chance to trim cable length to see effects}}
+.EQN 5 -12 54 0 0
+{0:\G}NAME({0:\w}NAME):{0:\a}NAME+1i*{0:\b}NAME({0:\w}NAME)
+.EQN 6 0 55 0 0
+{0:\d\w}NAME:2*{0:\p}NAME*500*((10)^(3))/(256)
+.EQN 0 24 56 0 0
+{0:Z.c}NAME({0:\w}NAME):(1)/(1i*{0:\w}NAME*{0:C}NAME({0:\w}NAME))
+.EQN 6 -24 57 0 0
+{0:k}NAME:0,1;255
+.EQN 0 24 58 0 0
+({0:x}NAME)[({0:k}NAME):{0:\w.low}NAME+{0:k}NAME*{0:\d\w}NAME
+.EQN 6 -22 59 0 0
+{0:\w.temp}NAME:({0:x}NAME)[({0:nback}NAME)
+.EQN 0 30 60 0 0
+{0:Z.0}NAME({0:\w.low}NAME)={0}?_n_u_l_l_
+.TXT 8 -32 61 0 0
+Cg a74.000000,74.000000,228
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 This part ot the program reads the data from the disk 
+for the background (created in part one) and the experimental data for 
+the proton resonance and plots the information as a continuous 
+function (hence the "interp" function): }}
+.TXT 6 36 597 0 0
+Cg a38.000000,38.000000,50
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard dispersion 
+term calculated with Hill & Hill method}
+.TXT 1 -35 596 0 0
+Cg a73.000000,73.000000,32
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Imaginary part 
+of susceptibility}
+.EQN 3 -1 64 0 0
+({0:butxii}NAME)[({0:k}NAME):{0:READ}NAME({0:proton.dat}NAME)
+.EQN 0 38 65 0 0
+({0:butxi}NAME)[({0:k}NAME):{0:READ}NAME({0:dproton.dat}NAME)
+.EQN 8 -38 66 0 0
+({0:Vback}NAME)[({0:k}NAME):{0:READ}NAME({0:backgrnd.dat}NAME)
+.EQN 0 28 67 0 0
+({0:Vreal}NAME)[({0:k}NAME):{0:READ}NAME({0:backreal.dat}NAME)
+.EQN 1 24 624 0 0
+({0:Vreal}NAME)[(0)={150069}?_n_u_l_l_
+.EQN 3 -52 68 0 0
+{0:ichi}NAME:{0:lspline}NAME({0:x}NAME,{0:butxii}NAME)
+.EQN 0 28 69 0 0
+{0:background}NAME:{0:lspline}NAME({0:x}NAME,{0:Vback}NAME)
+.EQN 0 24 625 0 0
+({0:Vback}NAME)[(0)={150069}?_n_u_l_l_
+.EQN 4 -52 70 0 0
+{0:rchi}NAME:{0:lspline}NAME({0:x}NAME,{0:butxi}NAME)
+.EQN 0 28 71 0 0
+{0:b}NAME({0:\w}NAME):{0:interp}NAME({0:background}NAME,{0:x}NAME,{0:Vback}NAME,{0:\w}NAME)
+.EQN 4 -28 72 0 0
+{0:realback}NAME:{0:lspline}NAME({0:x}NAME,{0:Vreal}NAME)
+.EQN 0 35 73 0 0
+{0:rb}NAME({0:\w}NAME):{0:interp}NAME({0:realback}NAME,{0:x}NAME,{0:Vreal}NAME,{0:\w}NAME)
+.EQN 3 -35 74 0 0
+{0:\w}NAME:{0:\w.low}NAME,{0:\w.low}NAME+{0:\d\w}NAME;{0:\w.hi}NAME
+.EQN 2 34 623 0 0
+{0:rb}NAME({0:\w.low}NAME)={150069}?_n_u_l_l_
+.EQN 4 -34 75 0 0
+{0:x.2}NAME({0:\w}NAME):{0:interp}NAME({0:ichi}NAME,{0:x}NAME,{0:butxii}NAME,{0:\w}NAME)
+.EQN 4 0 77 0 0
+{0:x.1}NAME({0:\w}NAME):{0:interp}NAME({0:rchi}NAME,{0:x}NAME,{0:butxi}NAME,{0:\w}NAME)
+.EQN 6 0 78 0 0
+{0:chi}NAME({0:\w}NAME):{0:x.1}NAME({0:\w}NAME)-1i*{0:x.2}NAME({0:\w}NAME)
+.EQN 1 1 304 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:x.2}NAME({0:\w}NAME)@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 29 12 10 0 3 
+.EQN 0 38 308 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:x.1}NAME({0:\w}NAME)@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 29 12 10 0 3 
+.TXT 27 -38 511 0 0
+Cg a74.000000,74.000000,258
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}{\f2
+\fcharset2\fnil Symbol;}}\plain\cf1\fs20 \pard {\f1 Input estimate of 
+coil current in two stages. On first pass put in constant TE  current 
+estimated from\par calculation.  Then output the current i(}{\f2 w}{\f1 
+) into file a:current.dat. Use this as input for current\par  estimate 
+on next iteration. See if everything converges }}
+.EQN 6 0 618 0 0
+{0:Icoil.TE}NAME:0.11133
+.TXT 1 30 600 0 0
+Cg a51.000000,51.000000,2
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard mA}
+.EQN 2 -30 620 0 0
+({0:Icoil}NAME)[({0:k}NAME):{0:Icoil.TE}NAME
+.TXT 0 50 621 0 0
+Cg a41.000000,41.000000,61
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard  On next 
+iteration read in\par iterated current READ(current.dat)}
+.EQN 3 -44 635 0 0
+({0:Icoil}NAME)[({0:k}NAME):{0:READ}NAME({0:current.dat}NAME)
+.EQN 1 -6 636 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&({0:Icoil}NAME)[({0:k}NAME)@&&(_n_u_l_l_&_n_u_l_l_)&{0:k}NAME
+0 0 1 0 1 0 0 1 1 
+0 0 1 0 1 0 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 21 15 10 0 3 
+.TXT 1 37 505 0 0
+Cg a74.000000,74.000000,30
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 define a coil current function}}
+.EQN 4 3 435 0 0
+{0:coil}NAME:{0:lspline}NAME({0:x}NAME,{0:Icoil}NAME)
+.EQN 4 -1 436 0 0
+{0:i.c}NAME({0:\w}NAME):{0:interp}NAME({0:coil}NAME,{0:x}NAME,{0:Icoil}NAME,{0:\w}NAME)
+.TXT 4 -1 602 0 0
+Cg a22.000000,22.000000,24
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard associate to 
+current.dat}
+.EQN 7 -38 88 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:i.c}NAME({0:\w}NAME)@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 19 12 10 0 3 
+.TXT 4 32 489 0 0
+Cg a74.000000,74.000000,39
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Parameterise the transition probability}}
+.EQN 6 0 490 0 0
+{0:p.T}NAME({0:\w}NAME):(({0:i.c}NAME({0:\w}NAME))/({0:Icoil.TE}NAME))
+.EQN 6 -32 91 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:p.T}NAME({0:\w}NAME)@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 0 2 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 19 12 10 0 2 Tranition Probability
+.TXT 2 41 331 0 0
+Cg a74.000000,74.000000,25
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Feed this into inductance}}
+.EQN 4 -3 285 0 0
+{0:L}NAME({0:\w}NAME):{0:L.0}NAME*(1+{0:sign}NAME*4*{0:\p}NAME*{0:eta}NAME*{0:p.T}NAME({0:\w}NAME)*{0:chi}NAME({0:\w}NAME))
+.EQN 15 -39 94 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:Re}NAME({0:L}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 19 10 10 0 3 
+.EQN 0 36 95 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:Im}NAME({0:L}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 19 10 10 0 3 
+.EQN 18 -35 96 0 0
+{0:Z.Lpure}NAME({0:\w}NAME):1i*{0:\w}NAME*{0:L}NAME({0:\w}NAME)+{0:R.coil}NAME
+.EQN 4 0 97 0 0
+{0:Z.stray}NAME({0:\w}NAME):(1)/(1i*{0:\w}NAME*{0:C.stray}NAME)
+.EQN 8 0 98 0 0
+{0:Z.L}NAME({0:\w}NAME):{0:Z.Lpure}NAME({0:\w}NAME)*({0:Z.stray}NAME({0:\w}NAME))/({0:Z.Lpure}NAME({0:\w}NAME)+{0:Z.stray}NAME({0:\w}NAME))
+.EQN 0 44 543 0 0
+{0:Z.Lpure}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 9 -45 99 0 0
+{0:Z.T}NAME({0:\w}NAME):{0:Z.0}NAME({0:\w}NAME)*({0:Z.L}NAME({0:\w}NAME)+{0:Z.0}NAME({0:\w}NAME)*{0:tanh}NAME({0:\G}NAME({0:\w}NAME)*{0:l}NAME({0:\w}NAME)))/({0:Z.0}NAME({0:\w}NAME)+{0:Z.L}NAME({0:\w}NAME)*{0:tanh}NAME({0:\G}NAME({0:\w}NAME)*{0:l}NAME(
+{0:\w}NAME)))
+.EQN 4 16 500 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&|({0:Z.T}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 21 15 10 0 3 
+.EQN 0 34 544 0 0
+{0:Z.T}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 20 -12 102 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&|({0:L}NAME({0:\w}NAME)),{0:L.0}NAME@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 0 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 29 12 10 0 3 
+.EQN 4 -38 103 0 0
+{0:Z.leg1}NAME({0:\w}NAME):{0:r}NAME+{0:Z.c}NAME({0:\w}NAME)+{0:Z.T}NAME({0:\w}NAME)
+.EQN 7 1 310 0 0
+{0:Z.total}NAME({0:\w}NAME):({0:R.1}NAME)/(1+({0:R.1}NAME)/({0:Z.leg1}NAME({0:\w}NAME)))
+.EQN 9 0 527 0 0
+|({0:Z.leg1}NAME({0:\w.low}NAME))={0}?_n_u_l_l_
+.EQN 3 20 526 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&|({0:Z.total}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 21 15 10 0 3 
+.EQN 30 14 355 0 0
+{0:xp.2}NAME:{0:\w.res}NAME
+.EQN 0 14 356 0 0
+{0:xp.3}NAME:{0:\w.hi}NAME
+.TXT 1 -49 109 0 0
+Cg a74.000000,74.000000,18
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Add parabolic term}}
+.EQN 0 21 110 0 0
+{0:xp.1}NAME:{0:\w.low}NAME
+.EQN 4 0 113 0 0
+{0:yp.1}NAME:0
+.EQN 0 15 114 0 0
+{0:yp.2}NAME:{0:\dphase}NAME
+.EQN 0 16 115 0 0
+{0:yp.3}NAME:0
+.EQN 4 -52 116 0 0
+{0:\a.1}NAME:{0:yp.1}NAME-{0:yp.2}NAME
+.EQN 0 21 117 0 0
+{0:\a.2}NAME:{0:yp.1}NAME-{0:yp.3}NAME
+.EQN 0 22 118 0 0
+{0:\b.1}NAME:({0:xp.1}NAME)^(2)-({0:xp.2}NAME)^(2)
+.EQN 6 -43 119 0 0
+{0:\G.1}NAME:{0:xp.1}NAME-{0:xp.2}NAME
+.EQN 0 42 120 0 0
+{0:\b.2}NAME:({0:xp.1}NAME)^(2)-({0:xp.3}NAME)^(2)
+.EQN 11 -42 121 0 0
+{0:\G.2}NAME:{0:xp.1}NAME-{0:xp.3}NAME
+.EQN 6 0 122 0 0
+{0:temp}NAME:({0:\b.1}NAME*(({0:\G.2}NAME)/({0:\G.1}NAME))-{0:\b.2}NAME)
+.EQN 1 20 311 0 0
+{0:a}NAME:({0:\G.2}NAME*(({0:\a.1}NAME)/({0:\G.1}NAME))-{0:\a.2}NAME)/({0:temp}NAME)
+.EQN 7 0 313 0 0
+{0:bb}NAME:({0:\a.2}NAME-{0:a}NAME*{0:\b.2}NAME)/({0:\G.2}NAME)
+.EQN 5 -1 314 0 0
+{0:c}NAME:{0:yp.1}NAME-{0:a}NAME*({0:xp.1}NAME)^(2)-{0:bb}NAME*{0:xp.1}NAME
+.EQN 4 0 315 0 0
+{0:parfaze}NAME({0:\w}NAME):{0:a}NAME*({0:\w}NAME)^(2)+{0:bb}NAME*{0:\w}NAME+{0:c}NAME
+.EQN 11 -19 127 0 0
+{0:\f.trim}NAME({0:\w}NAME):{0:slope\f}NAME*({0:\w}NAME-{0:\w.res}NAME)+{0:parfaze}NAME({0:\w}NAME)
+.EQN 6 0 128 0 0
+{0:\f}NAME({0:\w}NAME):{0:\f.trim}NAME({0:\w}NAME)+{0:phi}NAME
+.TXT 4 51 129 0 0
+Cg a74.000000,74.000000,17
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Recall I is in mA}}
+.EQN 2 -49 130 0 0
+{0:V.out}NAME({0:\w}NAME):{0:I}NAME*{0:Z.total}NAME({0:\w}NAME)*{0:exp}NAME(1i*{0:\f}NAME({0:\w}NAME)*({0:\p}NAME)/(180))
+.TXT 2 49 131 0 0
+Cg a74.000000,74.000000,17
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 output voltage mV}}
+.EQN 5 -47 446 0 0
+{0:\w.p1}NAME:2*{0:\p}NAME*(214-.125)*(10)^(6)
+.EQN 5 32 135 0 0
+{0:\w.p2}NAME:2*{0:\p}NAME*(214+.125)*(10)^(6)
+.EQN 1 -30 449 0 0
+{0:\w.p1}NAME:{0:\w.res}NAME
+.EQN 2 -6 138 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:Re}NAME({0:V.out}NAME({0:\w}NAME)),{0:rb}NAME({0:\w}NAME),{0:Re}NAME({0:V.out}NAME({0:\w}NAME))@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME,{0:\w}NAME,{0:\w.p1}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 0 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 36 40 10 0 3 
+.EQN 46 3 139 0 0
+{0:Peaka}NAME:{0:Re}NAME({0:V.out}NAME({0:\w.p1}NAME))-{0:rb}NAME({0:\w.p1}NAME)
+.EQN 0 40 140 0 0
+{0:Re}NAME({0:V.out}NAME({0:\w.p1}NAME))={18999}?_n_u_l_l_
+.EQN 10 0 141 0 0
+{0:Re}NAME({0:V.out}NAME({0:\w.p2}NAME))={18999}?_n_u_l_l_
+.EQN 2 -40 142 0 0
+{0:Peakb}NAME:{0:Re}NAME({0:V.out}NAME({0:\w.p2}NAME))-{0:rb}NAME({0:\w.p2}NAME)
+.EQN 8 12 143 0 0
+({0:Peaka}NAME-{0:Peakb}NAME)*(100)/({0:Peaka}NAME)={0}?_n_u_l_l_
+.TXT 2 34 144 0 0
+Cg a74.000000,74.000000,1
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 %}}
+.EQN 12 -49 145 0 0
+{0:xx}NAME:{0:\w.res}NAME
+.TXT 6 8 273 0 0
+Cg a74.000000,74.000000,64
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Calculation of the modulation level (note that it is 
+normalised)}}
+.EQN 6 -8 147 0 0
+{0:M.m}NAME:(|({0:V.out}NAME({0:xx}NAME))-{0:b}NAME({0:xx}NAME))/({0:b}NAME({0:xx}NAME))
+.EQN 0 30 148 0 0
+{0:M.r}NAME:(({0:Re}NAME({0:V.out}NAME({0:xx}NAME)))-{0:rb}NAME({0:xx}NAME))/({0:rb}NAME({0:xx}NAME))
+.EQN 10 -30 149 0 0
+{0:q}NAME:({0:\w.low}NAME&{0:\w.hi}NAME`(|({0:V.out}NAME({0:\w}NAME))-{0:b}NAME({0:\w}NAME))*(-1)&{0:\w}NAME)
+.TXT 5 1 275 0 0
+Cg a74.000000,74.000000,117
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Calculation of the polarisation by integrating the 
+area between the background and the resonance signal ("p" and "q")}}
+.EQN 7 -1 151 0 0
+{0:p}NAME:({0:\w.low}NAME&{0:\w.hi}NAME`({0:Re}NAME({0:V.out}NAME({0:\w}NAME))-{0:rb}NAME({0:\w}NAME))*(1)&{0:\w}NAME)
+.TXT 7 3 563 0 0
+Cg a74.000000,74.000000,27
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Real part of the modulation}}
+.EQN 0 21 565 0 0
+{0:M.r}NAME={0}?_n_u_l_l_
+.TXT 4 -21 564 0 0
+Cg a74.000000,74.000000,27
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Magnitude of the modulation}}
+.EQN 0 21 566 0 0
+{0:M.m}NAME={0}?_n_u_l_l_
+.EQN 15 -5 166 0 0
+({0:Peaka}NAME-{0:Peakb}NAME)*(100)/({0:Peaka}NAME)={0}?_n_u_l_l_
+.TXT 2 -15 167 0 0
+Cg a74.000000,74.000000,9
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Assymetry}}
+.TXT 0 48 168 0 0
+Cg a74.000000,74.000000,1
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 %}}
+.TXT 8 -52 169 0 0
+Cg a74.000000,74.000000,37
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Now follow the signal through the BRM}}
+.EQN 4 0 170 0 0
+{0:\f.2}NAME:10
+.TXT 2 16 171 0 0
+Cg a74.000000,74.000000,37
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 These phase angles are all in degrees}}
+.EQN 6 -16 172 0 0
+{0:\f.1}NAME({0:\w}NAME):0+{0:\f.2}NAME
+.EQN 0 36 173 0 0
+{0:V.c}NAME:1
+.EQN 6 0 174 0 0
+{0:A}NAME:1.0001
+.EQN 4 -35 175 0 0
+{0:V}NAME({0:\w}NAME):{0:V.c}NAME*{0:V.out}NAME({0:\w}NAME)*{0:A}NAME*{0:exp}NAME(1i*(({0:\f.1}NAME({0:\w}NAME)-{0:\f.2}NAME)*({0:\p}NAME)/(180)))
+.TXT 4 13 277 0 0
+Cg a74.000000,74.000000,48
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 There is a fixed phase change going thro BRM ???}}
+.EQN 4 -13 177 0 0
+{0:l}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.TXT 9 -1 178 0 0
+Cg a74.000000,74.000000,71
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 ====================== Fit parabolic background 
+=======================}}
+.EQN 2 6 179 0 0
+{0:nback}NAME~20
+.TXT 0 17 180 0 0
+Cg a74.000000,74.000000,43
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Choose point clear of signal for background}}
+.EQN 3 -17 181 0 0
+{0:\w.back}NAME:{0:\w.temp}NAME
+.EQN 4 0 182 0 0
+{0:xp.1}NAME:{0:\w.low}NAME
+.EQN 0 26 183 0 0
+{0:yp.1}NAME:{0:Re}NAME({0:V.out}NAME({0:\w.low}NAME))
+.EQN 4 -26 184 0 0
+{0:xp.3}NAME:{0:\w.hi}NAME
+.EQN 0 26 185 0 0
+{0:yp.3}NAME:{0:Re}NAME({0:V.out}NAME({0:\w.hi}NAME))
+.EQN 4 -26 186 0 0
+{0:xp.2}NAME:{0:\w.back}NAME
+.EQN 0 26 187 0 0
+{0:yp.2}NAME:{0:Re}NAME({0:V.out}NAME({0:\w.back}NAME))
+.EQN 8 -32 189 0 0
+{0:\a.1}NAME:{0:yp.1}NAME-{0:yp.2}NAME
+.EQN 0 20 334 0 0
+{0:\b.1}NAME:({0:xp.1}NAME)^(2)-({0:xp.2}NAME)^(2)
+.EQN 0 23 190 0 0
+{0:\G.1}NAME:{0:xp.1}NAME-{0:xp.2}NAME
+.EQN 5 -43 192 0 0
+{0:\a.2}NAME:{0:yp.1}NAME-{0:yp.3}NAME
+.EQN 0 20 335 0 0
+{0:\b.2}NAME:({0:xp.1}NAME)^(2)-({0:xp.3}NAME)^(2)
+.EQN 0 23 193 0 0
+{0:\G.2}NAME:{0:xp.1}NAME-{0:xp.3}NAME
+.EQN 6 -42 194 0 0
+{0:temp}NAME:({0:\b.1}NAME*(({0:\G.2}NAME)/({0:\G.1}NAME))-{0:\b.2}NAME)
+.EQN 2 45 195 0 0
+{0:a}NAME:({0:\G.2}NAME*(({0:\a.1}NAME)/({0:\G.1}NAME))-{0:\a.2}NAME)/({0:temp}NAME)
+.EQN 7 -45 196 0 0
+{0:b}NAME:({0:\a.2}NAME-{0:a}NAME*{0:\b.2}NAME)/({0:\G.2}NAME)
+.EQN 5 0 336 0 0
+{0:c}NAME:{0:yp.1}NAME-{0:a}NAME*({0:xp.1}NAME)^(2)-{0:b}NAME*{0:xp.1}NAME
+.EQN 4 23 337 0 0
+{0:parab}NAME({0:\w}NAME):{0:a}NAME*({0:\w}NAME)^(2)+{0:b}NAME*{0:\w}NAME+{0:c}NAME
+.EQN 9 -23 200 0 0
+{0:pp}NAME:({0:\w.low}NAME&{0:\w.hi}NAME`({0:Re}NAME({0:V.out}NAME({0:\w}NAME))-{0:parab}NAME({0:\w}NAME))*({0:sign}NAME)&{0:\w}NAME)
+.EQN 1 46 617 0 0
+{0:pp}NAME={0}?_n_u_l_l_
+.EQN 6 -47 203 0 0
+{0:parab}NAME({0:\w.low}NAME)={0}?_n_u_l_l_
+.EQN 0 27 204 0 0
+{0:parab}NAME({0:\w.hi}NAME)={0}?_n_u_l_l_
+.TXT 4 -26 205 0 0
+Cg a74.000000,74.000000,75
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 
+===========================================================================}}
+.TXT 4 0 206 0 0
+Cg a74.000000,74.000000,220
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Find normal constant current due to resistive 
+elements only, i.e. cable rsistance, coil resistance  and damping 
+resistor in parallel with amplifier input impedance and all this in 
+series with R, constant current resistor}}
+.EQN 8 2 207 0 0
+{0:R.leg1}NAME:{0:r}NAME+{0:S}NAME*{0:l}NAME({0:\w.res}NAME)+{0:R.coil}NAME
+.EQN 0 37 208 0 0
+{0:R.inv}NAME:(1)/({0:R.1}NAME)+(1)/({0:R.leg1}NAME)
+.EQN 6 -38 209 0 0
+{0:I.max}NAME:{0:U}NAME*(1000)/((1)/({0:R.inv}NAME)+{0:R}NAME)
+.TXT 6 36 610 0 0
+Cg a36.000000,36.000000,13
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard NEW TE SIGNAL}
+.EQN 1 -12 338 0 0
+{0:M.rp}NAME:(({0:Re}NAME({0:V.out}NAME({0:\w.res}NAME)))-{0:parab}NAME({0:\w.res}NAME))/({0:parab}NAME({0:\w.res}NAME))
+.TXT 7 6 278 0 0
+Cg a74.000000,74.000000,23
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 magnitude of modulation}}
+.EQN 45 28 626 0 0
+(5)/(400)={150069}?_n_u_l_l_
+.TXT 5 -22 611 0 0
+Cg a38.875000,38.875000,25
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Resistance 
+change of coil}
+.TXT 2 -34 609 0 0
+Cg a71.000000,71.000000,83
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Main working page. Can change the\par parameters here 
+and see the effects\par on the signal}}
+.EQN 1 32 612 0 0
+{0:sign}NAME*4*{0:\p}NAME*{0:eta}NAME*{0:\w.res}NAME*{0:L.0}NAME*{0:x.2}NAME({0:\w.res}NAME)={150117}?_n_u_l_l_
+.TXT 6 5 340 0 0
+Cg a74.000000,74.000000,13
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Amp impedance}}
+.EQN 0 13 215 0 0
+{0:R.1}NAME~50
+.TXT 4 -46 398 0 0
+Cg a74.000000,74.000000,45
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Output voltage in mV WARN.. must not go -ve !}}
+.EQN 0 46 216 0 0
+{0:R}NAME~619
+.EQN 1 -52 396 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:Re}NAME({0:V.out}NAME({0:\w}NAME)),{0:rb}NAME({0:\w}NAME),{0:parab}NAME({0:\w}NAME)@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME,{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 28 35 10 0 3 
+.EQN 2 53 217 0 0
+{0:const}NAME~1
+.EQN 3 0 497 0 0
+{0:knob}NAME~0.885
+.EQN 3 0 220 0 0
+{0:phi}NAME~6.1319
+.EQN 3 0 221 0 0
+{0:\dl}NAME~0
+.EQN 0 6 318 0 0
+{0:\dC}NAME~0
+.EQN 3 -6 222 0 0
+{0:\d\f}NAME~0
+.EQN 3 0 223 0 0
+{0:eta}NAME~0.00001*2.6*400
+.EQN 3 0 224 0 0
+{0:\dphase}NAME~0
+.EQN 3 0 225 0 0
+{0:nback}NAME~240
+.EQN 2 -8 605 0 0
+{0:trim}NAME~7*0.5
+.EQN 1 14 226 0 0
+_n_u_l_l_
+.EQN 2 -6 227 0 0
+{0:sign}NAME~-1
+.EQN 3 -1 228 0 0
+{0:C.stray}NAME~.001*(10)^(-12)
+.EQN 3 -4 560 0 0
+{0:Re}NAME({0:V.out}NAME({0:\w.low}NAME))={0}?_n_u_l_l_
+.TXT 4 0 561 0 0
+Cg a74.000000,74.000000,24
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Polarisation using parab}}
+.EQN 2 0 562 0 0
+{0:pp}NAME={19041}?_n_u_l_l_
+.TXT 2 -24 580 0 0
+Cg a74.000000,74.000000,18
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Constant current R}}
+.TXT 0 17 598 0 0
+Cg a30.000000,30.000000,37
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Polarisation 
+using Q curve background}
+.EQN 1 -42 581 0 0
+{0:C.stray}NAME*(10)^(12)={0}?_n_u_l_l_
+.TXT 0 15 582 0 0
+Cg a74.000000,74.000000,2
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 pF}}
+.EQN 1 10 583 0 0
+{0:R}NAME={0}?_n_u_l_l_
+.EQN 1 33 588 0 0
+{0:p}NAME={150113}?_n_u_l_l_
+.TXT 2 -57 584 0 0
+Cg a74.000000,74.000000,35
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Modulation with parabola background}}
+.TXT 1 30 586 0 0
+Cg a39.000000,39.000000,34
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Modulation 
+with Q curve background}
+.EQN 2 -30 585 0 0
+{0:M.rp}NAME={18997}?_n_u_l_l_
+.EQN 1 30 587 0 0
+{0:M.r}NAME={0}?_n_u_l_l_
+.EQN 3 -31 549 0 0
+{0:I.const}NAME({0:\w}NAME):{0:U}NAME*(1000)/({0:R}NAME+{0:Z.total}NAME({0:\w}NAME))
+.TXT 0 22 551 0 0
+Cg a74.000000,74.000000,32
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Current drawn from RF source, mA}}
+.EQN 3 -22 552 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&|({0:I.const}NAME({0:\w}NAME)),{0:I.max}NAME@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 20 16 10 0 3 
+.TXT 0 44 589 0 0
+Cg a74.000000,74.000000,25
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Current through amplifier}}
+.EQN 1 -11 591 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&({0:Re}NAME({0:V.out}NAME({0:\w}NAME)))/({0:R.1}NAME)@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 18 16 10 0 3 
+.TXT 21 -32 578 0 0
+Cg a70.000000,70.000000,113
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Current 
+through T-line Be carefull to keep \par true imaginary part\par the Q 
+meter output only \par shows us the REAL part !}
+.EQN 2 42 595 0 0
+{0:I.temp}NAME({0:\w}NAME):{0:I.const}NAME({0:\w}NAME)-({0:Re}NAME({0:V.out}NAME({0:\w}NAME)))/({0:R.1}NAME)
+.EQN 2 -8 592 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&|({0:I.temp}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 0 2 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 21 13 10 0 3 
+.TXT 23 -34 256 0 0
+Cg a25.250000,25.250000,131
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Coil current estimated on this pass. The current is 
+split between the coil and the stray impedance in the ratio of their 
+impedances}}
+.EQN 1 25 476 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:Im}NAME({0:I.temp}NAME({0:\w}NAME))@&&(_n_u_l_l_&_n_u_l_l_)&{0:\w}NAME
+0 0 0 0 0 2 0 1 1 
+0 0 1 0 0 2 0 1 1 
+0 1 0 0 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 25 15 10 0 3 
+.EQN 23 -26 407 0 0
+{0:I.coil}NAME({0:\w}NAME):({0:Z.stray}NAME({0:\w}NAME))/({0:Z.Lpure}NAME({0:\w}NAME)+{0:Z.stray}NAME({0:\w}NAME))*{0:I.temp}NAME({0:\w}NAME)
+.TXT 7 11 529 0 0
+Cg a59.000000,59.000000,15
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Coil current mA}
+.EQN 3 -12 257 0 0
+&&(_n_u_l_l_&_n_u_l_l_)&{0:I.coil}NAME({0:\w}NAME),{0:I.temp}NAME({0:\w}NAME),|({0:i.c}NAME({0:\w}NAME)),0.10331@{0:\w.hi}NAME&{0:\w.low}NAME&({0:\w.low}NAME&{0:\w.hi}NAME)&{0:\w}NAME
+0 0 0 0 1 0 0 1 1 
+0 0 1 1 1 0 0 1 1 
+0 1 0 5 1 1 NO-TRACE-STRING
+0 2 1 0 1 1 NO-TRACE-STRING
+0 3 2 0 1 1 NO-TRACE-STRING
+0 4 3 0 1 1 NO-TRACE-STRING
+0 1 4 0 1 1 NO-TRACE-STRING
+0 2 5 0 1 1 NO-TRACE-STRING
+0 3 6 0 1 1 NO-TRACE-STRING
+0 4 0 0 1 1 NO-TRACE-STRING
+0 1 1 0 1 1 NO-TRACE-STRING
+0 2 2 0 1 1 NO-TRACE-STRING
+0 3 3 0 1 1 NO-TRACE-STRING
+0 4 4 0 1 1 NO-TRACE-STRING
+0 1 5 0 1 1 NO-TRACE-STRING
+0 2 6 0 1 1 NO-TRACE-STRING
+0 3 0 0 1 1 NO-TRACE-STRING
+0 4 1 0 1 1 NO-TRACE-STRING
+0 1 1 20 22 10 0 3 
+.EQN 0 37 424 0 0
+{0:I.temp}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 4 1 422 0 0
+{0:Z.stray}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 3 0 413 0 0
+{0:Z.Lpure}NAME({0:\w.res}NAME)={0}?_n_u_l_l_
+.EQN 6 -3 433 0 0
+|(({0:Z.stray}NAME({0:\w.res}NAME))/(({0:Z.Lpure}NAME({0:\w.res}NAME)+{0:Z.stray}NAME({0:\w.res}NAME))))={0}?_n_u_l_l_
+.EQN 5 2 443 0 0
+{0:I.coil}NAME({0:\w.res}NAME)={150069}?_n_u_l_l_
+.EQN 3 0 616 0 0
+{0:I.coil}NAME({0:\w.low}NAME)={0}?_n_u_l_l_
+.TXT 4 -9 615 0 0
+Cg a74.000000,74.000000,68
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}{\f1\fcharset0\fnil Arial;}}\plain\cf1
+\fs20 \pard {\f1 Output coil current function of frequency to input in 
+next iteration}}
+.TXT 2 0 518 0 0
+Cg a41.000000,41.000000,26
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard Calculate 
+level of failure}
+.EQN 6 -26 557 0 0
+{0:WRITEPRN}NAME({0:current.dat}NAME):{0:Re}NAME({0:I.coil}NAME({0:\w}NAME))
+.EQN 1 29 517 0 0
+|(({0:I.coil}NAME({0:\w.low}NAME)-{0:I.coil}NAME({0:\w.res}NAME))/({0:I.coil}NAME({0:\w.low}NAME)))*100={0}?_n_u_l_l_
+.TXT 0 30 633 0 0
+Cg a17.625000,17.625000,1
+{\rtf\ansi \deff0{\colortbl;\red0\green0\blue128;}{\fonttbl{\f0
+\fcharset0\fnil Times New Roman;}}\plain\cf1\fs20 \pard %}
