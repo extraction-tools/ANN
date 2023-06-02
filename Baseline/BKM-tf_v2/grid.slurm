@@ -12,4 +12,4 @@ module load anaconda/2020.11-py3.8
 module load singularity/3.7.1
 module load singularity tensorflow/2.8.0
 
-singularity run --nv $CONTAINERDIR/tensorflow-2.8.0.sif Fit.py $1
+singularity run --nv $CONTAINERDIR/tensorflow-2.8.0.sif Fit_v2.py $1
