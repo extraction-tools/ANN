@@ -75,6 +75,10 @@ class Config():
         self.k_range = k_range
         self.rangesize = ranger
 
+        self.main_sig = backreal
+        self.current_sig = current
+        self.backgmd_sig = backgmd
+
         # pi = np.pi
         # im_unit = complex(0,1)
         # sign = 1
@@ -169,6 +173,10 @@ class Simulate():
         eta = self.Inputs.eta
         phi_const = self.Inputs.phi_const
         Cstray = self.Inputs.Cstray
+
+        backreal_sig = self.Inputs.main_sig
+        current_sig = self.Inputs.current_sig
+        backgmd_sig = self.Inputs.backgmd_sig
         
         I = U*1000/R #Ideal constant current, mA
 
@@ -249,10 +257,10 @@ class Simulate():
         vreal = []    
         Icoil = []
         
-        for item in deriv_sig:
-            butxi.append(item)
-        for item in main_sig:
-            butxii.append(item)
+        # for item in deriv_sig:
+        #     butxi.append(item)
+        # for item in main_sig:
+        #     butxii.append(item)
         for item in backgmd_sig:
             vback.append(item)
         for item in backreal_sig:
@@ -337,12 +345,12 @@ class Simulate():
             return -1*(I*Ztotal(w)*np.exp(im_unit*phi(w)*pi/180))
 
         
-        larger_k = range(0,k_range)
+        larger_k = range(0,self.Inputs.k_range)
         larger_x = np.array(larger_k, float)
         w_range = w_high - w_low
         larger_range = (delta_w*larger_x)+(w_low-5*w_range)
         
-        out_y = getArrayFromFunc(V_out,x)
-        if (rangesize == 1):
-            out_y = getArrayFromFunc(V_out,larger_range)
+        out_y = Simulate.getArrayFromFunc(V_out,x)
+        if (self.Inputs.rangesize == 1):
+            out_y = Simulate.getArrayFromFunc(V_out,larger_range)
         return out_y

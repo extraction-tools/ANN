@@ -19,4 +19,14 @@ class MplCanvas(FigureCanvas):
         super(MplCanvas,self).__init__(fig)
         fig.tight_layout()
 
-class Py
+class Realtime(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui = uic.loadUi('gui.ui',self)
+        self.resize(888,600)
+        icon = QIcon()
+        icon.addPixmap(QPixmap("PyShine.png"), QIcon.Normal, QIcon.off)
+        self.setWindowIcon(icon)
+        self.threadpool = QThreadPool()
+
+        self.cavas = MplCanvas(self,width=5,height=4,dpi=100)
