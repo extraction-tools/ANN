@@ -1,1 +1,0 @@
-ssh -y uvaspin@shannon.phys.virginia.edu
