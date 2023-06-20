@@ -49,7 +49,7 @@ Wsave = tfModel.get_weights()
 
 #Number of kinematic sets
 by_set = []
-for i in range(15):
+for i in range(194):
   setI = data.getSet(i, itemsInSet=45)
 
   tfModel.set_weights(Wsave)
