@@ -1,0 +1,5 @@
+# of layers,nodes first layer,decreasing nodes,activation function,initial learning rate,decay rate
+2,100,0,swish,0.0085,0.96
+2,10,0,swish,0.0085,0.96
+4,100,10,tanh,0.0085,0.96
+8,200,20,tanh,0.0085,0.96
