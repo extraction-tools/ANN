@@ -2,7 +2,8 @@ import math
 import numpy as np
 from mosttcoefficient import coefficients as coe
 class function(object):
-    #general functionss
+    #general functions
+    #defined in mathematica
     def xi(M,QQ,xB,alpha,beta):
         Q=np.sqrt(QQ)
         aux0=(2.*(alpha*((M**2)*(xB**2))))+(t*((-1.+xB)*(1.+((-2.*alpha)+((-1.\
@@ -10,13 +11,13 @@ class function(object):
         output=(xB/(2.-xB))+((-2.*((Q**-2.)*(((-2.+xB)**-2.)*(xB*aux0))))/(1.+\
         ((-1.+beta)*xB)))
         return output
+    #equation 2.4
     def Gamma(xB,M,QQ):
         return 2*xB*M/np.sqrt(QQ)
+    #equation 3.25
     def N(M,QQ,xB,alpha,beta):
         ee=xi(M,QQ,xB,alpha,beta)
         return np.sqrt(-4*M**2*ee**2-t*(1-ee**2))/M
-    y=0.49624;M=0.938;QQ=1.82;t=-0.17;xB=0.34
-    H=-0.897; E=-0.541; Ht=2.444; Et=2.207; Hc=2.421; Ec=0.903; Htc=1.131; Etc=5.383
     def F1(t,M):
         GE=1/(1-t/.71)**2
         GM=2.79*GE
@@ -27,7 +28,7 @@ class function(object):
         GM=2.79*GE
         out =(-GE+GM)/(1-t/(4*M**2))
         return out
-    #DVCS terms 
+    #pure DVCS terms, twist 2 
     #B.1
     def FUU(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc):
         ee=xi(M,QQ,xB,alpha,beta)
@@ -73,20 +74,7 @@ class function(object):
         out=4*n*hmi*(complex(Ht,-Htc)*complex(E,Ec)-ee*complex(Et,-Etc)*complex(H,Hc)-
                     ee**2/(1+ee**2)*complex(Et,-Etc)*complex(E,Ec)).real
         return out
-
-    # 3.40
-    def TDVCS(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc): 
-        Q=np.sqrt(QQ); Deltal=1; Deltat=1; h=1; flu=0; fltout=0
-        fuu=FUU(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc); ful=FUL()
-        futin=FUTin(); futout=Futout(t,y,M,QQ,xB,phi,alpha,beta,E,Et,Hc,Htc)
-        fll= FLL(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        fltin=FLTin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        out= 1/QQ**2*(fuu+2*Deltal*ful+2*Deltat*(futin*np.cos(phis-phi)+futout*np.sin(phis-phi))+
-                     2*h*(flu+2*Deltal*fll+2*Deltat*(fltin*np.cos(phis-phi)+fltout*np.sin(phis-phi))))
-        return out
-
-
-    #Interference terms
+    #interference terms twist 2 
     #c.1
     def FUUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc):
         Q=np.sqrt(QQ)
@@ -185,18 +173,56 @@ class function(object):
                  BIL*(F1(t,M)+F2(t,M))*(complex(H,-Hc)+t/(4*M**2)*complex(E,-Ec))-
                  CIL*ee*(F1(t,M)+F2(t,M))*(complex(Ht,-Htc)+t/(4*M**2)*complex(Et,-Etc))).real
         return out
+    #Cross section terms
+    #term out front that is multiplied by |T| to get cross section equation 2.3
+    def consts(y,M,QQ,xB):
+        fnst=1/137
+        return fnst**3*xB*y**2/(8*np.pi*QQ**2*np.sqrt(1+Gamma(xB,M,QQ)**2))
+    #Cross sections from equation 3.40 for pure DVCS, broken up into its varius F components, if more than one just add together 
+    def sigmaFUU(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return 1/QQ**2*consts(y,M,QQ,xB)*FUU(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    #note that FUL=0 as it has h+ in it. 
+    def sigmaFUL():
+        return 0
+    #note that FUTin=0 as it has h+ in it. 
+    def sigmaFUTin():
+        return 0
+    #have extra 2pi in denominator becasue phis is being varried here to must put back inn
+    def sigmaFUTout(t,y,M,QQ,xB,phi,alpha,beta,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (1/(QQ**2*2*np.pi)*consts(y,M,QQ,xB)*np.sin(phis-phi)*
+                2*DeltaT*Futout(t,y,M,QQ,xB,phi,alpha,beta,E,Et,Hc,Htc))*389.39*1000
+    #this is zero as FLU vanish and does not even appear with other f functions
+    def sigmaFLU():
+        return 0
+    def sigmaFLL(t,y,M,QQ,xB,phi,alpha,beta,DeltaL,h,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return 1/QQ**2*consts(y,M,QQ,xB)*2*h*2*DeltaL*FLL(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    #d
+    def sigmaFLTin(t,y,M,QQ,xB,phi,alpha,beta,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (1/(QQ**2*2*np.pi)*consts(y,M,QQ,xB)*2*h*2*DeltaT*np.cos(phis-phi)*
+                FLTin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc))*389.39*1000
+    #this is zero as FLU vanish and does not even appear with other f functionss
+    def sigmaFLTout():
+        return 0
+    #Cross secton from equation 3.57 for interference, broken up into its varius F components, if more than one jsut add together. 
+    def sigmaFUUI(t,y,M,QQ,xB,phi,alpha,beta,el,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        Q=np.sqrt(QQ)
+        return -el/(QQ*t)*consts(y,M,QQ,xB)*FUUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    def sigmaFULI(t,y,M,QQ,xB,phi,alpha,beta,el,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return -el/(QQ*t)*consts(y,M,QQ,xB)*2*DeltaL*FULI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    def sigmaFUTIin(t,y,M,QQ,xB,phi,alpha,beta,el,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (-el/(QQ*t*2*np.pi)*consts(y,M,QQ,xB)*2*DeltaT*np.cos(phis-phi)*
+                FUTIin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc))*389.39*1000
+    def sigmaFUTIout(t,y,M,QQ,xB,phi,alpha,beta,el,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (-el/(QQ*t*2*np.pi)*consts(y,M,QQ,xB)*2*DeltaT*np.sin(phis-phi)*
+                FUTIout(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc))*389.39*1000
+    def sigmaFLUI(t,y,M,QQ,xB,phi,alpha,beta,el,h,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return -el/(QQ*t)*consts(y,M,QQ,xB)*2*h*FLUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    def sigmaFLLI(t,y,M,QQ,xB,phi,alpha,beta,el,h,DeltaL,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return -el/(QQ*t)*consts(y,M,QQ,xB)*2*h*2*DeltaL*FLUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000
+    def sigmaFLTIin(t,y,M,QQ,xB,phi,alpha,beta,el,h,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (-el/(QQ*t)*consts(y,M,QQ,xB)*2*h*2*DeltaT*np.cos(phis-phi)*
+                FLTIin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000)
+    def sigmaFLTIout(t,y,M,QQ,xB,phi,alpha,beta,el,h,DeltaT,phis,H,E,Ht,Et,Hc,Ec,Htc,Etc):
+        return (-el/(QQ*t)*consts(y,M,QQ,xB)*2*h*2*DeltaT*np.sin(phis-phi)*
+                FLTIout(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)*389.39*1000)
 
-    #3.57
-    phis=1
-    def Interference(t,y,M,QQ,xB,phi,phis,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc):
-        el=1; Deltal=1; Q=np.sqrt(QQ); Deltat=1; h=1
-        fuui=FUUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc);flui=FLUI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        futiin=FUTIin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        futiout=FUTIout(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        fuli=FULI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc);flli=FLLI(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        fltiin=FLTIin(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-        fltiout=FLTIout(t,y,M,QQ,xB,phi,alpha,beta,H,E,Ht,Et,Hc,Ec,Htc,Etc)
-
-        out =-el/(Q**2*t)*(fuui+2*Deltal*fuli+Deltat*(futiin*np.cos(phis-phi)+futiout*np.sin(phis-phi))+
-                          2*h*(flui+2*Deltal*flli+2*Deltat*(fltiin*np.cos(phis-phi)+fltiout*np.sin(phis-phi))))
-        return out
